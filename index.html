@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AutoChat - Automate Your Business</title>
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --bg-0:#070a1c; --bg-1:#0d1330; --bg-2:#141b40; --line:rgba(255,255,255,0.1);
+            --text-hi:#f2f4ff; --text-lo:#8992b8;
+            --orange:#ff7a45; --coral:#ff5f7e; --violet:#7b5cff;
+            --grad-warm: linear-gradient(90deg, var(--orange), var(--coral) 55%, var(--violet));
+        }
+        body {
+            background:
+                radial-gradient(ellipse at 20% -10%, #1a2050 0%, var(--bg-0) 45%),
+                radial-gradient(ellipse at 100% 110%, #201436 0%, var(--bg-0) 50%),
+                var(--bg-0);
+            color: var(--text-hi);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .hero-section {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            padding-top: 110px;
+            text-align: center;
+            z-index: 1;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+        }
+        
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 40px;
+            animation: fadeInDown 1s ease;
+        }
+        
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .logo-icon { 
+            font-size: 40px;
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .logo-text {
+            font-size: 32px;
+            color: var(--orange);
+            font-weight: 800;
+        }
+        
+        h1 {
+            font-size: 56px;
+            margin-bottom: 20px;
+            color: var(--orange);
+            font-weight: 900;
+            text-shadow: 0 0 20px rgba(255, 122, 69, 0.5);
+            animation: fadeInUp 1s ease 0.3s both;
+        }
+        
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .subtitle {
+            font-size: 22px;
+            color: #c7cce3;
+            margin-bottom: 40px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.8;
+            animation: fadeInUp 1s ease 0.6s both;
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 60px;
+            margin-bottom: 50px;
+            flex-wrap: wrap;
+            justify-content: center;
+            animation: fadeInUp 1s ease 0.9s both;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 20px;
+            background: rgba(255, 122, 69, 0.1);
+            border-radius: 15px;
+            border: 1px solid rgba(255, 122, 69, 0.3);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s;
+        }
+
+        .stat-item:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 122, 69, 0.2);
+            border-color: rgba(255, 122, 69, 0.6);
+            box-shadow: 0 10px 30px rgba(255, 122, 69, 0.4);
+        }
+
+        .stat-number {
+            font-size: 56px;
+            font-weight: 900;
+            color: var(--orange);
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: var(--text-lo);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-top: 5px;
+        }
+        
+        .btn-container {
+            animation: fadeInUp 1s ease 1.2s both;
+        }
+        
+        .btn {
+            background: var(--grad-warm);
+            color: #1a0f08;
+            border: none;
+            padding: 18px 50px;
+            font-size: 18px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 700;
+            transition: all 0.3s;
+            margin: 10px;
+            text-decoration: none;
+            display: inline-block;
+            box-shadow: 0 0 30px rgba(255, 95, 126, 0.35);
+        }
+        
+        .btn:hover { 
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 0 40px rgba(255, 95, 126, 0.5);
+        }
+        
+        .btn-secondary {
+            background: transparent;
+            border: 2px solid var(--orange);
+            color: var(--orange);
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(255, 122, 69, 0.1);
+            box-shadow: 0 0 30px rgba(255, 122, 69, 0.5);
+        }
+
+        .steps-section {
+            background: linear-gradient(135deg, rgba(13, 19, 48, 0.95) 0%, rgba(20, 15, 45, 0.95) 100%);
+            padding: 80px 20px;
+            border-top: 2px solid var(--orange);
+            position: relative;
+            z-index: 1;
+        }
+
+        .steps-container { max-width: 1000px; margin: 0 auto; }
+
+        .steps-title {
+            font-size: 36px;
+            margin-bottom: 40px;
+            text-align: center;
+            color: var(--orange);
+        }
+
+        .steps-description {
+            background: rgba(13, 19, 48, 0.9);
+            border-radius: 20px;
+            padding: 40px;
+            border: 1px solid rgba(255, 122, 69, 0.2);
+        }
+
+        .step-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 25px;
+            padding: 15px;
+            transition: all 0.3s;
+        }
+
+        .step-item:hover {
+            transform: translateX(10px);
+            background: rgba(255, 122, 69, 0.05);
+            border-radius: 10px;
+        }
+
+        .step-number {
+            background: var(--grad-warm);
+            color: #1a0f08;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 18px;
+            margin-right: 20px;
+            flex-shrink: 0;
+        }
+
+        .step-content { flex: 1; }
+
+        .step-title-text {
+            color: var(--orange);
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .step-desc-text {
+            color: var(--text-lo);
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
+        .pricing-note {
+            background: rgba(13, 19, 48, 0.9);
+            border: 2px solid var(--orange);
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .pricing-note strong {
+            color: var(--orange);
+            font-size: 20px;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .pricing-note p { color: var(--text-lo); font-size: 16px; }
+        
+        .info-section {
+            background: rgba(7, 10, 28, 0.95);
+            padding: 80px 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .info-container { max-width: 1400px; margin: 0 auto; }
+        
+        .info-title {
+            font-size: 42px;
+            margin-bottom: 20px;
+            text-align: center;
+            color: var(--orange);
+            font-weight: 800;
+        }
+
+        .info-subtitle {
+            text-align: center;
+            color: var(--text-lo);
+            font-size: 18px;
+            margin-bottom: 60px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(min(350px, 100%), 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+        
+        .feature-card {
+            background: linear-gradient(135deg, rgba(13, 19, 48, 0.9) 0%, rgba(20, 15, 45, 0.8) 100%);
+            border-radius: 20px;
+            padding: 35px;
+            border: 2px solid rgba(255, 122, 69, 0.2);
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--orange), transparent);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.3s;
+        }
+
+        .feature-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--orange);
+            box-shadow: 0 20px 40px rgba(255, 122, 69, 0.3);
+        }
+        
+        .feature-icon { 
+            font-size: 48px; 
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .feature-title { 
+            font-size: 24px; 
+            margin-bottom: 15px; 
+            color: var(--orange);
+            font-weight: 700;
+        }
+
+        .feature-desc { 
+            color: var(--text-lo); 
+            line-height: 1.8;
+            font-size: 15px;
+        }
+
+        .feature-list {
+            list-style: none;
+            margin-top: 15px;
+            padding: 0;
+        }
+
+        .feature-list li {
+            color: #c7cce3;
+            padding: 8px 0;
+            padding-left: 25px;
+            position: relative;
+            font-size: 14px;
+        }
+
+        .feature-list li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--orange);
+            font-weight: bold;
+            font-size: 16px;
+        }
+        
+        footer {
+            background: var(--bg-0);
+            padding: 30px;
+            text-align: center;
+            color: var(--text-lo);
+            border-top: 1px solid var(--line);
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* ── Top Navigation Bar ─────────────────────────────────────── */
+        .site-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 200;
+            background: rgba(13, 19, 48, 0.85);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border-bottom: 1px solid var(--line);
+        }
+        .nav-inner {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 14px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--text-hi);
+            text-decoration: none;
+            flex-shrink: 0;
+        }
+        .nav-brand .nav-brand-icon { font-size: 22px; }
+        .nav-brand .nav-brand-text {
+            background: var(--grad-warm);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 22px;
+            flex: 1;
+            justify-content: center;
+            white-space: nowrap;
+        }
+        .nav-links a {
+            position: relative;
+            color: var(--text-lo);
+            text-decoration: none;
+            font-size: 13.5px;
+            font-weight: 500;
+            letter-spacing: .1px;
+            padding: 4px 2px;
+            transition: color 0.2s;
+        }
+        .nav-links a:hover { color: var(--text-hi); }
+        .nav-links a.active { color: var(--text-hi); }
+        .nav-links a.active::after {
+            content: '';
+            position: absolute;
+            left: 0; right: 0; bottom: -4px;
+            height: 2px;
+            border-radius: 2px;
+            background: var(--grad-warm);
+        }
+        #authButtons {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-shrink: 0;
+        }
+        #authButtons a, #authButtons button {
+            font-size: 13.5px !important;
+            padding: 8px 18px !important;
+        }
+        .nav-toggle {
+            display: none;
+            background: transparent;
+            border: 1px solid var(--line);
+            color: var(--text-hi);
+            border-radius: 8px;
+            width: 38px;
+            height: 38px;
+            font-size: 18px;
+            cursor: pointer;
+        }
+        
+        @media (max-width: 1080px) {
+            .nav-links { gap: 14px; }
+            .nav-links a { font-size: 12.5px; }
+        }
+        @media (max-width: 768px) {
+            h1 { font-size: 36px; }
+            .hero-stats { gap: 20px; }
+            .stat-number { font-size: 36px; }
+            .stat-item { padding: 15px; }
+            .step-item { flex-direction: column; }
+            .step-number { margin-right: 0; margin-bottom: 10px; }
+            .features-grid { grid-template-columns: 1fr; }
+            .info-title { font-size: 32px; }
+            .hero-section { padding-top: 100px; }
+            .btn { padding: 14px 30px; font-size: 16px; }
+            .nav-links { display: none; }
+        }
+        @media (max-width: 480px) {
+            h1 { font-size: 26px; line-height: 1.3; }
+            .subtitle { font-size: 16px; }
+            .hero-stats { gap: 12px; }
+            .stat-number { font-size: 28px; }
+            .stat-label { font-size: 11px; letter-spacing: 1px; }
+            .stat-item { padding: 12px; }
+            .steps-section { padding: 50px 15px; }
+            .steps-description { padding: 20px; }
+            .steps-title { font-size: 24px; }
+            .info-section { padding: 50px 15px; }
+            .info-title { font-size: 24px; }
+            .feature-card { padding: 20px; }
+            .logo-text { font-size: 24px; }
+            .logo-icon { font-size: 28px; }
+            .nav-brand { font-size: 17px; }
+            #authButtons a, #authButtons button { font-size: 12px !important; padding: 7px 12px !important; }
+        }
+
+        /* ── Carousel ──────────────────────────────────────────────── */
+        .carousel-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 0;
+            position: relative;
+            margin-bottom: 40px;
+        }
+        .carousel-btn {
+            flex-shrink: 0;
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            background: rgba(255,122,69,0.15);
+            border: 2px solid rgba(255,122,69,0.4);
+            color: var(--orange);
+            font-size: 22px;
+            cursor: pointer;
+            transition: all 0.25s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2;
+            flex-shrink: 0;
+        }
+        .carousel-btn:hover {
+            background: rgba(255,122,69,0.35);
+            border-color: var(--orange);
+            transform: scale(1.1);
+            box-shadow: 0 0 20px rgba(255,122,69,0.4);
+        }
+        .carousel-btn:active { transform: scale(0.97); }
+        .carousel-track-container {
+            flex: 1;
+            overflow: hidden;
+            padding: 10px 4px;
+        }
+        .carousel-track {
+            display: flex;
+            gap: 24px;
+            transition: transform 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            will-change: transform;
+        }
+        .carousel-track .feature-card {
+            flex: 0 0 calc(33.333% - 16px);
+            min-width: 0;
+        }
+        .carousel-dots {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 10px;
+        }
+        .carousel-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--bg-2);
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+        }
+        .carousel-dot.active {
+            background: var(--orange);
+            transform: scale(1.3);
+            box-shadow: 0 0 8px rgba(255,122,69,0.6);
+        }
+        @media (max-width: 900px) {
+            .carousel-track .feature-card { flex: 0 0 calc(50% - 12px); }
+        }
+        @media (max-width: 580px) {
+            .carousel-track .feature-card { flex: 0 0 calc(100% - 0px); }
+            .carousel-btn { width: 40px; height: 40px; font-size: 18px; }
+            .carousel-track { gap: 16px; }
+        }
+
+        /* ── FAQ accordion ── */
+        .faq-container { max-width: 780px; margin: 0 auto; }
+                .faq-item {
+                    background: var(--bg-1);
+                    border: 1px solid var(--line);
+                    border-radius: 14px;
+                    margin-bottom: 14px;
+                    overflow: hidden;
+                    transition: border-color 0.2s;
+                }
+                .faq-item.open { border-color: rgba(255,122,69,0.4); }
+                .faq-question {
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    gap: 16px;
+                    padding: 20px 24px;
+                    cursor: pointer;
+                    font-weight: 700;
+                    font-size: 16px;
+                    color: var(--text-hi);
+                }
+                .faq-question .faq-icon {
+                    color: var(--orange);
+                    font-size: 20px;
+                    font-weight: 800;
+                    flex-shrink: 0;
+                    transition: transform 0.25s ease;
+                }
+                .faq-item.open .faq-icon { transform: rotate(45deg); }
+                .faq-answer {
+                    max-height: 0;
+                    overflow: hidden;
+                    transition: max-height 0.3s ease;
+                }
+                .faq-answer p {
+                    color: var(--text-lo);
+                    font-size: 14.5px;
+                    line-height: 1.75;
+                    padding: 0 24px 22px;
+                }
+                .faq-item.open .faq-answer { max-height: 240px; }
+    </style>
+</head>
+<body>
+    <nav class="site-nav">
+        <div class="nav-inner">
+            <a href="index.html" class="nav-brand">
+                <span class="nav-brand-icon"><svg class="brand-logo-svg" viewBox="0 0 46 38" width="1em" height="0.83em" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" style="display:block;overflow:visible;"><rect x="4" y="4" width="24" height="19" rx="7" style="fill:none;stroke:var(--text-lo);stroke-width:2.3"/><rect x="16" y="14" width="26" height="20" rx="7" style="fill:var(--bg-1);stroke:var(--orange);stroke-width:2.3"/><circle cx="23" cy="24" r="2" style="fill:var(--orange)"/><circle cx="29" cy="24" r="2" style="fill:var(--orange)"/><circle cx="35" cy="24" r="2" style="fill:var(--orange)"/></svg></span>
+                <span class="nav-brand-text">AutoChat</span>
+            </a>
+            <div id="authButtons"></div>
+        </div>
+    </nav>
+
+    <section class="hero-section">
+        <div class="container">
+            <div class="header">
+                <div class="logo-icon"><svg class="brand-logo-svg" viewBox="0 0 46 38" width="1em" height="0.83em" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" style="display:block;overflow:visible;"><rect x="4" y="4" width="24" height="19" rx="7" style="fill:none;stroke:var(--text-lo);stroke-width:2.3"/><rect x="16" y="14" width="26" height="20" rx="7" style="fill:var(--bg-1);stroke:var(--orange);stroke-width:2.3"/><circle cx="23" cy="24" r="2" style="fill:var(--orange)"/><circle cx="29" cy="24" r="2" style="fill:var(--orange)"/><circle cx="35" cy="24" r="2" style="fill:var(--orange)"/></svg></div>
+                <div class="logo-text">AutoChat</div>
+            </div>
+            
+            <h1>Empower Your Business with Chat Automation</h1>
+            <p class="subtitle">
+                Deploy intelligent bots across social media platforms in minutes 
+                let AutoChat handle your customer service 24/7/365.
+            </p>
+            
+            <div class="hero-stats">
+                <div class="stat-item">
+                    <span class="stat-number" data-target="50654">0</span>
+                    <span class="stat-label">Active Bots</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number" data-target="89814">0</span>
+                    <span class="stat-label">Users</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number" data-target="154326">0</span>
+                    <span class="stat-label">Total Visitors</span>
+                </div>
+            </div>
+            
+            <div class="btn-container">
+                <button id="getStartedBtn" class="btn">🚀 Get Started Free</button>
+            </div>
+        </div>
+    </section>
+
+    <section class="info-section" id="learn-more">
+        <div class="info-container">
+            <h2 class="info-title">Platform Advantages</h2>
+            <p class="info-subtitle">Discover why thousands of businesses trust AutoChat to automate their customer service and boost productivity</p>
+            
+            <!-- Carousel wrapper -->
+            <div class="carousel-wrapper">
+                <button class="carousel-btn carousel-btn-left" onclick="slideCarousel(-1)" aria-label="Previous">&#8592;</button>
+
+                <div class="carousel-track-container">
+                    <div class="carousel-track" id="carouselTrack">
+
+                        <div class="feature-card">
+                            <span class="feature-icon">⚡</span>
+                            <h3 class="feature-title">Lightning-Fast Setup</h3>
+                            <p class="feature-desc">Deploy your intelligent bot in less than 5 minutes without writing a single line of code.</p>
+                            <ul class="feature-list">
+                                <li>No coding skills required</li>
+                                <li>Pre-built templates for every industry</li>
+                                <li>Instant activation</li>
+                                <li>Step-by-step video tutorials</li>
+                            </ul>
+                        </div>
+
+                        <div class="feature-card">
+                            <span class="feature-icon">🔒</span>
+                            <h3 class="feature-title">Enterprise-Grade Security</h3>
+                            <p class="feature-desc">Your data and customer information are protected with bank-level encryption and advanced security protocols.</p>
+                            <ul class="feature-list">
+                                <li>End-to-end encryption</li>
+                                <li>GDPR compliant</li>
+                                <li>Regular security audits</li>
+                                <li>99.9% uptime guarantee</li>
+                            </ul>
+                        </div>
+
+                        <div class="feature-card">
+                            <span class="feature-icon">🤖</span>
+                            <h3 class="feature-title">Advanced AI Technology</h3>
+                            <p class="feature-desc">Powered by cutting-edge AI that understands context, learns from interactions, and improves continuously.</p>
+                            <ul class="feature-list">
+                                <li>Natural language processing</li>
+                                <li>Context-aware conversations</li>
+                                <li>Machine learning capabilities</li>
+                                <li>Multi-language support</li>
+                            </ul>
+                        </div>
+
+                        <div class="feature-card">
+                            <span class="feature-icon">🎮</span>
+                            <h3 class="feature-title">Complete Control Dashboard</h3>
+                            <p class="feature-desc">Manage all your bots from one powerful dashboard. Monitor performance and analyze conversations in real-time.</p>
+                            <ul class="feature-list">
+                                <li>Real-time analytics</li>
+                                <li>Conversation history</li>
+                                <li>Performance metrics</li>
+                                <li>Easy bot customization</li>
+                            </ul>
+                        </div>
+
+                        <div class="feature-card">
+                            <span class="feature-icon">📱</span>
+                            <h3 class="feature-title">Multi-Platform Integration</h3>
+                            <p class="feature-desc">Connect with your customers wherever they are — WhatsApp, Telegram, Instagram, and more.</p>
+                            <ul class="feature-list">
+                                <li>WhatsApp QR Code</li>
+                                <li>Telegram API</li>
+                                <li>Instagram DM automation</li>
+                                <li>Facebook Messenger</li>
+                            </ul>
+                        </div>
+
+                        <div class="feature-card">
+                            <span class="feature-icon">⏰</span>
+                            <h3 class="feature-title">24/7 Automated Support</h3>
+                            <p class="feature-desc">Never miss a customer inquiry. Your AutoChat works around the clock to provide instant responses.</p>
+                            <ul class="feature-list">
+                                <li>Always available</li>
+                                <li>Instant response time</li>
+                                <li>Handle unlimited conversations</li>
+                                <li>Reduce response time by 90%</li>
+                            </ul>
+                        </div>
+
+                        <div class="feature-card">
+                            <span class="feature-icon">💰</span>
+                            <h3 class="feature-title">Cost-Effective Solution</h3>
+                            <p class="feature-desc">Reduce customer service costs by up to 80%. One bot can handle the workload of multiple support agents.</p>
+                            <ul class="feature-list">
+                                <li>80% cost reduction</li>
+                                <li>No hiring or training costs</li>
+                                <li>Scalable pricing plans</li>
+                                <li>Free trial available</li>
+                            </ul>
+                        </div>
+
+                        <div class="feature-card">
+                            <span class="feature-icon">📊</span>
+                            <h3 class="feature-title">Actionable Insights</h3>
+                            <p class="feature-desc">Gain valuable insights into customer behavior, common questions, and business opportunities.</p>
+                            <ul class="feature-list">
+                                <li>Customer behavior analytics</li>
+                                <li>Conversation trends</li>
+                                <li>Performance reports</li>
+                                <li>Export data anytime</li>
+                            </ul>
+                        </div>
+
+                    </div><!-- end track -->
+                </div><!-- end track-container -->
+
+                <button class="carousel-btn carousel-btn-right" onclick="slideCarousel(1)" aria-label="Next">&#8594;</button>
+            </div>
+
+            <!-- Dot indicators -->
+            <div class="carousel-dots" id="carouselDots"></div>
+        </div>
+    </section>
+
+    <section class="info-section" id="use-cases" style="padding-top:20px;border-top:1px solid var(--line);">
+        <div class="info-container">
+            <h2 class="info-title">Who Is It For?</h2>
+            <p class="info-subtitle">AutoChat adapts to any business that talks to customers — here's where it makes the biggest difference.</p>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <span class="feature-icon">🛒</span>
+                    <h3 class="feature-title">E-commerce</h3>
+                    <p class="feature-desc">Answer product questions, shipping costs, and order status automatically — the moment a customer asks, day or night.</p>
+                    <ul class="feature-list">
+                        <li>Instant product & pricing answers</li>
+                        <li>Order status without human input</li>
+                        <li>Shipping & return policy on autopilot</li>
+                        <li>Recover abandoned conversations</li>
+                    </ul>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">📅</span>
+                    <h3 class="feature-title">Service Providers</h3>
+                    <p class="feature-desc">Let clients book appointments and get instant answers, even outside business hours — no missed leads, no back-and-forth.</p>
+                    <ul class="feature-list">
+                        <li>Automated appointment booking</li>
+                        <li>Instant availability replies</li>
+                        <li>Works after hours & weekends</li>
+                        <li>Fewer no-shows with auto reminders</li>
+                    </ul>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">🎧</span>
+                    <h3 class="feature-title">Customer Support Teams</h3>
+                    <p class="feature-desc">Cut down repetitive tickets and free your team to focus on the conversations that actually need a human touch.</p>
+                    <ul class="feature-list">
+                        <li>Handles FAQs automatically</li>
+                        <li>Lowers first-response time</li>
+                        <li>Scales without new hires</li>
+                        <li>Consistent answers, every time</li>
+                    </ul>
+                </div>
+            </div>
+            <div style="text-align:center;margin-top:20px;">
+                <a href="create-bot.html" class="btn">🚀 Build Your Bot</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="info-section" id="security" style="padding-top:20px;border-top:1px solid var(--line);">
+        <div class="info-container">
+            <h2 class="info-title">Security &amp; Privacy</h2>
+            <p class="info-subtitle">Built on the same protections trusted by growing businesses to keep customer conversations and data safe.</p>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <span class="feature-icon">🔐</span>
+                    <h3 class="feature-title">End-to-End Encryption</h3>
+                    <p class="feature-desc">All data in transit and at rest is encrypted, so conversations, credentials, and account details stay private at every step.</p>
+                    <ul class="feature-list">
+                        <li>Encrypted data in transit & at rest</li>
+                        <li>Salted, hashed password storage</li>
+                        <li>Signed session tokens, not raw keys</li>
+                        <li>No credentials ever exposed client-side</li>
+                    </ul>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">🧩</span>
+                    <h3 class="feature-title">Isolated User Data</h3>
+                    <p class="feature-desc">Every account is fully sandboxed — your bots, messages, and settings can only ever be accessed by you.</p>
+                    <ul class="feature-list">
+                        <li>Per-user ownership checks on every request</li>
+                        <li>No shared access between accounts</li>
+                        <li>Private bot configurations by default</li>
+                        <li>Soft-delete safeguards against data loss</li>
+                    </ul>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">🛡️</span>
+                    <h3 class="feature-title">Hardened Backend</h3>
+                    <p class="feature-desc">Built with modern backend security standards — no direct database access, and every endpoint verified server-side.</p>
+                    <ul class="feature-list">
+                        <li>No direct client access to the database</li>
+                        <li>Server-side validation on every action</li>
+                        <li>Rate-limited authentication endpoints</li>
+                        <li>Continuously reviewed for vulnerabilities</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="info-section" id="faq" style="padding-top:20px;border-top:1px solid var(--line);">
+        <div class="info-container">
+            <h2 class="info-title">Frequently Asked Questions</h2>
+            <p class="info-subtitle">Everything you need to know before launching your first AutoChat.</p>
+            <div class="faq-container">
+                <div class="faq-item open">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        Do I need coding experience to create a bot?
+                        <span class="faq-icon">+</span>
+                    </div>
+                    <div class="faq-answer"><p>No — none at all. AutoChat is fully no-code. You can build and launch a working bot using our guided setup without writing a single line of code.</p></div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        Is my bot available 24/7?
+                        <span class="faq-icon">+</span>
+                    </div>
+                    <div class="faq-answer"><p>Yes. Once published, your bot runs around the clock, responding to customers instantly — even while you sleep, and with zero downtime on your end.</p></div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        Is my data secure?
+                        <span class="faq-icon">+</span>
+                    </div>
+                    <div class="faq-answer"><p>Yes. All data is encrypted end-to-end, and every account's bots and information are fully isolated — no one else can ever access your data.</p></div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        Which platforms are supported?
+                        <span class="faq-icon">+</span>
+                    </div>
+                    <div class="faq-answer"><p>Telegram and WhatsApp are fully supported today, with more messaging platforms on the roadmap as the platform grows.</p></div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        Can I change my bot's responses later?
+                        <span class="faq-icon">+</span>
+                    </div>
+                    <div class="faq-answer"><p>Absolutely. You can update your welcome message, AI behavior, and settings anytime from the My Bots dashboard — changes apply instantly.</p></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer><p>&copy; 2026 AutoChat Platform. All rights reserved.</p></footer>
+
+    <script>
+        // Counter Animation - 10 SECONDS
+        function animateCounter(element) {
+            const target = parseInt(element.getAttribute('data-target'));
+            const duration = 3000;
+            const start = 0;
+            const startTime = performance.now();
+
+            function updateCounter(currentTime) {
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                const easeProgress = 1 - Math.pow(1 - progress, 4);
+                const current = Math.floor(start + (target - start) * easeProgress);
+                element.innerText = current.toLocaleString();
+
+                if (progress < 1) {
+                    requestAnimationFrame(updateCounter);
+                } else {
+                    element.innerText = target.toLocaleString();
+                }
+            }
+
+            requestAnimationFrame(updateCounter);
+        }
+
+        window.addEventListener('load', () => {
+            const counters = document.querySelectorAll('.stat-number');
+            counters.forEach(counter => {
+                animateCounter(counter);
+            });
+        });
+
+        // ── HTML escaping (prevents stored XSS from the username) ───────
+        function escapeHtml(str) {
+            return String(str ?? '').replace(/[&<>"']/g, ch => ({
+                '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+            }[ch]));
+        }
+
+        // ── Auth (localStorage — no Firebase) ──────────────────────────
+        (function initAuth() {
+            const authButtons = document.getElementById('authButtons');
+            let user = null;
+            try { user = JSON.parse(localStorage.getItem('userInfo')); } catch(_) {}
+
+            if (user && user.id) {
+                authButtons.innerHTML = `
+                    <div style="display:flex;align-items:center;gap:15px;">
+                        <span style="color:var(--text-lo);font-size:14px;">Hi, ${escapeHtml(user.username)}</span>
+                        <a href="my-bots.html" style="color:var(--orange);text-decoration:none;font-weight:600;padding:8px 20px;border:1px solid var(--orange);border-radius:20px;">My Bots</a>
+                        <button onclick="signOut()" style="color:var(--orange);background:transparent;border:1px solid var(--orange);border-radius:20px;padding:8px 20px;cursor:pointer;font-weight:600;">🔐 Sign Out</button>
+                    </div>`;
+            } else {
+                authButtons.innerHTML = `
+                    <a href="auth.html" style="color:var(--orange);text-decoration:none;font-weight:600;padding:8px 20px;border:1px solid var(--orange);border-radius:20px;margin-right:10px;">🔐 Sign In</a>
+                    <a href="auth.html" style="background:linear-gradient(90deg,#ff7a45,#ff5f7e);color:#1a0f08;text-decoration:none;font-weight:600;padding:8px 20px;border-radius:20px;">Sign Up</a>`;
+            }
+        })();
+
+        function signOut() {
+            localStorage.removeItem('userInfo');
+            localStorage.removeItem('authToken');
+            localStorage.removeItem('sessionToken');
+            location.reload();
+        }
+
+        // ── Get Started Button ─────────────────────────────────────────
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('getStartedBtn').addEventListener('click', () => {
+                let user = null;
+                try { user = JSON.parse(localStorage.getItem('userInfo')); } catch(_) {}
+                window.location.href = (user && user.id) ? 'create-bot.html' : 'auth.html';
+            });
+        });
+
+        // ── Carousel Logic ─────────────────────────────────────────────
+        (function() {
+            const track     = document.getElementById('carouselTrack');
+            const dotsEl    = document.getElementById('carouselDots');
+            const cards     = track ? track.querySelectorAll('.feature-card') : [];
+            const total     = cards.length;
+            let current     = 0;
+
+            function visibleCount() {
+                const w = window.innerWidth;
+                if (w <= 580) return 1;
+                if (w <= 900) return 2;
+                return 3;
+            }
+
+            function maxIndex() {
+                return Math.max(0, total - visibleCount());
+            }
+
+            function buildDots() {
+                if (!dotsEl) return;
+                dotsEl.innerHTML = '';
+                const count = maxIndex() + 1;
+                for (let i = 0; i < count; i++) {
+                    const d = document.createElement('button');
+                    d.className = 'carousel-dot' + (i === current ? ' active' : '');
+                    d.setAttribute('aria-label', 'Go to slide ' + (i+1));
+                    d.onclick = () => goTo(i);
+                    dotsEl.appendChild(d);
+                }
+            }
+
+            function goTo(index) {
+                current = Math.max(0, Math.min(index, maxIndex()));
+                if (!track) return;
+                const cardWidth  = cards[0] ? cards[0].offsetWidth : 0;
+                const gap        = 24;
+                track.style.transform = `translateX(-${current * (cardWidth + gap)}px)`;
+                document.querySelectorAll('.carousel-dot').forEach((d, i) => {
+                    d.classList.toggle('active', i === current);
+                });
+            }
+
+            window.slideCarousel = function(dir) { goTo(current + dir); };
+
+            // Touch / swipe support
+            let touchStartX = 0;
+            if (track) {
+                track.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].clientX; }, { passive: true });
+                track.addEventListener('touchend', e => {
+                    const diff = touchStartX - e.changedTouches[0].clientX;
+                    if (Math.abs(diff) > 40) slideCarousel(diff > 0 ? 1 : -1);
+                }, { passive: true });
+            }
+
+            window.addEventListener('resize', () => {
+                buildDots();
+                goTo(Math.min(current, maxIndex()));
+            });
+
+            if (track) {
+                buildDots();
+                goTo(0);
+            }
+        })();
+
+        // ── FAQ accordion ────────────────────────────────────────────
+        function toggleFaq(questionEl) {
+            const item = questionEl.closest('.faq-item');
+            item.classList.toggle('open');
+        }
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,1340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Create Your Bot | AutoChat</title>
+<style>
+:root {
+  --bg-0:#070a1c; --bg-1:#0d1330; --bg-2:#141b40; --line:rgba(255,255,255,0.1);
+  --text-hi:#f2f4ff; --text-lo:#8992b8;
+  --orange:#ff7a45; --coral:#ff5f7e; --violet:#7b5cff;
+  --grad-warm: linear-gradient(90deg, var(--orange), var(--coral) 55%, var(--violet));
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: radial-gradient(ellipse at 20% -10%, #1a2050 0%, var(--bg-0) 45%), radial-gradient(ellipse at 100% 110%, #201436 0%, var(--bg-0) 50%), var(--bg-0); color: var(--text-hi); font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; min-height: 100vh; padding: 20px; }
+.container { max-width: 1000px; margin: 0 auto; }
+.header { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 40px; }
+.logo-icon { font-size: 30px; }
+.logo-text { font-size: 24px; background: var(--grad-warm); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 800; }
+.step-indicator { display: flex; justify-content: center; gap: 10px; margin-bottom: 30px; }
+.step { width: 12px; height: 12px; border-radius: 50%; background: var(--bg-2); }
+.step.active { background: var(--orange); }
+.step.completed { background: #00ff00; }
+.step-section { display: none; animation: fadeIn 0.5s; }
+.step-section.active { display: block; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+.card { background: var(--bg-1); border-radius: 15px; padding: 30px; margin-bottom: 20px; border: 1px solid var(--line); }
+h1 { text-align: center; font-size: 32px; margin: 30px 0; color: var(--orange); }
+.subtitle { text-align: center; color: var(--text-lo); margin-bottom: 40px; }
+.section { background: var(--bg-1); border-radius: 15px; padding: 30px; margin-bottom: 25px; border: 1px solid rgba(255, 122, 69, 0.2); }
+.section-title { font-size: 22px; color: var(--orange); margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+.form-group { margin-bottom: 20px; }
+.form-group label { display: block; margin-bottom: 8px; color: var(--text-lo); font-size: 14px; }
+.form-group input, .form-group textarea { width: 100%; padding: 12px 15px; background: var(--bg-2); border: 1px solid var(--line); border-radius: 10px; color: var(--text-hi); font-size: 15px; }
+.form-group input:focus, .form-group textarea:focus { outline: none; border-color: var(--orange); }
+.bot-type-cards { display: grid; gap: 20px; margin: 30px 0; }
+.bot-type-card { background: var(--bg-1); border-radius: 15px; padding: 30px; cursor: pointer; transition: transform 0.2s; border: 2px solid transparent; }
+.bot-type-card:hover { transform: translateY(-5px); border: 2px solid var(--orange); }
+.bot-type-card.selected { border: 2px solid #00ff00; background: #1a2a1a; }
+.bot-type-card h3 { color: var(--orange); margin-bottom: 15px; font-size: 28px; display: flex; align-items: center; gap: 10px; }
+.bot-type-card p { color: var(--text-lo); line-height: 1.5; font-size: 14px; }
+.new-badge { background: linear-gradient(90deg, #00aa00, #00cc00); color: white; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; }
+.main-menu { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 30px 0; }
+.menu-item { display: flex; gap: 15px; align-items: center; }
+.menu-number { background: var(--grad-warm); color: #1a0f08; width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 18px; flex-shrink: 0; }
+.menu-item input { flex: 1; }
+.divider { height: 2px; background: linear-gradient(90deg, transparent, var(--orange), transparent); margin: 30px 0; }
+.sub-section { background: var(--bg-1); border-radius: 15px; padding: 25px; margin: 25px 0; border: 1px solid rgba(0, 255, 0, 0.2); }
+.sub-header { display: flex; align-items: center; gap: 15px; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid var(--line); }
+.sub-number { background: linear-gradient(90deg, #00aa00, #00cc00); color: white; padding: 8px 20px; border-radius: 10px; font-weight: bold; font-size: 16px; }
+.sub-title { color: #00ff00; font-size: 18px; font-weight: 600; }
+.content-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 20px 0; }
+.content-item { background: var(--bg-1); border-radius: 10px; padding: 20px; border: 1px solid var(--line); }
+.content-item h4 { color: var(--orange); margin-bottom: 15px; font-size: 16px; }
+.add-btn { background: linear-gradient(90deg, #00aa00, #00cc00); color: white; border: none; padding: 10px 25px; border-radius: 10px; cursor: pointer; font-weight: 600; font-size: 14px; margin-top: 10px; }
+.add-btn:hover { transform: scale(1.05); }
+.items-list { margin-top: 15px; }
+.item-row { display: flex; justify-content: space-between; align-items: center; background: var(--bg-2); padding: 12px 15px; border-radius: 8px; margin-bottom: 10px; border: 1px solid var(--line); }
+.item-number { background: #00aa00; color: white; padding: 3px 12px; border-radius: 5px; font-size: 12px; font-weight: bold; margin-right: 10px; }
+.item-text { flex: 1; color: #c7cce3; }
+.item-delete { background: var(--coral); color: white; border: none; padding: 5px 15px; border-radius: 5px; cursor: pointer; font-size: 12px; }
+.submenu-options { background: var(--bg-1); border-radius: 10px; padding: 15px; margin-top: 20px; border: 1px solid var(--line); }
+.submenu-options h4 { color: var(--text-lo); font-size: 14px; margin-bottom: 10px; }
+.submenu-options ul { list-style: none; color: #c7cce3; }
+.submenu-options li { padding: 5px 0; }
+.submenu-options strong { color: #00ff00; }
+.info-box { background: rgba(0, 170, 255, 0.1); border: 1px solid #00aaff; border-radius: 10px; padding: 15px; margin-bottom: 20px; color: #00aaff; font-size: 14px; }
+.options-grid { display: grid; grid-template-columns: 1fr; gap: 15px; margin-top: 20px; }
+.option-btn { background: var(--bg-2); border: 1px solid var(--line); border-radius: 10px; padding: 15px; text-align: left; cursor: pointer; transition: all 0.2s; color: var(--text-hi); font-size: 15px; }
+.option-btn:hover { background: var(--bg-1); border-color: var(--orange); transform: translateY(-3px); }
+.option-btn.selected { background: var(--grad-warm); border-color: var(--orange); color: #1a0f08; }
+.platform-card { background: var(--bg-1); border-radius: 15px; padding: 40px 30px; margin-bottom: 20px; cursor: pointer; transition: transform 0.2s; border: 3px solid var(--line); text-align: center; }
+.platform-card:hover { transform: scale(1.03); border-color: var(--orange); }
+.platform-card.selected { border-color: #00ff00; background: #1a2a2a; }
+.platform-card h3 { font-size: 28px; margin-bottom: 15px; }
+.platform-card p { color: var(--text-lo); line-height: 1.6; font-size: 16px; }
+#telegramCard h3 { color: #0088cc; }
+#whatsappCard h3 { color: #25D366; }
+.summary-card { background: var(--bg-2); border-radius: 15px; padding: 25px; margin: 20px 0; border: 1px solid var(--line); }
+.summary-card h3 { color: var(--orange); margin-bottom: 20px; font-size: 20px; display: flex; align-items: center; gap: 10px; }
+.info-row { display: flex; justify-content: space-between; margin: 15px 0; padding: 15px; background: var(--bg-1); border-radius: 10px; border-bottom: 1px solid var(--line); }
+.info-row:last-child { border-bottom: none; }
+.info-label { font-weight: 600; color: var(--text-lo); font-size: 16px; }
+.info-value { color: var(--text-hi); font-size: 16px; text-align: right; }
+.welcome-preview { background: var(--bg-1); padding: 15px; border-radius: 10px; font-style: italic; line-height: 1.6; white-space: pre-wrap; }
+.btn { background: var(--grad-warm); color: #1a0f08; border: none; padding: 15px 40px; font-size: 18px; border-radius: 50px; cursor: pointer; font-weight: 600; transition: transform 0.2s; width: 100%; margin-top: 20px; }
+.btn:hover { transform: scale(1.05); }
+.btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+.btn-secondary { background: transparent; border: 2px solid var(--orange); color: var(--orange); margin-top: 15px; }
+.btn-success { background: linear-gradient(90deg, #00aa00, #00cc00); }
+.button-group { display: flex; gap: 15px; margin-top: 30px; }
+.button-group .btn { margin-top: 0; }
+.loading-spinner { border: 4px solid var(--line); border-top: 4px solid var(--orange); border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 20px auto; }
+@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+.countdown { text-align: center; font-size: 18px; color: var(--orange); font-weight: 700; margin: 15px 0; padding: 10px; background: rgba(255,122,69,0.08); border-radius: 10px; border: 1px solid var(--orange); }
+.status-message { text-align: center; color: var(--text-lo); margin: 15px 0; font-size: 14px; }
+.status-message.success { color: #00ff00; }
+.status-message.error { color: var(--coral); }
+.loading { text-align: center; padding: 50px; color: var(--orange); font-size: 18px; }
+.success-message { background: rgba(0, 255, 0, 0.1); border: 2px solid #00ff00; border-radius: 15px; padding: 30px; text-align: center; margin: 30px 0; }
+.success-message h3 { color: #00ff00; margin-bottom: 15px; font-size: 24px; }
+.qr-container { text-align: center; padding: 30px; }
+.qr-code { background: #fff; padding: 20px; border-radius: 15px; display: inline-block; margin: 20px 0; }
+.qr-code img { width: 256px; height: 256px; }
+@media (max-width: 768px) { .main-menu, .content-grid { grid-template-columns: 1fr; } .button-group { flex-direction: column; } }
+
+/* ── Responsive Design ─────────────────────────────────────────── */
+@media (max-width: 768px) {
+    body { padding: 12px; }
+    .container { max-width: 100%; }
+    h1 { font-size: 24px; margin: 20px 0; }
+    .card { padding: 18px; }
+    .section { padding: 18px; }
+    .main-menu { grid-template-columns: 1fr; gap: 12px; }
+    .content-grid { grid-template-columns: 1fr; }
+    .bot-type-cards { grid-template-columns: 1fr; }
+    .bot-type-card { padding: 20px; }
+    .bot-type-card h3 { font-size: 22px; }
+    .button-group { flex-direction: column; gap: 10px; }
+    .button-group .btn { width: 100%; }
+    .platform-card { padding: 25px 18px; }
+    .platform-card h3 { font-size: 22px; }
+    .summary-card { padding: 18px; }
+    .info-row { flex-direction: column; gap: 5px; }
+    .info-label { font-size: 13px; }
+    .info-value { font-size: 14px; text-align: left; }
+    .sub-section { padding: 18px; }
+    .step-indicator { gap: 8px; }
+    .step { width: 10px; height: 10px; }
+    #authButtons { position: fixed; top: 10px; right: 10px; z-index: 1000; }
+    #authButtons span { display: none; }
+}
+@media (max-width: 480px) {
+    body { padding: 8px; }
+    h1 { font-size: 20px; }
+    .card { padding: 14px; border-radius: 12px; }
+    .btn { padding: 13px 20px; font-size: 15px; }
+    .form-group input, .form-group textarea { font-size: 16px; padding: 11px 12px; }
+    .menu-number { width: 34px; height: 34px; font-size: 16px; }
+    .sub-number { padding: 6px 14px; font-size: 14px; }
+    .bot-type-card h3 { font-size: 20px; }
+    .pairing-code-value { font-size: 28px; letter-spacing: 5px; }
+    .pairing-code-box { padding: 20px 15px; }
+}
+
+/* ── Step 0: Intro Grid ─────────────────────────────────────── */
+.steps-intro-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    text-align: left;
+}
+.steps-intro-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: var(--bg-1);
+    border: 1px solid rgba(255,122,69,0.2);
+    border-radius: 12px;
+    padding: 14px 16px;
+    transition: all 0.2s;
+}
+.steps-intro-item:hover {
+    border-color: var(--orange);
+    background: rgba(255,122,69,0.06);
+    transform: translateY(-2px);
+}
+.steps-intro-num {
+    background: var(--grad-warm);
+    color:#1a0f08;
+    width:34px;
+    height:34px;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-weight:800;
+    font-size:16px;
+    flex-shrink:0;
+}
+.steps-intro-title {
+    color:var(--text-hi);
+    font-weight:700;
+    font-size:15px;
+    margin-bottom:3px;
+}
+.steps-intro-desc {
+    color:var(--text-lo);
+    font-size:13px;
+    line-height:1.4;
+}
+@media (max-width:500px) {
+    .steps-intro-grid { grid-template-columns:1fr; }
+}
+</style>
+</head>
+<body>
+<div id="authButtons" style="position: absolute; top: 20px; right: 20px;"></div>
+<div style="position: absolute; top: 20px; left: 20px;">
+<a href="index.html" style="color: var(--text-lo); text-decoration: none; font-weight: 600; padding: 8px 20px; border: 1px solid var(--line); border-radius: 20px;">← Back</a>
+</div>
+<div class="container">
+<div class="header">
+<div class="logo-icon"><svg class="brand-logo-svg" viewBox="0 0 46 38" width="1em" height="0.83em" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" style="display:block;overflow:visible;"><rect x="4" y="4" width="24" height="19" rx="7" style="fill:none;stroke:var(--text-lo);stroke-width:2.3"/><rect x="16" y="14" width="26" height="20" rx="7" style="fill:var(--bg-1);stroke:var(--orange);stroke-width:2.3"/><circle cx="23" cy="24" r="2" style="fill:var(--orange)"/><circle cx="29" cy="24" r="2" style="fill:var(--orange)"/><circle cx="35" cy="24" r="2" style="fill:var(--orange)"/></svg></div>
+<div class="logo-text">AutoChat</div>
+</div>
+<div class="step-indicator">
+<div class="step active" data-step="0"></div>
+<div class="step" data-step="1"></div>
+<div class="step" data-step="2"></div>
+<div class="step" data-step="3"></div>
+<div class="step" data-step="4"></div>
+<div class="step" data-step="5"></div>
+<div class="step" data-step="6"></div>
+</div>
+
+<!-- Step 0: How to Create Your Bot — Intro ──────────────── -->
+<div class="step-section active" id="step0">
+<div class="card" style="text-align:center;">
+    <h1 style="font-size:26px;margin-bottom:8px;">🚀 How to Create Your Bot</h1>
+    <p class="subtitle" style="font-size:15px;margin-bottom:30px;color:var(--text-lo);">
+        Follow these simple steps to get your bot running in minutes
+    </p>
+
+    <div class="steps-intro-grid">
+        <div class="steps-intro-item">
+            <div class="steps-intro-num">1</div>
+            <div>
+                <div class="steps-intro-title">Name Your Bot</div>
+                <div class="steps-intro-desc">Give your bot a unique name</div>
+            </div>
+        </div>
+        <div class="steps-intro-item">
+            <div class="steps-intro-num">2</div>
+            <div>
+                <div class="steps-intro-title">Choose Bot Type</div>
+                <div class="steps-intro-desc">Welcome Bot or NumBot Pro</div>
+            </div>
+        </div>
+        <div class="steps-intro-item">
+            <div class="steps-intro-num">3</div>
+            <div>
+                <div class="steps-intro-title">Set Your Message</div>
+                <div class="steps-intro-desc">Write your welcome or menu message</div>
+            </div>
+        </div>
+        <div class="steps-intro-item">
+            <div class="steps-intro-num">4</div>
+            <div>
+                <div class="steps-intro-title">Select Platform</div>
+                <div class="steps-intro-desc">Telegram or WhatsApp</div>
+            </div>
+        </div>
+        <div class="steps-intro-item">
+            <div class="steps-intro-num">5</div>
+            <div>
+                <div class="steps-intro-title">Connect Account</div>
+                <div class="steps-intro-desc">Enter your credentials</div>
+            </div>
+        </div>
+        <div class="steps-intro-item">
+            <div class="steps-intro-num">6</div>
+            <div>
+                <div class="steps-intro-title">Launch Bot 🎉</div>
+                <div class="steps-intro-desc">Your bot goes live instantly!</div>
+            </div>
+        </div>
+    </div>
+
+    <button class="btn" onclick="goToStep(1)" style="margin-top:30px;width:100%;font-size:18px;">
+        Let's Start →
+    </button>
+</div>
+</div>
+
+<!-- Step 1: Bot Name -->
+<div class="step-section" id="step1">
+<div class="card">
+<h1>🚀 Ready to Create Your Bot?</h1>
+<p class="subtitle">Just fill in a few details to get started</p>
+<div class="form-group">
+<label>🤖 Your Bot Name</label>
+<input type="text" id="botName" placeholder="e.g., WelcomeBot" required>
+</div>
+<button class="btn" onclick="goToStep(2)">Start →</button>
+<button class="btn btn-secondary" onclick="goToStep(0)">← Back</button>
+</div>
+</div>
+
+<!-- Step 2: Bot Type -->
+<div class="step-section" id="step2">
+<div class="card">
+<h1>Select Your Bot Type</h1>
+<div class="bot-type-cards">
+<div class="bot-type-card" onclick="selectBotType('welcome')" id="welcomeCard">
+<h3>🤖 Welcome Bot</h3>
+<p>This bot sends a greeting message at the start of every conversation with your customers. Perfect for making a great first impression!</p>
+</div>
+<div class="bot-type-card" onclick="selectBotType('number')" id="numberCard">
+<h3>🔢 NumBot Pro <span class="new-badge">NEW</span></h3>
+<p>Intelligent number-based bot for menus, products, and services. Customers send numbers (1, 2, 3...) to navigate through your offerings. Perfect for businesses, restaurants, and stores!</p>
+</div>
+</div>
+<div class="button-group">
+<button class="btn btn-secondary" onclick="goToStep(1)">← Back</button>
+<button class="btn" onclick="goToStep(3)" id="step2Next" disabled>Select →</button>
+</div>
+</div>
+</div>
+
+<!-- Step 3: Welcome Bot -->
+<div class="step-section" id="step3-welcome">
+<div class="card">
+<h1>👋 Welcome Message</h1>
+<div class="form-group">
+<label>📝 Write Your Welcome Message</label>
+<p style="color: var(--text-lo); margin-bottom: 15px;">What message would you like your bot to send when someone starts a conversation?</p>
+<textarea id="welcomeMessage" rows="6" placeholder="Type your welcome message here...">Hello! 👋 Welcome to our service. How can I help you today?</textarea>
+</div>
+<h3 style="color: var(--orange); font-size: 18px; margin: 25px 0 15px;">💡 Or choose a pre-made message:</h3>
+<div class="options-grid">
+<div class="option-btn" onclick="selectOption('Hello! 👋 Welcome to our service. How can I help you today?')">
+<strong>😊 Friendly:</strong><br>
+Hello! 👋 Welcome to our service. How can I help you today?
+</div>
+<div class="option-btn" onclick="selectOption('Welcome! 🎉 We\'re excited to have you here. What would you like to know?')">
+<strong>🎉 Excited:</strong><br>
+Welcome! 🎉 We're excited to have you here. What would you like to know?
+</div>
+<div class="option-btn" onclick="selectOption('Hi there! 👋 I\'m your AI assistant. Feel free to ask me anything!')">
+<strong>🤖 Professional:</strong><br>
+Hi there! 👋 I'm your AI assistant. Feel free to ask me anything!
+</div>
+<div class="option-btn" onclick="selectOption('Welcome to [Business Name]! 🚀 How can I assist you today?')">
+<strong>🚀 Business:</strong><br>
+Welcome to [Business Name]! 🚀 How can I assist you today?
+</div>
+<div class="option-btn" onclick="selectOption('Hey! 👋 Thanks for reaching out! What can I help you with?')">
+<strong>👋 Casual:</strong><br>
+Hey! 👋 Thanks for reaching out! What can I help you with?
+</div>
+<div class="option-btn" onclick="selectOption('Welcome! 💎 We value your time. How may I assist you today?')">
+<strong>💎 Premium:</strong><br>
+Welcome! 💎 We value your time. How may I assist you today?
+</div>
+</div>
+<div class="button-group">
+<button class="btn btn-secondary" onclick="goToStep(2)">← Back</button>
+<button class="btn" onclick="goToStep(4)">Next →</button>
+</div>
+</div>
+</div>
+
+<!-- Step 3: NumBot Pro -->
+<div class="step-section" id="step3-number">
+<div class="card">
+<h1>🤖 NumBot Pro Setup</h1>
+<p class="subtitle">Configure your number-based bot menu</p>
+<div class="section">
+<h2 class="section-title">👋 Welcome Message</h2>
+<div class="info-box">💡 This message will be sent when customers first contact your bot</div>
+<div class="form-group">
+<label>Greeting Message</label>
+<textarea id="numbotWelcome" rows="8">Hello 👋
+
+Welcome 🎉
+
+Thank you for contacting us.
+
+This is an automated message to help you quickly.
+
+Please choose one of the options below, and our team will assist you shortly.</textarea>
+</div>
+</div>
+<div class="section">
+<h2 class="section-title">📱 Main Menu</h2>
+<div class="info-box">💡 These are the 4 main options that customers will see first</div>
+<div class="main-menu">
+<div class="menu-item">
+<div class="menu-number">1</div>
+<input type="text" id="menu1" value="Services & Products" required oninput="updateLabels()">
+</div>
+<div class="menu-item">
+<div class="menu-number">2</div>
+<input type="text" id="menu2" value="Prices & Offers" required oninput="updateLabels()">
+</div>
+<div class="menu-item">
+<div class="menu-number">3</div>
+<input type="text" id="menu3" value="Orders & Booking" required oninput="updateLabels()">
+</div>
+<div class="menu-item">
+<div class="menu-number">4</div>
+<input type="text" id="menu4" value="Customer Service & Help" required oninput="updateLabels()">
+</div>
+</div>
+</div>
+<div class="divider"></div>
+<div class="sub-section">
+<div class="sub-header">
+<div class="sub-number">1+</div>
+<div class="sub-title" id="label1">Services & Products</div>
+</div>
+<div class="info-box">⚠️ Too many places - Customer can add product name + description</div>
+<div class="content-grid">
+<div class="content-item">
+<h4>➕ Add Product</h4>
+<div class="form-group">
+<label>Product Name</label>
+<input type="text" id="product1_name" placeholder="Enter product name">
+</div>
+<div class="form-group">
+<label>Product Description</label>
+<textarea id="product1_desc" rows="2" placeholder="Enter product description"></textarea>
+</div>
+<button type="button" class="add-btn" onclick="addItem(1)">+ Add Item</button>
+</div>
+<div class="content-item">
+<h4>📦 Added Products</h4>
+<div class="items-list" id="itemsList1">
+<em style="color: var(--text-lo);">No products added yet</em>
+</div>
+</div>
+</div>
+<div class="submenu-options">
+<h4>📋 Submenu Options:</h4>
+<ul>
+<li><strong>1</strong> - Prices & Offers</li>
+<li><strong>2</strong> - Orders & Booking</li>
+<li><strong>3</strong> - Customer Service & Help</li>
+<li><strong>0</strong> - Back to main menu</li>
+</ul>
+</div>
+</div>
+<div class="sub-section">
+<div class="sub-header">
+<div class="sub-number">2+</div>
+<div class="sub-title" id="label2">Prices & Offers</div>
+</div>
+<div class="info-box">⚠️ Too many places - Customer can add product name + price</div>
+<div class="content-grid">
+<div class="content-item">
+<h4>➕ Add Product</h4>
+<div class="form-group">
+<label>Product Name</label>
+<input type="text" id="product2_name" placeholder="Enter product name">
+</div>
+<div class="form-group">
+<label>Price</label>
+<input type="text" id="product2_price" placeholder="e.g., 50 USD">
+</div>
+<button type="button" class="add-btn" onclick="addItem(2)">+ Add Item</button>
+</div>
+<div class="content-item">
+<h4>📦 Added Products</h4>
+<div class="items-list" id="itemsList2">
+<em style="color: var(--text-lo);">No products added yet</em>
+</div>
+</div>
+</div>
+<div class="submenu-options">
+<h4>📋 Submenu Options:</h4>
+<ul>
+<li><strong>1</strong> - Orders & Booking</li>
+<li><strong>2</strong> - Customer Service & Help</li>
+<li><strong>0</strong> - Back to main menu</li>
+</ul>
+</div>
+</div>
+<div class="sub-section">
+<div class="sub-header">
+<div class="sub-number">3+</div>
+<div class="sub-title" id="label3">Orders & Booking</div>
+</div>
+<div class="info-box">⚠️ Too many places - Customer can add booking details</div>
+<div class="content-grid">
+<div class="content-item">
+<h4>➕ Add Booking Option</h4>
+<div class="form-group">
+<label>Booking Detail</label>
+<input type="text" id="booking3_detail" placeholder="e.g., VIP Reservation">
+</div>
+<div class="form-group">
+<label>Description</label>
+<textarea id="booking3_desc" rows="2" placeholder="Enter booking description"></textarea>
+</div>
+<button type="button" class="add-btn" onclick="addItem(3)">+ Add Item</button>
+</div>
+<div class="content-item">
+<h4>📦 Added Options</h4>
+<div class="items-list" id="itemsList3">
+<em style="color: var(--text-lo);">No options added yet</em>
+</div>
+</div>
+</div>
+<div class="submenu-options">
+<h4>📋 Submenu Options:</h4>
+<ul>
+<li><strong>1</strong> - Customer Service & Help</li>
+<li><strong>0</strong> - Back to main menu</li>
+</ul>
+</div>
+</div>
+<div class="sub-section">
+<div class="sub-header">
+<div class="sub-number">4+</div>
+<div class="sub-title" id="label4">Customer Service & Help</div>
+</div>
+<div class="info-box">ℹ️ This section shows a waiting message</div>
+<div class="content-item">
+<h4>💬 Waiting Message</h4>
+<div class="form-group">
+<label>Custom Message</label>
+<textarea id="message4" rows="3" placeholder="Please wait, someone will contact you soon...">🕐 Please wait, someone is going to contact you soon...</textarea>
+</div>
+</div>
+<div class="submenu-options">
+<h4>📋 Submenu Options:</h4>
+<ul>
+<li><strong>0</strong> - Back to main menu</li>
+</ul>
+</div>
+</div>
+<div class="button-group">
+<button class="btn btn-secondary" onclick="goToStep(2)">← Back</button>
+<button class="btn" onclick="goToStep(4)">Next →</button>
+</div>
+</div>
+</div>
+
+<!-- Step 4: Platform Selection -->
+<div class="step-section" id="step4">
+<div class="card">
+<h1>📱 Select Platform</h1>
+<div class="platform-card" onclick="selectPlatform('telegram')" id="telegramCard">
+<h3><img src="telegram-logo.png" style="width: 32px; height: 40px; object-fit: contain; vertical-align: middle; margin-right: 10px;" alt="Telegram"> Telegram</h3>
+<p>Your bot will work on Telegram — the fastest messaging app with 700M+ users worldwide.</p>
+</div>
+<div class="platform-card" onclick="selectPlatform('whatsapp')" id="whatsappCard">
+<h3><img src="whatsapp.logo.jpg" style="width: 32px; height: 40px; object-fit: contain; vertical-align: middle; margin-right: 10px;" alt="WhatsApp"> WhatsApp</h3>
+<p>Your bot will work on WhatsApp — the most popular messaging app with 2B+ users worldwide.</p>
+</div>
+<div class="button-group">
+<button class="btn btn-secondary" onclick="goToStep(3)">← Back</button>
+<button class="btn" onclick="goToStep(5)" id="step4Next" disabled>Select Platform →</button>
+</div>
+</div>
+</div>
+
+<!-- Step 5: Telegram -->
+<div class="step-section" id="step5-telegram">
+<div class="card">
+<h1>🔑 Enter Your Telegram API</h1>
+<p class="subtitle">Connect your Telegram account to create your bot. You need API ID and Hash from my.telegram.org</p>
+<div id="telegramCredentialsForm">
+<div class="form-group">
+<label>📱 Phone Number</label>
+<input type="text" id="phoneNumber" placeholder="+964xxxxxxxxx" required>
+</div>
+<div class="form-group">
+<label>🆔 API ID</label>
+<input type="text" id="apiId" placeholder="1234567" required>
+</div>
+<div class="form-group">
+<label>🔐 API Hash</label>
+<input type="text" id="apiHash" placeholder="abcdef1234567890..." required>
+</div>
+<button type="button" class="btn" id="sendCodeBtn" onclick="sendVerificationCode()">Send Code →</button>
+<button type="button" class="btn btn-secondary" onclick="goToStep(4)">← Back</button>
+</div>
+<div id="telegramLoadingState" style="display: none;">
+<h3>⏳ Connecting to Server...</h3>
+<div class="loading-spinner"></div>
+<p class="status-message">Please wait while we connect to Telegram...</p>
+</div>
+<div id="telegramCodeForm" style="display: none;">
+<div class="countdown" id="countdownTimer">⏳ Time Remaining: 60s</div>
+<div class="form-group">
+<label>📩 Verification Code</label>
+<input type="text" id="verificationCode" placeholder="12345" maxlength="10">
+</div>
+<p class="status-message" id="codeStatus"></p>
+<button type="button" class="btn" id="verifyBtn" onclick="verifyCodeAndGetSession()">Verify & Continue →</button>
+<button type="button" class="btn btn-secondary" onclick="location.reload()">← Cancel</button>
+</div>
+</div>
+</div>
+
+<!-- Step 5: WhatsApp -->
+<div class="step-section" id="step5-whatsapp">
+<div class="card">
+<h1>📱 Connect WhatsApp</h1>
+<p class="subtitle">Scan the QR code with your phone — completely free, no API keys needed</p>
+
+<!-- Initial state: button to start the connection -->
+<div id="whatsappStartState" style="text-align:center;padding:20px 0;">
+  <div class="info-box" style="background:rgba(37,211,102,0.08);border-color:#25D366;color:#25D366;margin-bottom:25px;">
+    💡 We'll generate a QR code for you to scan with <strong>WhatsApp on your phone</strong>.<br>
+    No Meta Developer account or API keys required.
+  </div>
+  <button type="button" class="btn" id="waStartBtn"
+          style="background:linear-gradient(90deg,#25D366,#128C7E);"
+          onclick="startWhatsAppConnection()">
+    📲 Generate QR Code
+  </button>
+  <button type="button" class="btn btn-secondary" onclick="goToStep(4)">← Back</button>
+</div>
+
+<!-- Loading state: waiting for server to start neonize + first QR -->
+<div id="whatsappLoadingState" style="display:none;text-align:center;padding:30px;">
+  <div class="loading-spinner" style="border-top-color:#25D366;"></div>
+  <p style="color:#25D366;margin-top:15px;">🔄 Starting WhatsApp connection...</p>
+</div>
+
+<!-- QR state: shows the live QR code streamed over SSE -->
+<div id="whatsappQrState" style="display:none;">
+  <div class="qr-container">
+    <div class="qr-code" id="waQrBox">
+      <img id="waQrImage" src="" alt="WhatsApp QR Code" />
+    </div>
+
+    <div class="status-message" id="waQrStatus">
+      📷 Open WhatsApp → Settings → Linked Devices → Link a Device
+    </div>
+
+    <div class="countdown" id="waQrCountdown" style="display:none;"></div>
+  </div>
+</div>
+
+<!-- Success state: scan confirmed -->
+<div id="whatsappSuccessState" style="display:none;text-align:center;padding:30px;">
+  <h3 style="color:#25D366;font-size:28px;margin-bottom:15px;">✅ WhatsApp Connected!</h3>
+  <p id="waSuccessDetail" style="color:var(--text-lo);font-size:16px;">Your phone is now linked successfully.</p>
+  <p style="color:var(--text-lo);margin-top:10px;">Redirecting to Summary...</p>
+</div>
+
+<!-- Error state -->
+<div id="whatsappErrorState" style="display:none;text-align:center;padding:30px;">
+  <h3 style="color:var(--coral);font-size:24px;margin-bottom:15px;">⚠️ Connection Issue</h3>
+  <p id="waErrorDetail" style="color:var(--text-lo);font-size:15px;margin-bottom:20px;"></p>
+  <button type="button" class="btn" style="background:linear-gradient(90deg,#25D366,#128C7E);"
+          onclick="startWhatsAppConnection()">🔄 Try Again</button>
+  <button type="button" class="btn btn-secondary" onclick="goToStep(4)">← Back</button>
+</div>
+
+</div>
+</div>
+
+<!-- Step 6: Summary -->
+<div class="step-section" id="step6">
+<div class="card">
+<h1>📋 Your Bot Summary</h1>
+<div class="summary-card">
+<h3>🤖 Bot Information</h3>
+<div class="info-row">
+<span class="info-label">Bot Name:</span>
+<span class="info-value" id="summaryBotName">-</span>
+</div>
+<div class="info-row">
+<span class="info-label">Bot Type:</span>
+<span class="info-value" id="summaryBotType">-</span>
+</div>
+<div class="info-row">
+<span class="info-label">Platform:</span>
+<span class="info-value" id="summaryPlatform">-</span>
+</div>
+</div>
+<div class="summary-card">
+<h3>👋 Welcome Message</h3>
+<div class="welcome-preview" id="summaryWelcomeMessage">-</div>
+</div>
+<div class="summary-card" id="telegramSummaryCard">
+<h3>📱 Telegram Account Info</h3>
+<div class="info-row">
+<span class="info-label">Phone:</span>
+<span class="info-value" id="summaryPhone">-</span>
+</div>
+<div class="info-row">
+<span class="info-label">API ID:</span>
+<span class="info-value" id="summaryApiId">-</span>
+</div>
+</div>
+<div class="summary-card" id="whatsappSummaryCard" style="display: none;">
+<h3>📱 WhatsApp Account Info</h3>
+<div class="info-row">
+<span class="info-label">Phone:</span>
+<span class="info-value" id="summaryWhatsAppPhone">-</span>
+</div>
+<div class="info-row">
+<span class="info-label">Status:</span>
+<span class="info-value" id="summaryWhatsAppStatus">-</span>
+</div>
+</div>
+<button class="btn" id="createBotBtn" onclick="createBot()">🚀 Create Bot Now</button>
+<div class="loading" id="loadingMessage" style="display: none;">⏳ Creating your bot... Please wait</div>
+<div class="success-message" id="successMessage" style="display: none;">
+<h3>✅ Bot Created Successfully!</h3>
+<p>Redirecting to My Bots...</p>
+</div>
+<button class="btn btn-secondary" onclick="goToStep(5)">← Back</button>
+</div>
+</div>
+
+</div>
+
+<script>
+// ── Backend API base URL ────────────────────────────────────────────────
+// Auto-detects local development (127.0.0.1 / localhost) vs production.
+// ⚠️ Still update the production value below to your real HTTPS backend
+// domain once you deploy — this only handles local testing automatically.
+const API_BASE_URL = (['localhost', '127.0.0.1'].includes(window.location.hostname))
+    ? 'http://127.0.0.1:5000'
+    : 'https://zm06sj92-5000.uks1.devtunnels.ms'; // ⚠️ CHANGE THIS before going live
+
+// Bot Data
+let botData = {
+    botName: '',
+    botType: '',
+    welcomeMessage: '',
+    numbotWelcome: '',
+    menuStructure: {},
+    products: [],
+    products2: [],
+    products3: [],
+    waitingMessage: '',
+    platform: '',
+    telegram: {},
+    whatsapp: {}
+};
+
+let currentStep = 0;
+let items = { 1: [], 2: [], 3: [] };
+let currentUser = null;
+let telegramSessionId = null;
+let countdownInterval;
+let timeLeft = 60;
+let qrRefreshInterval;
+let qrTimeLeft = 60;
+
+// ── HTML escaping (prevents stored XSS from usernames/product text/etc.) ──
+function escapeHtml(str) {
+    return String(str ?? '').replace(/[&<>"']/g, ch => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+    }[ch]));
+}
+
+// ── Auth Check (localStorage — no Firebase) ────────────────────────────
+(function initAuth() {
+    const authButtons = document.getElementById('authButtons');
+    try { currentUser = JSON.parse(localStorage.getItem('userInfo')); } catch(_) {}
+
+    if (currentUser && currentUser.id) {
+        authButtons.innerHTML = `
+            <div style="display:flex;align-items:center;gap:15px;">
+                <span style="color:var(--text-lo);font-size:14px;">Hi, ${escapeHtml(currentUser.username)}</span>
+                <button onclick="signOut()" style="color:var(--orange);background:transparent;border:1px solid var(--orange);border-radius:20px;padding:8px 20px;cursor:pointer;font-weight:600;">
+                    🔐 Sign Out
+                </button>
+            </div>`;
+    } else {
+        window.location.href = 'auth.html';
+    }
+})();
+
+function signOut() {
+    localStorage.removeItem('userInfo');
+    localStorage.removeItem('authToken');
+    window.location.href = 'auth.html';
+}
+
+// Navigation
+function goToStep(stepNumber) {
+    if (stepNumber > currentStep && !validateStep(currentStep)) {
+        return;
+    }
+    
+    // ✅ Save data before navigating
+    saveData();
+    
+    document.querySelectorAll('.step-section').forEach(s => s.classList.remove('active'));
+    let targetId = `step${stepNumber}`;
+    if (stepNumber === 3) {
+        targetId = botData.botType === 'number' ? 'step3-number' : 'step3-welcome';
+    } else if (stepNumber === 5) {
+        targetId = botData.platform === 'whatsapp' ? 'step5-whatsapp' : 'step5-telegram';
+    }
+    document.getElementById(targetId).classList.add('active');
+    currentStep = stepNumber;
+    
+    document.querySelectorAll('.step').forEach((s, i) => {
+        s.classList.remove('active', 'completed');
+        if (i + 1 < currentStep) s.classList.add('completed');
+        else if (i + 1 === currentStep) s.classList.add('active');
+    });
+    
+    if (currentStep === 6) {
+        showSummary();
+    }
+    if (currentStep === 5 && botData.platform === 'whatsapp') {
+        // neonize QR flow: reset to the initial "start" state each time
+        // we arrive at this step, and close any leftover SSE connection.
+        closeWhatsAppStream();
+        showWaState('start');
+    }
+    window.scrollTo(0, 0);
+}
+
+function validateStep(step) {
+    if (step === 1) {
+        const botName = document.getElementById('botName').value.trim();
+        if (!botName) {
+            alert('Please enter a bot name');
+            return false;
+        }
+    } else if (step === 2) {
+        if (!botData.botType) {
+            alert('Please select a bot type');
+            return false;
+        }
+    }
+    return true;
+}
+
+function saveData() {
+    if (currentStep === 1) {
+        botData.botName = document.getElementById('botName').value.trim();
+    } else if (currentStep === 3) {
+        if (botData.botType === 'welcome') {
+            botData.welcomeMessage = document.getElementById('welcomeMessage').value;
+        } else {
+            // If the user typed into a product/booking field but forgot to
+            // press "+ Add Item" before moving on, capture it now instead
+            // of silently discarding it.
+            autoAddPendingItems();
+
+            botData.numbotWelcome = document.getElementById('numbotWelcome').value;
+            botData.menuStructure = {
+                1: document.getElementById('menu1').value,
+                2: document.getElementById('menu2').value,
+                3: document.getElementById('menu3').value,
+                4: document.getElementById('menu4').value
+            };
+            botData.products = items[1];
+            botData.products2 = items[2];
+            botData.products3 = items[3];
+            botData.waitingMessage = document.getElementById('message4').value;
+        }
+    } else if (currentStep === 5) {
+        if (botData.platform === 'telegram') {
+            botData.telegram = {
+                phoneNumber: document.getElementById('phoneNumber').value,
+                apiId: document.getElementById('apiId').value,
+                apiHash: document.getElementById('apiHash').value,
+                sessionCode: document.getElementById('sessionCode')?.value || ''
+            };
+        } else {
+            // WhatsApp (neonize): botData.whatsapp is already populated
+            // by the SSE 'connected' handler — nothing to read from a form.
+            botData.whatsapp = botData.whatsapp || {};
+        }
+    }
+}
+
+// If a product/booking row was typed but never added via its "+ Add Item"
+// button, add it automatically here so the data isn't lost when the user
+// moves to the next step. Mirrors the same validation addItem() uses.
+function autoAddPendingItems() {
+    const name1 = document.getElementById('product1_name').value.trim();
+    const desc1 = document.getElementById('product1_desc').value.trim();
+    if (name1 && desc1) addItem(1);
+
+    const name2 = document.getElementById('product2_name').value.trim();
+    const price2 = document.getElementById('product2_price').value.trim();
+    if (name2 && price2) addItem(2);
+
+    const name3 = document.getElementById('booking3_detail').value.trim();
+    const desc3 = document.getElementById('booking3_desc').value.trim();
+    if (name3 && desc3) addItem(3);
+}
+
+function selectBotType(type) {
+    botData.botType = type;
+    document.getElementById('welcomeCard').classList.remove('selected');
+    document.getElementById('numberCard').classList.remove('selected');
+    document.getElementById(type + 'Card').classList.add('selected');
+    document.getElementById('step2Next').disabled = false;
+}
+
+function selectPlatform(platform) {
+    botData.platform = platform;
+    document.getElementById('telegramCard').classList.remove('selected');
+    document.getElementById('whatsappCard').classList.remove('selected');
+    document.getElementById(platform + 'Card').classList.add('selected');
+    document.getElementById('step4Next').disabled = false;
+}
+
+function selectOption(message) {
+    document.getElementById('welcomeMessage').value = message;
+    document.querySelectorAll('.option-btn').forEach(btn => btn.classList.remove('selected'));
+    event.target.closest('.option-btn').classList.add('selected');
+}
+
+function updateLabels() {
+    document.getElementById('label1').textContent = document.getElementById('menu1').value;
+    document.getElementById('label2').textContent = document.getElementById('menu2').value;
+    document.getElementById('label3').textContent = document.getElementById('menu3').value;
+    document.getElementById('label4').textContent = document.getElementById('menu4').value;
+}
+
+function addItem(section) {
+    let name, desc, price;
+    if (section === 1) {
+        name = document.getElementById('product1_name').value;
+        desc = document.getElementById('product1_desc').value;
+        if (!name || !desc) { alert('Please enter product name and description'); return; }
+    } else if (section === 2) {
+        name = document.getElementById('product2_name').value;
+        price = document.getElementById('product2_price').value;
+        if (!name || !price) { alert('Please enter product name and price'); return; }
+    } else if (section === 3) {
+        name = document.getElementById('booking3_detail').value;
+        desc = document.getElementById('booking3_desc').value;
+        if (!name || !desc) { alert('Please enter booking detail and description'); return; }
+    }
+    const itemNumber = items[section].length + 1;
+    items[section].push({ number: itemNumber, name, description: desc || '', price: price || '' });
+    renderItems(section);
+    if (section === 1) {
+        document.getElementById('product1_name').value = '';
+        document.getElementById('product1_desc').value = '';
+    } else if (section === 2) {
+        document.getElementById('product2_name').value = '';
+        document.getElementById('product2_price').value = '';
+    } else if (section === 3) {
+        document.getElementById('booking3_detail').value = '';
+        document.getElementById('booking3_desc').value = '';
+    }
+}
+
+function renderItems(section) {
+    const list = document.getElementById(`itemsList${section}`);
+    if (items[section].length === 0) {
+        list.innerHTML = '<em style="color: var(--text-lo);">No items added yet</em>';
+        return;
+    }
+    let html = '';
+    items[section].forEach((item, index) => {
+        let displayText = escapeHtml(item.name);
+        if (item.description) displayText += ` - ${escapeHtml(item.description)}`;
+        if (item.price) displayText += ` - ${escapeHtml(item.price)}`;
+        html += `
+            <div class="item-row">
+                <span class="item-number">${item.number}+</span>
+                <span class="item-text">${displayText}</span>
+                <button type="button" class="item-delete" onclick="deleteItem(${section}, ${index})">🗑</button>
+            </div>
+        `;
+    });
+    list.innerHTML = html;
+}
+
+function deleteItem(section, index) {
+    items[section].splice(index, 1);
+    renderItems(section);
+}
+
+// ============================================
+// Telegram Functions
+// ============================================
+async function sendVerificationCode() {
+    const phoneNumber = document.getElementById('phoneNumber').value.trim();
+    const apiId = document.getElementById('apiId').value.trim();
+    const apiHash = document.getElementById('apiHash').value.trim();
+    
+    if (!phoneNumber || !apiId || !apiHash) {
+        alert('Please fill in all fields');
+        return;
+    }
+    
+    const btn = document.getElementById('sendCodeBtn');
+    btn.disabled = true;
+    btn.textContent = '⏳ Sending...';
+    document.getElementById('telegramCredentialsForm').style.display = 'none';
+    document.getElementById('telegramLoadingState').style.display = 'block';
+    
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/send-code`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                phoneNumber,
+                apiId,
+                apiHash,
+                userId:         currentUser.id,
+                botName:        botData.botName,
+                botType:        botData.botType === 'number' ? 'number_bot' : 'welcome_bot',
+                welcomeMessage: botData.botType === 'welcome' ? botData.welcomeMessage : botData.numbotWelcome,
+                menuStructure:  botData.menuStructure  || {},
+                products:       botData.products       || [],
+                products2:      botData.products2      || [],
+                products3:      botData.products3      || [],
+                waitingMessage: botData.waitingMessage || ''
+            })
+        });
+        const data = await response.json();
+        if (data.success) {
+            telegramSessionId = data.sessionId;
+            localStorage.setItem('telegramSessionId', telegramSessionId);
+            document.getElementById('telegramLoadingState').style.display = 'none';
+            document.getElementById('telegramCodeForm').style.display = 'block';
+            startCountdown();
+        } else {
+            alert('Error: ' + (data.error || 'Failed to send code'));
+            document.getElementById('telegramLoadingState').style.display = 'none';
+            document.getElementById('telegramCredentialsForm').style.display = 'block';
+            btn.disabled = false;
+            btn.textContent = 'Send Code →';
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert('Failed to connect to backend. Make sure backend is running on port 5000.');
+        document.getElementById('telegramLoadingState').style.display = 'none';
+        document.getElementById('telegramCredentialsForm').style.display = 'block';
+        btn.disabled = false;
+        btn.textContent = 'Send Code →';
+    }
+}
+
+function startCountdown() {
+    timeLeft = 60;
+    const timerElement = document.getElementById('countdownTimer');
+    countdownInterval = setInterval(() => {
+        timeLeft--;
+        timerElement.textContent = `⏳ Time Remaining: ${timeLeft}s`;
+        if (timeLeft <= 0) {
+            clearInterval(countdownInterval);
+            timerElement.textContent = '❌ Time Expired! Please restart.';
+            document.getElementById('verifyBtn').disabled = true;
+        }
+    }, 1000);
+}
+
+async function verifyCodeAndGetSession() {
+    const verificationCode = document.getElementById('verificationCode').value.trim();
+    const sessionId = telegramSessionId || localStorage.getItem('telegramSessionId');
+    
+    if (!verificationCode) {
+        alert('Please enter the verification code');
+        return;
+    }
+    if (!sessionId) {
+        alert('Please click "Send Code" first');
+        return;
+    }
+    
+    const btn = document.getElementById('verifyBtn');
+    const statusMsg = document.getElementById('codeStatus');
+    btn.disabled = true;
+    btn.textContent = 'Verifying...';
+    
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/verify-code`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                sessionId,
+                code: verificationCode,
+                userId: currentUser.id
+            })
+        });
+        const data = await response.json();
+        if (data.success) {
+            botData.telegram.sessionCode = data.sessionString;
+            statusMsg.className = 'status-message success-message';
+            statusMsg.textContent = '✅ Verified Successfully!';
+            setTimeout(() => {
+                goToStep(6);
+            }, 1000);
+        } else {
+            statusMsg.className = 'status-message error-message';
+            statusMsg.textContent = '❌ ' + (data.error || 'Invalid code');
+            btn.disabled = false;
+            btn.textContent = 'Verify & Continue →';
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        statusMsg.className = 'status-message error-message';
+        statusMsg.textContent = '❌ Failed to verify';
+        btn.disabled = false;
+        btn.textContent = 'Verify & Continue →';
+    }
+}
+
+// ============================================
+// WhatsApp — neonize (WhatsApp Web Automation, Free)
+// ============================================
+
+let waEventSource = null;     // active EventSource connection
+let waCountdownInterval = null;
+
+/**
+ * Shows exactly one of the WhatsApp step states and hides the rest.
+ * states: 'start' | 'loading' | 'qr' | 'success' | 'error'
+ */
+function showWaState(state) {
+    const ids = {
+        start:   'whatsappStartState',
+        loading: 'whatsappLoadingState',
+        qr:      'whatsappQrState',
+        success: 'whatsappSuccessState',
+        error:   'whatsappErrorState'
+    };
+    Object.entries(ids).forEach(([key, id]) => {
+        const el = document.getElementById(id);
+        if (el) el.style.display = (key === state) ? 'block' : 'none';
+    });
+}
+
+function closeWhatsAppStream() {
+    if (waEventSource) {
+        waEventSource.close();
+        waEventSource = null;
+    }
+    if (waCountdownInterval) {
+        clearInterval(waCountdownInterval);
+        waCountdownInterval = null;
+    }
+}
+
+/**
+ * Step 1: Tell the backend to create a neonize client for this user
+ * (POST /api/whatsapp/connect), then open the SSE stream to receive
+ * the QR code and the eventual "connected" signal.
+ */
+async function startWhatsAppConnection() {
+    if (!currentUser) {
+        alert('You must be signed in');
+        return;
+    }
+
+    showWaState('loading');
+
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/whatsapp/connect`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                userId:         currentUser.id,
+                botName:        botData.botName,
+                botType:        botData.botType === 'number' ? 'number_bot' : 'welcome_bot',
+                welcomeMessage: botData.botType === 'welcome' ? botData.welcomeMessage : botData.numbotWelcome,
+                menuStructure:  botData.menuStructure || {},
+                products:       botData.products || [],
+                products2:      botData.products2 || [],
+                products3:      botData.products3 || [],
+                waitingMessage: botData.waitingMessage || ''
+            })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok || !data.success) {
+            throw new Error(data.detail || data.error || 'Failed to start WhatsApp connection');
+        }
+
+        botData.whatsapp = botData.whatsapp || {};
+        botData.whatsapp.botRowId = data.botRowId;
+
+        // Step 2: open the SSE stream to receive the QR + connected events
+        openWhatsAppQrStream(currentUser.id);
+
+    } catch (err) {
+        console.error('WhatsApp connect error:', err);
+        document.getElementById('waErrorDetail').textContent = err.message;
+        showWaState('error');
+    }
+}
+
+/**
+ * Opens an SSE connection to /api/whatsapp/qr-stream and reacts to:
+ *   - status:    waiting   → SSE connected, waiting for neonize to produce a QR
+ *   - qr:        <base64>  → show the QR image, restart the 60s "expires" countdown
+ *   - connected: success   → show success state, save data, move to Summary
+ *   - heartbeat: ping      → keep-alive, ignored visually
+ */
+function openWhatsAppQrStream(userId) {
+    closeWhatsAppStream();
+
+    waEventSource = new EventSource(`${API_BASE_URL}/api/whatsapp/qr-stream?userId=${encodeURIComponent(userId)}`);
+
+    waEventSource.addEventListener('status', (e) => {
+        if (e.data === 'waiting') {
+            document.getElementById('waQrStatus').textContent =
+                '📡 Connected — waiting for QR code...';
+        }
+    });
+
+    waEventSource.addEventListener('qr', (e) => {
+        // e.data is a full "data:image/png;base64,..." string
+        document.getElementById('waQrImage').src = e.data;
+        document.getElementById('waQrStatus').textContent =
+            '📷 Open WhatsApp → Settings → Linked Devices → Link a Device';
+        showWaState('qr');
+        startWaQrCountdown();
+    });
+
+    waEventSource.addEventListener('connected', (_e) => {
+        closeWhatsAppStream();
+
+        botData.whatsapp = botData.whatsapp || {};
+        botData.whatsapp.connected = true;
+
+        document.getElementById('waSuccessDetail').textContent =
+            '✅ Your phone is now linked successfully.';
+        showWaState('success');
+
+        setTimeout(() => goToStep(6), 2000);
+    });
+
+    waEventSource.addEventListener('heartbeat', () => {
+        // keep-alive only, no UI change needed
+    });
+
+    waEventSource.onerror = () => {
+        // EventSource auto-reconnects; only show an error if we never
+        // got a QR or connection in the first place.
+        if (!document.getElementById('waQrImage').src.startsWith('data:')) {
+            document.getElementById('waErrorDetail').textContent =
+                'Lost connection to the server. Please try again.';
+            showWaState('error');
+            closeWhatsAppStream();
+        }
+    };
+}
+
+/**
+ * WhatsApp QR codes expire after ~60 seconds. This countdown is purely
+ * informational — neonize automatically generates and streams a fresh QR
+ * before/when the old one expires, so the image updates itself.
+ */
+function startWaQrCountdown() {
+    if (waCountdownInterval) clearInterval(waCountdownInterval);
+
+    let timeLeft = 60;
+    const countdownEl = document.getElementById('waQrCountdown');
+    countdownEl.style.display = 'block';
+    countdownEl.textContent = `⏱️ QR refreshes in ${timeLeft}s`;
+
+    waCountdownInterval = setInterval(() => {
+        timeLeft--;
+        if (timeLeft <= 0) {
+            countdownEl.textContent = '🔄 Refreshing QR code...';
+            clearInterval(waCountdownInterval);
+        } else {
+            countdownEl.textContent = `⏱️ QR refreshes in ${timeLeft}s`;
+        }
+    }, 1000);
+}
+
+// ============================================
+// Summary & Create Bot
+// ============================================
+function showSummary() {
+    document.getElementById('summaryBotName').textContent = botData.botName;
+    document.getElementById('summaryBotType').textContent = botData.botType === 'number' ? 'NumBot Pro' : 'Welcome Bot';
+    document.getElementById('summaryPlatform').textContent = botData.platform === 'whatsapp' ? '📱 WhatsApp' : '💬 Telegram';
+
+    if (botData.botType === 'welcome') {
+        document.getElementById('summaryWelcomeMessage').textContent = botData.welcomeMessage;
+    } else {
+        let html = '<strong>Main Menu:</strong><br><br>';
+        for (const [key, value] of Object.entries(botData.menuStructure)) {
+            html += `${escapeHtml(key)}️⃣ ${escapeHtml(value)}<br>`;
+        }
+        if (botData.products.length > 0) {
+            html += '<br><strong>Products:</strong><br>';
+            botData.products.forEach(p => {
+                html += `• ${escapeHtml(p.name)} - ${escapeHtml(p.description)}<br>`;
+            });
+        }
+        document.getElementById('summaryWelcomeMessage').innerHTML = html;
+    }
+
+    if (botData.platform === 'telegram') {
+        document.getElementById('telegramSummaryCard').style.display = 'block';
+        document.getElementById('whatsappSummaryCard').style.display = 'none';
+        document.getElementById('summaryPhone').textContent = botData.telegram.phoneNumber;
+        document.getElementById('summaryApiId').textContent = botData.telegram.apiId;
+    } else {
+        document.getElementById('telegramSummaryCard').style.display = 'none';
+        document.getElementById('whatsappSummaryCard').style.display = 'block';
+        document.getElementById('summaryWhatsAppPhone').textContent = 'Linked via QR code';
+        document.getElementById('summaryWhatsAppStatus').textContent = '✅ Active';
+    }
+}
+
+async function createBot() {
+    if (!confirm('🚀 Are you ready to create your bot?')) return;
+
+    document.getElementById('createBotBtn').style.display = 'none';
+    document.getElementById('loadingMessage').style.display = 'block';
+
+    try {
+        // ─────────────────────────────────────────────────────────────
+        // The server already created the record when the user verified
+        // credentials (status = 'pending' for Telegram, 'active' for
+        // WhatsApp). We just ask the (authenticated) backend to activate
+        // it — the backend verifies real ownership using the session
+        // token, it never trusts a client-supplied user_id.
+        // ─────────────────────────────────────────────────────────────
+        const res = await fetch(`${API_BASE_URL}/api/bots/activate-pending`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+            },
+            body: JSON.stringify({
+                platform: botData.platform,
+                bot_name: botData.botName
+            })
+        });
+        const result = await res.json();
+        if (!res.ok) throw new Error(result.detail || 'Failed to activate bot');
+
+        document.getElementById('loadingMessage').style.display = 'none';
+        document.getElementById('successMessage').style.display = 'block';
+
+        setTimeout(() => {
+            window.location.href = 'my-bots.html';
+        }, 2000);
+
+    } catch (err) {
+        console.error('Error:', err);
+        alert('❌ Failed to activate bot: ' + err.message);
+        document.getElementById('createBotBtn').style.display = 'block';
+        document.getElementById('loadingMessage').style.display = 'none';
+    }
+}
+</script>
+</body>
+</html>

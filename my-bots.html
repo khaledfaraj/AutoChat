@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Bots | AutoChat</title>
+
+    <style>
+        :root {
+            --bg-0:#070a1c; --bg-1:#0d1330; --bg-2:#141b40; --line:rgba(255,255,255,0.1);
+            --text-hi:#f2f4ff; --text-lo:#8992b8;
+            --orange:#ff7a45; --coral:#ff5f7e; --violet:#7b5cff;
+            --grad-warm: linear-gradient(90deg, var(--orange), var(--coral) 55%, var(--violet));
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background:
+                radial-gradient(ellipse at 20% -10%, #1a2050 0%, var(--bg-0) 45%),
+                radial-gradient(ellipse at 100% 110%, #201436 0%, var(--bg-0) 50%),
+                var(--bg-0);
+            color: var(--text-hi);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container { max-width: 1200px; margin: 0 auto; }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 50px;
+            padding: 20px;
+            background: var(--bg-1);
+            border-radius: 15px;
+            border: 1px solid rgba(255, 122, 69, 0.2);
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--orange);
+        }
+        .btn {
+            background: var(--grad-warm);
+            color: #1a0f08;
+            border: none;
+            padding: 12px 30px;
+            font-size: 16px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 5px 20px rgba(255,95,126,0.35); }
+        .btn-secondary {
+            background: transparent;
+            border: 2px solid var(--orange);
+            color: var(--orange);
+        }
+        .page-title { font-size: 42px; margin-bottom: 30px; color: var(--orange); }
+        .bots-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(min(400px, 100%), 1fr));
+            gap: 25px;
+        }
+        .bot-card {
+            background: var(--bg-1);
+            border-radius: 15px;
+            padding: 25px;
+            border: 2px solid rgba(255, 122, 69, 0.2);
+            transition: all 0.3s;
+        }
+        .bot-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--orange);
+            box-shadow: 0 10px 30px rgba(255,122,69,0.3);
+        }
+        .bot-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--line);
+        }
+        .bot-name { font-size: 24px; font-weight: 700; color: var(--orange); }
+        .status-badge {
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        .status-active  { background: rgba(0,255,0,0.2);   color: #00ff00; border: 1px solid #00ff00; }
+        .status-paused  { background: rgba(255,165,0,0.2); color: #ffa500; border: 1px solid #ffa500; }
+        .control-section { margin: 20px 0; }
+        .control-label { color: var(--text-lo); font-size: 14px; margin-bottom: 10px; display: block; }
+        .toggle-container { display: flex; align-items: center; gap: 15px; margin: 15px 0; }
+        .toggle-switch {
+            position: relative;
+            width: 60px; height: 30px;
+            background: var(--bg-2);
+            border-radius: 15px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .toggle-switch.active { background: #00ff00; }
+        .toggle-switch.paused { background: #ffa500; }
+        .toggle-switch::after {
+            content: '';
+            position: absolute;
+            top: 3px; left: 3px;
+            width: 24px; height: 24px;
+            background: white;
+            border-radius: 50%;
+            transition: transform 0.3s;
+        }
+        .toggle-switch.active::after { transform: translateX(30px); }
+        .toggle-text { font-size: 16px; font-weight: 600; }
+        .welcome-message-box {
+            background: var(--bg-1);
+            border: 1px solid var(--line);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 10px 0;
+        }
+        .welcome-message-box textarea {
+            width: 100%;
+            background: transparent;
+            border: none;
+            color: var(--text-hi);
+            font-size: 14px;
+            padding: 10px;
+            resize: vertical;
+            min-height: 180px;
+            font-family: inherit;
+        }
+        .welcome-message-box textarea:focus { outline: none; border: 1px solid var(--orange); border-radius: 5px; }
+        .btn-save {
+            background: #00aa00;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            font-size: 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+        .btn-save:hover { background: #00cc00; }
+        .btn-delete {
+            background: var(--coral);
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            font-size: 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            width: 100%;
+            margin-top: 15px;
+        }
+        .btn-delete:hover { background: #e0435c; }
+        .empty-state {
+            text-align: center;
+            padding: 80px 20px;
+            background: var(--bg-1);
+            border-radius: 20px;
+            border: 1px solid rgba(255,122,69,0.2);
+        }
+        .empty-state h2 { color: var(--orange); font-size: 28px; margin-bottom: 15px; }
+        .error-box {
+            background: rgba(255,95,126,0.1);
+            border: 2px solid var(--coral);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 20px 0;
+        }
+        .error-box h3 { color: var(--coral); margin-bottom: 15px; font-size: 20px; }
+        .loading { text-align: center; padding: 50px; color: var(--orange); font-size: 18px; }
+        .platform-info { color: var(--text-lo); font-size: 13px; margin-top: 5px; }
+        @media (max-width: 768px) {
+            .bots-grid { grid-template-columns: 1fr; }
+            .header { flex-direction: column; gap: 15px; text-align: center; }
+            .page-title { font-size: 28px; }
+            .bot-name { font-size: 20px; }
+            .btn { padding: 10px 20px; font-size: 14px; }
+        }
+        @media (max-width: 480px) {
+            body { padding: 12px; }
+            .header { padding: 15px; }
+            .bot-card { padding: 18px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">
+                <span><svg class="brand-logo-svg" viewBox="0 0 46 38" width="1em" height="0.83em" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" style="display:block;overflow:visible;"><rect x="4" y="4" width="24" height="19" rx="7" style="fill:none;stroke:var(--text-lo);stroke-width:2.3"/><rect x="16" y="14" width="26" height="20" rx="7" style="fill:var(--bg-1);stroke:var(--orange);stroke-width:2.3"/><circle cx="23" cy="24" r="2" style="fill:var(--orange)"/><circle cx="29" cy="24" r="2" style="fill:var(--orange)"/><circle cx="35" cy="24" r="2" style="fill:var(--orange)"/></svg></span>
+                <span>AutoChat</span>
+            </div>
+            <div>
+                <a href="create-bot.html" class="btn">Create New Bot</a>
+                <button class="btn btn-secondary" onclick="signOut()" style="margin-left: 10px;">🔐 Sign Out</button>
+            </div>
+        </div>
+
+        <h1 class="page-title">🤖 My Bots</h1>
+
+        <div id="botsContainer">
+            <div class="loading">Loading your bots...</div>
+        </div>
+    </div>
+
+    <script>
+        // ── Backend API base URL ─────────────────────────────────────────
+        // Auto-detects local dev vs production.
+        // ⚠️ Still update the production value below to your real HTTPS
+        // backend domain once you deploy.
+        const API_BASE_URL = (['localhost', '127.0.0.1'].includes(window.location.hostname))
+            ? 'http://127.0.0.1:5000'
+            : 'https://zm06sj92-5000.uks1.devtunnels.ms'; // ⚠️ CHANGE THIS before going live
+
+        function authHeaders() {
+            const token = localStorage.getItem('authToken');
+            return { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` };
+        }
+
+        // ── Auth Check (no Firebase — use localStorage) ─────────────────
+        (function checkAuth() {
+            const info  = localStorage.getItem('userInfo');
+            const token = localStorage.getItem('authToken');
+            if (!info || !token) {
+                window.location.href = 'auth.html';
+                return;
+            }
+            try {
+                const user = JSON.parse(info);
+                if (!user || !user.id) { window.location.href = 'auth.html'; return; }
+                console.log('✅ Logged in as:', user.username);
+                loadBots();
+            } catch(_) {
+                window.location.href = 'auth.html';
+            }
+        })();
+
+        // ── Load Bots ──────────────────────────────────────────────────
+        async function loadBots() {
+            const container = document.getElementById('botsContainer');
+
+            try {
+                const res = await fetch(`${API_BASE_URL}/api/bots`, { headers: authHeaders() });
+
+                if (res.status === 401) {
+                    // Token missing/expired/invalid — the server rejected us.
+                    localStorage.removeItem('userInfo');
+                    localStorage.removeItem('authToken');
+                    window.location.href = 'auth.html';
+                    return;
+                }
+
+                const result = await res.json();
+                if (!res.ok) throw new Error(result.detail || 'Failed to load bots');
+                const bots = result.bots;
+
+                if (!bots || bots.length === 0) {
+                    container.innerHTML = `
+                        <div class="empty-state">
+                            <h2>🎉 You don't have any bots yet</h2>
+                            <p>Create your first bot and start automating!</p>
+                            <a href="create-bot.html" class="btn" style="margin-top: 20px;">Create New Bot</a>
+                        </div>`;
+                    return;
+                }
+
+                console.log(`✅ Loaded ${bots.length} bot(s)`);
+                container.innerHTML = '<div class="bots-grid" id="botsGrid"></div>';
+                const grid = document.getElementById('botsGrid');
+                bots.forEach(bot => grid.appendChild(createBotCard(bot)));
+
+            } catch (err) {
+                console.error('❌ Error in loadBots:', err);
+                container.innerHTML = `
+                    <div class="error-box">
+                        <h3>❌ Error Loading Bots</h3>
+                        <p style="margin:15px 0;color:#c7cce3;">${escapeHtml(err.message)}</p>
+                        <button onclick="location.reload()" class="btn" style="margin-top:15px;">🔄 Retry</button>
+                    </div>`;
+            }
+        }
+
+        // ── HTML escaping (prevents stored XSS from bot_name/welcome_message) ──
+        function escapeHtml(str) {
+            return String(str ?? '').replace(/[&<>"']/g, ch => ({
+                '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+            }[ch]));
+        }
+
+        // ── Create Bot Card ────────────────────────────────────────────
+        function createBotCard(bot) {
+            const card = document.createElement('div');
+            card.className = 'bot-card';
+            const isActive   = bot.status === 'active';
+            const statusClass = isActive ? 'status-active' : 'status-paused';
+            const statusText  = isActive ? 'Active' : 'Paused';
+            const toggleClass = isActive ? 'active' : 'paused';
+
+            card.innerHTML = `
+                <div class="bot-header">
+                    <div>
+                        <div class="bot-name">${escapeHtml(bot.bot_name || 'Unnamed Bot')}</div>
+                        <div class="platform-info">${escapeHtml(bot.platform || 'Telegram')} • ${escapeHtml(bot.bot_type || 'General')}</div>
+                    </div>
+                    <div class="status-badge ${statusClass}">${statusText}</div>
+                </div>
+
+                <div class="control-section">
+                    <label class="control-label">Bot Status</label>
+                    <div class="toggle-container">
+                        <div class="toggle-switch ${toggleClass}" id="toggle-${bot.id}"
+                             onclick="toggleStatus('${bot.id}', '${bot.status}')"></div>
+                        <span class="toggle-text" id="status-text-${bot.id}">${statusText}</span>
+                    </div>
+                </div>
+
+                <div class="control-section">
+                    <label class="control-label">Welcome Message</label>
+                    <div class="welcome-message-box">
+                        <textarea id="welcome-${bot.id}" placeholder="Enter welcome message...">${escapeHtml(bot.welcome_message || '')}</textarea>
+                        <button class="btn-save" onclick="updateWelcomeMessage('${bot.id}')">💾 Save Message</button>
+                    </div>
+                </div>
+
+                <button class="btn-delete" data-bot-id="${bot.id}" data-bot-name="${escapeHtml(bot.bot_name || 'this bot')}">
+                    🗑 Delete This Bot
+                </button>`;
+
+            // Wired via addEventListener (not an inline onclick string) so a bot
+            // name containing quotes/HTML can never break out of an attribute.
+            card.querySelector('.btn-delete').addEventListener('click', (e) => {
+                const btn = e.currentTarget;
+                deleteBot(btn.dataset.botId, btn.dataset.botName);
+            });
+
+            return card;
+        }
+
+        // ── Toggle Status ──────────────────────────────────────────────
+        async function toggleStatus(botId, currentStatus) {
+            try {
+                const res = await fetch(`${API_BASE_URL}/api/bots/${botId}/toggle`, {
+                    method: 'POST',
+                    headers: authHeaders()
+                });
+                const result = await res.json();
+                if (!res.ok) throw new Error(result.detail || 'Failed to update status');
+
+                const newStatus = result.status;
+                document.getElementById(`toggle-${botId}`).className =
+                    `toggle-switch ${newStatus === 'active' ? 'active' : 'paused'}`;
+                document.getElementById(`status-text-${botId}`).textContent =
+                    newStatus === 'active' ? 'Active' : 'Paused';
+                showNotification(`Bot ${newStatus === 'active' ? 'activated' : 'paused'} successfully!`, 'success');
+            } catch (err) {
+                showNotification('Failed to update bot status', 'error');
+            }
+        }
+
+        // ── Update Welcome Message ─────────────────────────────────────
+        async function updateWelcomeMessage(botId) {
+            const newMessage = document.getElementById(`welcome-${botId}`).value.trim();
+            if (!newMessage) { showNotification('Please enter a welcome message', 'error'); return; }
+            try {
+                const res = await fetch(`${API_BASE_URL}/api/bots/${botId}/welcome-message`, {
+                    method: 'POST',
+                    headers: authHeaders(),
+                    body: JSON.stringify({ welcome_message: newMessage })
+                });
+                const result = await res.json();
+                if (!res.ok) throw new Error(result.detail || 'Failed to update message');
+                showNotification('Welcome message updated successfully!', 'success');
+            } catch (err) {
+                showNotification('Failed to update welcome message', 'error');
+            }
+        }
+
+        // ── Delete Bot (removes the row completely, via the backend) ────
+        async function deleteBot(botId, botName) {
+            const confirmed = confirm(
+                `⚠️ Are you sure you want to delete "${botName}"?\n\n` +
+                `This will permanently remove all bot data from the database.`
+            );
+            if (!confirmed) return;
+
+            try {
+                const res = await fetch(`${API_BASE_URL}/api/bots/${botId}`, {
+                    method: 'DELETE',
+                    headers: authHeaders()
+                });
+                const result = await res.json();
+                if (!res.ok) throw new Error(result.detail || 'Failed to delete bot');
+
+                // Animate card out
+                const card = document.getElementById(`toggle-${botId}`).closest('.bot-card');
+                card.style.transition = 'opacity 0.3s, transform 0.3s';
+                card.style.opacity = '0';
+                card.style.transform = 'scale(0.9)';
+                setTimeout(() => {
+                    card.remove();
+                    if (!document.querySelector('.bot-card')) location.reload();
+                }, 300);
+
+                showNotification('Bot deleted successfully!', 'success');
+
+            } catch (err) {
+                console.error('❌ Error deleting bot:', err);
+                showNotification('Failed to delete bot', 'error');
+            }
+        }
+
+        // ── Notification Toast ─────────────────────────────────────────
+        function showNotification(message, type) {
+            const n = document.createElement('div');
+            n.style.cssText = `position:fixed;top:20px;right:20px;padding:15px 25px;
+                background:${type === 'success' ? '#00aa00' : '#ff5f7e'};color:white;
+                border-radius:10px;font-weight:600;z-index:10000;`;
+            n.textContent = message;
+            document.body.appendChild(n);
+            setTimeout(() => n.remove(), 3000);
+        }
+
+        // ── Sign Out ───────────────────────────────────────────────────
+        function signOut() {
+            localStorage.removeItem('userInfo');
+            localStorage.removeItem('authToken');
+            window.location.href = 'auth.html';
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In | AutoChat</title>
+
+    <style>
+        :root {
+            --bg-0:#070a1c;
+            --bg-1:#0d1330;
+            --bg-2:#141b40;
+            --line:rgba(255,255,255,0.1);
+            --text-hi:#f2f4ff;
+            --text-lo:#8992b8;
+            --orange:#ff7a45;
+            --coral:#ff5f7e;
+            --violet:#7b5cff;
+            --grad-warm: linear-gradient(90deg, var(--orange), var(--coral) 55%, var(--violet));
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background:
+                radial-gradient(ellipse at 20% -10%, #1a2050 0%, var(--bg-0) 45%),
+                radial-gradient(ellipse at 100% 110%, #201436 0%, var(--bg-0) 50%),
+                var(--bg-0);
+            color: var(--text-hi);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .container {
+            max-width: 500px;
+            width: 100%;
+            background: var(--bg-1);
+            border: 1px solid var(--line);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(255, 95, 126, 0.2);
+        }
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+        .logo-icon { font-size: 30px; }
+        .logo-text {
+            font-size: 24px;
+            background: var(--grad-warm);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800;
+        }
+        h1 {
+            text-align: center;
+            font-size: 26px;
+            margin-bottom: 25px;
+        }
+
+        /* ⚠️ Warning Banner */
+        .warning-banner {
+            background: #ffcc00;
+            color: #000;
+            padding: 15px;
+            text-align: center;
+            font-weight: bold;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            font-size: 13px;
+            line-height: 1.6;
+            display: none; /* shown only on signup tab */
+        }
+
+        /* Tab Switch */
+        .tabs {
+            display: flex;
+            background: var(--bg-2);
+            border-radius: 12px;
+            padding: 5px;
+            margin-bottom: 28px;
+        }
+        .tab-btn {
+            flex: 1;
+            padding: 11px;
+            border: none;
+            border-radius: 9px;
+            background: transparent;
+            color: var(--text-lo);
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.25s;
+        }
+        .tab-btn.active {
+            background: var(--grad-warm);
+            color: #1a0f08;
+        }
+
+        /* Terms (shown only in signup mode) */
+        .terms-box {
+            background: var(--bg-1);
+            border: 1px solid rgba(255, 122, 69, 0.25);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 22px;
+            display: none;
+            max-height: 200px;
+            overflow-y: auto;
+            font-size: 13px;
+            color: var(--text-lo);
+            line-height: 1.7;
+        }
+        .terms-box h3 { color: var(--orange); margin-bottom: 12px; font-size: 15px; }
+        .terms-box p { margin-bottom: 10px; }
+        .terms-box::-webkit-scrollbar { width: 4px; }
+        .terms-box::-webkit-scrollbar-thumb { background: var(--orange); border-radius: 2px; }
+
+        .checkbox-group {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin: 14px 0 20px;
+            display: none;
+        }
+        .checkbox-group input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            accent-color: var(--orange);
+            margin-top: 2px;
+            flex-shrink: 0;
+        }
+        .checkbox-group label {
+            font-size: 13px;
+            color: #c7cce3;
+            cursor: pointer;
+            line-height: 1.5;
+        }
+
+        /* Form */
+        .form-group { margin-bottom: 20px; }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: var(--text-lo);
+        }
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            background: var(--bg-2);
+            border: 1px solid var(--line);
+            border-radius: 10px;
+            color: var(--text-hi);
+            font-size: 15px;
+            transition: border-color 0.2s;
+        }
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--orange);
+        }
+        .btn {
+            background: var(--grad-warm);
+            color: #1a0f08;
+            border: none;
+            padding: 15px;
+            font-size: 17px;
+            border-radius: 10px;
+            cursor: pointer;
+            width: 100%;
+            font-weight: 600;
+            margin-top: 6px;
+            transition: transform 0.2s, opacity 0.2s;
+        }
+        .btn:hover { transform: translateY(-2px); }
+        .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+        .switch-link {
+            text-align: center;
+            margin-top: 20px;
+            color: var(--text-lo);
+            font-size: 14px;
+        }
+        .switch-link a {
+            color: var(--orange);
+            text-decoration: none;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .error-msg {
+            background: rgba(255, 0, 0, 0.15);
+            border: 1px solid #ff0000;
+            border-radius: 8px;
+            padding: 12px 15px;
+            color: #ff6666;
+            font-size: 14px;
+            margin-bottom: 18px;
+            display: none;
+        }
+        .success-msg {
+            background: rgba(0, 200, 0, 0.15);
+            border: 1px solid #00cc00;
+            border-radius: 8px;
+            padding: 12px 15px;
+            color: #66ff66;
+            font-size: 14px;
+            margin-bottom: 18px;
+            display: none;
+        }
+
+        @media (max-width: 600px) {
+            body { padding: 15px; align-items: flex-start; padding-top: 50px; }
+            .container { padding: 25px 18px; border-radius: 15px; }
+            h1 { font-size: 22px; margin-bottom: 18px; }
+            .btn { padding: 14px; font-size: 16px; }
+            .form-group input { font-size: 16px; }
+        }
+
+        /* ── Identity Verification Gate (signup only) ───────────────── */
+        .verify-gate {
+            display: none;
+            margin-bottom: 8px;
+        }
+        .verify-gate .gate-badge {
+            display: block;
+            text-align: center;
+            font-size: 11px;
+            letter-spacing: 2px;
+            color: var(--orange);
+            border: 1px solid rgba(255,122,69,0.3);
+            padding: 4px 12px;
+            border-radius: 20px;
+            text-transform: uppercase;
+            margin: 0 auto 16px;
+            width: fit-content;
+            background: rgba(255,122,69,0.08);
+        }
+        .verify-gate .gate-image {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 18px;
+        }
+        .verify-gate .gate-image img {
+            max-width: 100%;
+            max-height: 180px;
+            border-radius: 12px;
+            border: 1px solid var(--line);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.5);
+        }
+        .verify-gate .gate-question {
+            text-align: center;
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: var(--text-hi);
+        }
+        .verify-gate .gate-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 14px;
+        }
+        @media (max-width: 480px) {
+            .verify-gate .gate-options { grid-template-columns: 1fr; }
+        }
+        .verify-gate .gate-option { position: relative; }
+        .verify-gate .gate-option input {
+            position: absolute; opacity: 0; width: 0; height: 0;
+        }
+        .verify-gate .gate-option label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            min-height: 52px;
+            padding: 10px 12px;
+            background: var(--bg-1);
+            border: 1px solid var(--line);
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 13.5px;
+            color: var(--text-hi);
+            transition: all 0.2s ease;
+            user-select: none;
+        }
+        .verify-gate .gate-option label:hover {
+            border-color: var(--orange);
+            box-shadow: 0 0 16px rgba(255,122,69,0.35), inset 0 0 12px rgba(255,122,69,0.08);
+            transform: translateY(-1px);
+        }
+        .verify-gate .gate-option input:checked + label {
+            border-color: var(--orange);
+            background: linear-gradient(180deg, rgba(255,122,69,0.16), rgba(123,92,255,0.06));
+            box-shadow: 0 0 20px rgba(255,122,69,0.35), inset 0 0 14px rgba(255,122,69,0.12);
+            color: var(--text-hi);
+        }
+        .verify-gate .gate-status {
+            min-height: 20px;
+            text-align: center;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+        .verify-gate .gate-status.error {
+            color: var(--coral);
+            text-shadow: 0 0 12px rgba(255,95,126,0.6);
+        }
+        .verify-gate .gate-status.success {
+            color: #39ff8a;
+            text-shadow: 0 0 12px rgba(57,255,138,0.5);
+        }
+        .verify-gate .gate-status.working { color: var(--text-lo); }
+    </style>
+</head>
+<body>
+    <div style="position: absolute; top: 20px; left: 20px;">
+        <a href="index.html" style="color: #8992b8; text-decoration: none; font-weight: 600;
+           padding: 8px 20px; border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; display: inline-block;">
+            ← Back
+        </a>
+    </div>
+
+    <div class="container">
+        <div class="header">
+            <div class="logo-icon"><svg class="brand-logo-svg" viewBox="0 0 46 38" width="1em" height="0.83em" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" style="display:block;overflow:visible;"><rect x="4" y="4" width="24" height="19" rx="7" style="fill:none;stroke:var(--text-lo);stroke-width:2.3"/><rect x="16" y="14" width="26" height="20" rx="7" style="fill:var(--bg-1);stroke:var(--orange);stroke-width:2.3"/><circle cx="23" cy="24" r="2" style="fill:var(--orange)"/><circle cx="29" cy="24" r="2" style="fill:var(--orange)"/><circle cx="35" cy="24" r="2" style="fill:var(--orange)"/></svg></div>
+            <div class="logo-text">AutoChat</div>
+        </div>
+
+        <!-- Tab Switcher -->
+        <div class="tabs">
+            <button class="tab-btn active" id="tabLogin" onclick="switchTab('login')">Sign In</button>
+            <button class="tab-btn" id="tabSignup" onclick="switchTab('signup')">Create Account</button>
+        </div>
+
+        <h1 id="pageTitle">Sign In to Your Account</h1>
+
+        <!-- ⚠️ Warning Banner (signup only) -->
+        <div class="warning-banner" id="warningBanner">
+            ⚠️ Important Notice: You are fully responsible for keeping your data safe. The platform does not retain any recoverable data. If you forget your username or password, you will be permanently unable to recover your account, and you will have to create
+        </div>
+
+        <!-- Error / Success -->
+        <div class="error-msg" id="errorMsg"></div>
+        <div class="success-msg" id="successMsg"></div>
+
+        <!-- 🔒 Identity Verification Gate (shown only when creating an account) -->
+        <div class="verify-gate" id="verifyGate">
+            <div class="gate-badge">Security Check</div>
+            <div class="gate-image">
+                <img src="security.png.jpeg" alt="Verification picture">
+            </div>
+            <div class="gate-question">How many children are in the picture?</div>
+            <div class="gate-options">
+                <div class="gate-option">
+                    <input type="radio" name="gateAnswer" id="gateOpt1" value="Zero (0)">
+                    <label for="gateOpt1">Zero (0)</label>
+                </div>
+                <div class="gate-option">
+                    <input type="radio" name="gateAnswer" id="gateOpt2" value="One (1)">
+                    <label for="gateOpt2">One (1)</label>
+                </div>
+                <div class="gate-option">
+                    <input type="radio" name="gateAnswer" id="gateOpt3" value="Two (2)">
+                    <label for="gateOpt3">Two (2)</label>
+                </div>
+                <div class="gate-option">
+                    <input type="radio" name="gateAnswer" id="gateOpt4" value="Three (3)">
+                    <label for="gateOpt4">Three (3)</label>
+                </div>
+            </div>
+            <div class="gate-status" id="gateStatus"></div>
+        </div>
+
+        <!-- Form -->
+        <div id="formArea">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" placeholder="Enter your username" autocomplete="username">
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" placeholder="Enter your password" autocomplete="current-password">
+            </div>
+            <!-- Phone Number (signup only) -->
+            <div class="form-group" id="phoneGroup" style="display:none;">
+                <label for="phone">Phone Number</label>
+                <input type="tel" id="phone" placeholder="+1234567890" autocomplete="tel">
+            </div>
+        </div>
+
+        <!-- Terms (signup only) -->
+        <div class="terms-box" id="termsBox">
+            <h3>📋 Terms of Service</h3>
+            <p><strong>1. User Responsibility</strong><br>
+            You are solely responsible for all content generated or used through your AutoChat, including messages sent to customers and data inputted during setup.</p>
+            <p><strong>2. No Liability Clause</strong><br>
+            AutoChat Platform is not liable for any content generated by your bot. You agree we are not responsible for any inappropriate, illegal, or harmful content.</p>
+            <p><strong>3. Compliance</strong><br>
+            You will comply with all applicable laws, data protection regulations, and platform-specific policies when using your bot.</p>
+            <p><strong>4. Account Termination</strong><br>
+            We reserve the right to terminate any account that violates these terms or engages in abusive behavior.</p>
+            <p><strong>5. Privacy & Data</strong><br>
+            Your data is protected with enterprise-grade security. We do not sell or share your data with third parties.</p>
+        </div>
+
+        <div class="checkbox-group" id="termsCheck">
+            <input type="checkbox" id="agreeTerms">
+            <label for="agreeTerms">
+                I have read and agree to the Terms of Service and understand that I am
+                solely responsible for my bot's content and my account credentials.
+            </label>
+        </div>
+
+        <button class="btn" id="mainBtn" onclick="handleSubmit()">Sign In</button>
+
+        <div class="switch-link" id="switchLink">
+            Don't have an account? <a onclick="switchTab('signup')">Create one</a>
+        </div>
+    </div>
+
+    <script>
+        // ── Backend API base URL ────────────────────────────────────────
+        // Auto-detects local dev vs production.
+        // ⚠️ Still update the production value below to your real HTTPS
+        // backend domain once you deploy.
+        const API_BASE_URL = (['localhost', '127.0.0.1'].includes(window.location.hostname))
+            ? 'http://127.0.0.1:5000'
+            : 'https://zm06sj92-5000.uks1.devtunnels.ms'; // ⚠️ CHANGE THIS before going live
+
+        let currentTab = 'login';
+        let signupVerified = false; // stays true for the rest of this page load once solved
+
+        // ── Tab Switching ──────────────────────────────────────────────
+        function switchTab(tab) {
+            currentTab = tab;
+            clearMessages();
+
+            const isSignup = tab === 'signup';
+
+            document.getElementById('tabLogin').classList.toggle('active', !isSignup);
+            document.getElementById('tabSignup').classList.toggle('active', isSignup);
+            document.getElementById('pageTitle').textContent =
+                isSignup ? 'Create Your Free Account' : 'Sign In to Your Account';
+            document.getElementById('mainBtn').textContent =
+                isSignup ? 'Create Account' : 'Sign In';
+            document.getElementById('switchLink').innerHTML = isSignup
+                ? 'Already have an account? <a onclick="switchTab(\'login\')">Sign in</a>'
+                : 'Don\'t have an account? <a onclick="switchTab(\'signup\')">Create one</a>';
+
+            // Show / hide signup-only elements
+            document.getElementById('warningBanner').style.display = isSignup ? 'block' : 'none';
+
+            if (isSignup && !signupVerified) {
+                // First time reaching signup this session: show the verification
+                // gate and hide the actual registration form until it's solved.
+                showGate(true);
+            } else {
+                showGate(false);
+                document.getElementById('termsBox').style.display   = isSignup ? 'block' : 'none';
+                document.getElementById('termsCheck').style.display = isSignup ? 'flex'  : 'none';
+                document.getElementById('phoneGroup').style.display = isSignup ? 'block' : 'none';
+                document.getElementById('formArea').style.display   = 'block';
+                document.getElementById('mainBtn').style.display    = 'block';
+            }
+
+            // Reset fields
+            document.getElementById('username').value = '';
+            document.getElementById('password').value = '';
+            document.getElementById('phone').value = '';
+            document.getElementById('agreeTerms').checked = false;
+        }
+
+        // ── Verification Gate visibility ─────────────────────────────
+        function showGate(show) {
+            document.getElementById('verifyGate').style.display = show ? 'block' : 'none';
+            if (show) {
+                // Hide the real form/terms/button until the gate is passed
+                document.getElementById('formArea').style.display   = 'none';
+                document.getElementById('termsBox').style.display   = 'none';
+                document.getElementById('termsCheck').style.display = 'none';
+                document.getElementById('phoneGroup').style.display = 'none';
+                document.getElementById('mainBtn').style.display    = 'none';
+                document.querySelectorAll('input[name="gateAnswer"]').forEach(r => r.checked = false);
+                const statusEl = document.getElementById('gateStatus');
+                statusEl.className = 'gate-status';
+                statusEl.textContent = '';
+            }
+        }
+
+        // ── Helpers ────────────────────────────────────────────────────
+        function showError(msg) {
+            const el = document.getElementById('errorMsg');
+            el.textContent = msg;
+            el.style.display = 'block';
+            document.getElementById('successMsg').style.display = 'none';
+        }
+        function showSuccess(msg) {
+            const el = document.getElementById('successMsg');
+            el.textContent = msg;
+            el.style.display = 'block';
+            document.getElementById('errorMsg').style.display = 'none';
+        }
+        function clearMessages() {
+            document.getElementById('errorMsg').style.display = 'none';
+            document.getElementById('successMsg').style.display = 'none';
+        }
+        function setLoading(loading) {
+            const btn = document.getElementById('mainBtn');
+            btn.disabled = loading;
+            btn.textContent = loading
+                ? (currentTab === 'login' ? 'Signing in…' : 'Creating account…')
+                : (currentTab === 'login' ? 'Sign In' : 'Create Account');
+        }
+
+        // ── Main Submit ────────────────────────────────────────────────
+        async function handleSubmit() {
+            clearMessages();
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value;
+
+            if (!username || !password) {
+                showError('Please enter your username and password.');
+                return;
+            }
+
+            if (currentTab === 'login') {
+                await doLogin(username, password);
+            } else {
+                await doSignup(username, password);
+            }
+        }
+
+        // ── Login ──────────────────────────────────────────────────────
+        // Rate limiting (10 tries / 60s lock) is enforced inside Postgres
+        // itself (login_user()) — the backend just relays whatever it says.
+        async function doLogin(username, password) {
+            setLoading(true);
+            try {
+                const res = await fetch(`${API_BASE_URL}/api/auth/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+                const result = await res.json();
+
+                if (!res.ok) {
+                    showError(result.detail || 'Login failed.');
+                    return;
+                }
+
+                // Save session — 'token' is the real, server-signed proof of
+                // identity used for every later request. 'userInfo' is just
+                // for display purposes in the UI.
+                localStorage.setItem('authToken', result.token);
+                localStorage.setItem('userInfo', JSON.stringify({
+                    id:           result.user.id,
+                    username:     result.user.username,
+                    phone_number: result.user.phone_number,
+                    lastLogin:    new Date().toISOString()
+                }));
+
+                showSuccess('Login successful! Redirecting…');
+                setTimeout(() => { window.location.href = 'index.html'; }, 800);
+
+            } catch (err) {
+                showError('Login failed: ' + err.message);
+            } finally {
+                setLoading(false);
+            }
+        }
+
+        // ── Signup ─────────────────────────────────────────────────────
+        async function doSignup(username, password) {
+            if (!document.getElementById('agreeTerms').checked) {
+                showError('You must agree to the Terms of Service to create an account.');
+                return;
+            }
+            const phone = document.getElementById('phone').value.trim();
+            if (!phone) {
+                showError('Please enter your phone number.');
+                return;
+            }
+            if (password.length < 6) {
+                showError('Password must be at least 6 characters.');
+                return;
+            }
+
+            setLoading(true);
+            try {
+                // signup_user() hashes the password INSIDE Postgres and checks
+                // for a duplicate username there too. The backend calls it on
+                // your behalf and hands back a signed session token.
+                const res = await fetch(`${API_BASE_URL}/api/auth/signup`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password, phone_number: phone })
+                });
+                const result = await res.json();
+
+                if (!res.ok) {
+                    showError(result.detail || 'Sign up failed.');
+                    return;
+                }
+
+                localStorage.setItem('authToken', result.token);
+                localStorage.setItem('userInfo', JSON.stringify({
+                    id:           result.user.id,
+                    username:     result.user.username,
+                    phone_number: result.user.phone_number,
+                    createdAt:    new Date().toISOString()
+                }));
+
+                showSuccess(gateSuccessMessage);
+                setTimeout(() => { window.location.href = 'index.html'; }, 900);
+
+            } catch (err) {
+                showError('Sign up failed: ' + err.message);
+            } finally {
+                setLoading(false);
+            }
+        }
+
+        // ── Identity Verification (client-side AES-256-GCM) ─────────────
+        // The success payload is never stored as plaintext anywhere in this
+        // file. It can only be recovered by deriving the correct AES-GCM
+        // key from the chosen answer, which requires solving the question.
+        const GATE_PAYLOAD = {
+            iv:         "J0RCAwJhdaaELldO",
+            ciphertext: "bDPSaoWvVij3Ok9yWR1+H2q8+glcKdRcFQR5/37twF0yF7EcWnkw44as6nofvYqD0RkK+Qytlguyo8gT0zZW+yxiKWeH"
+        };
+
+        // Holds the decrypted success message until it's shown to the user —
+        // this only happens after the account is actually created, not at
+        // the moment the puzzle is solved.
+        let gateSuccessMessage = 'Account created! Redirecting…';
+
+        function base64ToBytes(b64) {
+            const bin = atob(b64);
+            const bytes = new Uint8Array(bin.length);
+            for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+            return bytes;
+        }
+
+        async function deriveGateKey(candidateAnswer) {
+            const encoder = new TextEncoder();
+            const digest = await crypto.subtle.digest('SHA-256', encoder.encode(candidateAnswer));
+            return crypto.subtle.importKey('raw', digest, { name: 'AES-GCM' }, false, ['decrypt']);
+        }
+
+        async function tryUnlockGate(candidateAnswer) {
+            try {
+                const key = await deriveGateKey(candidateAnswer);
+                const iv = base64ToBytes(GATE_PAYLOAD.iv);
+                const ciphertext = base64ToBytes(GATE_PAYLOAD.ciphertext);
+                const plaintextBuffer = await crypto.subtle.decrypt({ name: 'AES-GCM', iv }, key, ciphertext);
+                const plaintext = new TextDecoder().decode(plaintextBuffer);
+                return JSON.parse(plaintext); // throws if key is wrong -> wrong answer
+            } catch (err) {
+                return null; // GCM auth failed = wrong answer
+            }
+        }
+
+        document.querySelectorAll('input[name="gateAnswer"]').forEach(radio => {
+            radio.addEventListener('change', async () => {
+                const statusEl = document.getElementById('gateStatus');
+                statusEl.className = 'gate-status working';
+                statusEl.textContent = 'Verifying…';
+
+                const result = await tryUnlockGate(radio.value);
+
+                if (result && result.message) {
+                    // Don't reveal the message here — it's saved and shown
+                    // only after the account is actually created below.
+                    gateSuccessMessage = result.message;
+                    statusEl.className = 'gate-status';
+                    statusEl.textContent = '';
+                    signupVerified = true;
+
+                    // Reveal the actual registration form
+                    setTimeout(() => {
+                        document.getElementById('verifyGate').style.display = 'none';
+                        document.getElementById('formArea').style.display   = 'block';
+                        document.getElementById('termsBox').style.display   = 'block';
+                        document.getElementById('termsCheck').style.display = 'flex';
+                        document.getElementById('phoneGroup').style.display = 'block';
+                        document.getElementById('mainBtn').style.display    = 'block';
+                    }, 300);
+                } else {
+                    statusEl.className = 'gate-status error';
+                    statusEl.textContent = 'Access Denied: Wrong answer! Please try again.';
+                }
+            });
+        });
+
+        // ── Keyboard shortcut ──────────────────────────────────────────
+        document.addEventListener('keydown', (e) => {
+            const gateVisible = document.getElementById('verifyGate').style.display === 'block';
+            if (e.key === 'Enter' && !gateVisible) handleSubmit();
+        });
+
+        // ── Check if already logged in ─────────────────────────────────
+        (function() {
+            const info = localStorage.getItem('userInfo');
+            if (info) {
+                try {
+                    const user = JSON.parse(info);
+                    if (user && user.id) window.location.href = 'index.html';
+                } catch(_) {}
+            }
+        })();
+    </script>
+</body>
+</html>
