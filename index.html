@@ -467,11 +467,13 @@
             display: flex;
             align-items: center;
             gap: 10px;
-            flex-shrink: 0;
+            flex-shrink: 1;
+            min-width: 0;
         }
         #authButtons a, #authButtons button {
             font-size: 13.5px !important;
             padding: 8px 18px !important;
+            white-space: nowrap;
         }
         .nav-toggle {
             display: none;
@@ -491,7 +493,8 @@
         }
         @media (max-width: 768px) {
             h1 { font-size: 36px; }
-            .hero-stats { gap: 14px; }
+            .nav-inner { padding: 12px 14px; gap: 10px; }
+            .hero-stats { gap: 14px; grid-template-columns: repeat(2, minmax(0, 1fr)); }
             .stat-number { font-size: 32px; }
             .stat-item { padding: 15px; }
             .stat-icon svg { width: 24px; height: 24px; }
@@ -506,11 +509,11 @@
         @media (max-width: 480px) {
             h1 { font-size: 26px; line-height: 1.3; }
             .subtitle { font-size: 16px; }
-            .hero-stats { gap: 10px; }
-            .stat-number { font-size: 24px; }
-            .stat-label { font-size: 10px; letter-spacing: 1px; }
-            .stat-sublabel { font-size: 9.5px; letter-spacing: 1px; }
-            .stat-item { padding: 12px; }
+            .hero-stats { gap: 10px; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .stat-number { font-size: 22px; }
+            .stat-label { font-size: 9.5px; letter-spacing: .8px; }
+            .stat-sublabel { font-size: 9px; letter-spacing: .8px; }
+            .stat-item { padding: 10px 8px; }
             .steps-section { padding: 50px 15px; }
             .steps-description { padding: 20px; }
             .steps-title { font-size: 24px; }
@@ -519,8 +522,12 @@
             .feature-card { padding: 20px; }
             .logo-text { font-size: 24px; }
             .logo-icon { font-size: 28px; }
-            .nav-brand { font-size: 17px; }
-            #authButtons a, #authButtons button { font-size: 12px !important; padding: 7px 12px !important; }
+            .nav-brand { font-size: 15px; gap: 5px; }
+            .nav-inner { padding: 10px 12px; }
+            #authButtons { gap: 6px; }
+            #authButtons .auth-greeting { display: none; }
+            #authButtons .auth-user-row { gap: 8px; }
+            #authButtons a, #authButtons button { font-size: 11.5px !important; padding: 6px 10px !important; }
         }
 
         /* ── Carousel ──────────────────────────────────────────────── */
@@ -1027,8 +1034,8 @@
 
             if (user && user.id) {
                 authButtons.innerHTML = `
-                    <div style="display:flex;align-items:center;gap:15px;">
-                        <span style="color:var(--text-lo);font-size:14px;">Hi, ${escapeHtml(user.username)}</span>
+                    <div class="auth-user-row" style="display:flex;align-items:center;gap:15px;">
+                        <span class="auth-greeting" style="color:var(--text-lo);font-size:14px;">Hi, ${escapeHtml(user.username)}</span>
                         <a href="my-bots.html" style="color:var(--orange);text-decoration:none;font-weight:600;padding:8px 20px;border:1px solid var(--orange);border-radius:20px;">My Bots</a>
                         <button onclick="signOut()" style="color:var(--orange);background:transparent;border:1px solid var(--orange);border-radius:20px;padding:8px 20px;cursor:pointer;font-weight:600;">🔐 Sign Out</button>
                     </div>`;
@@ -1091,7 +1098,7 @@
                 current = Math.max(0, Math.min(index, maxIndex()));
                 if (!track) return;
                 const cardWidth  = cards[0] ? cards[0].offsetWidth : 0;
-                const gap        = 24;
+                const gap        = parseFloat(getComputedStyle(track).columnGap || getComputedStyle(track).gap) || 0;
                 track.style.transform = `translateX(-${current * (cardWidth + gap)}px)`;
                 document.querySelectorAll('.carousel-dot').forEach((d, i) => {
                     d.classList.toggle('active', i === current);
