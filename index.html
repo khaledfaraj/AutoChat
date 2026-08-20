@@ -648,6 +648,183 @@
                     padding: 0 24px 22px;
                 }
                 .faq-item.open .faq-answer { max-height: 240px; }
+        /* ── Live Chat Demo Section ── */
+        .demo-section {
+            background: rgba(7, 10, 28, 0.95);
+            padding: 80px 20px 90px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .demo-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .demo-copy { text-align: center; margin-bottom: 45px; }
+
+        .demo-title {
+            font-size: 42px;
+            margin-bottom: 20px;
+            color: var(--orange);
+            font-weight: 800;
+        }
+
+        .demo-subtitle {
+            color: var(--text-lo);
+            font-size: 18px;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .phone-shell {
+            width: 280px;
+            height: 560px;
+            background: var(--bg-1);
+            border-radius: 38px;
+            border: 8px solid var(--bg-2);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.55), 0 0 0 1px var(--line);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .phone-notch {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 105px;
+            height: 22px;
+            background: var(--bg-2);
+            border-bottom-left-radius: 13px;
+            border-bottom-right-radius: 13px;
+            z-index: 10;
+        }
+
+        .phone-chat-header {
+            background: var(--bg-2);
+            padding: 30px 14px 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 1px solid var(--line);
+        }
+
+        .phone-back { color: var(--text-lo); font-size: 17px; }
+
+        .phone-avatar {
+            width: 30px;
+            height: 30px;
+            background: var(--grad-warm);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .phone-header-info { display: flex; flex-direction: column; }
+        .phone-header-info .phone-name { font-size: 14px; font-weight: 700; color: var(--text-hi); }
+        .phone-header-info .phone-status { font-size: 10.5px; color: #10b981; }
+
+        .phone-chat-box {
+            flex: 1;
+            padding: 12px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 9px;
+            background: var(--bg-0);
+            scroll-behavior: smooth;
+        }
+        .phone-chat-box::-webkit-scrollbar { display: none; }
+
+        .phone-msg {
+            max-width: 88%;
+            padding: 9px 12px;
+            border-radius: 15px;
+            font-size: 12px;
+            line-height: 1.4;
+            opacity: 0;
+            animation: msgFadeIn 0.4s forwards;
+        }
+
+        .phone-msg.user {
+            align-self: flex-end;
+            background: var(--grad-warm);
+            color: white;
+            border-bottom-right-radius: 4px;
+        }
+
+        .phone-msg.bot {
+            align-self: flex-start;
+            background: var(--bg-1);
+            color: var(--text-hi);
+            border-bottom-left-radius: 4px;
+            border: 1px solid var(--line);
+        }
+
+        .phone-msg b { color: var(--orange); }
+
+        .phone-input-area {
+            background: var(--bg-2);
+            padding: 9px 11px 15px;
+            display: flex;
+            align-items: center;
+            gap: 9px;
+        }
+
+        .phone-input-bubble {
+            flex: 1;
+            background: var(--bg-0);
+            border: 1px solid var(--line);
+            border-radius: 20px;
+            padding: 7px 13px;
+            font-size: 12px;
+            color: var(--text-hi);
+            display: flex;
+            align-items: center;
+            min-height: 32px;
+        }
+
+        .phone-placeholder { color: var(--text-lo); }
+        .phone-typing-cursor {
+            border-right: 2px solid var(--orange);
+            animation: phoneBlink 1s step-end infinite;
+        }
+
+        .phone-send-btn {
+            width: 30px;
+            height: 30px;
+            background: var(--orange);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            opacity: 0.5;
+            transition: 0.3s;
+            flex-shrink: 0;
+        }
+        .phone-send-btn.active { opacity: 1; transform: scale(1.05); }
+
+        @keyframes msgFadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes phoneBlink { 50% { border-color: transparent; } }
+
+        @media (max-width: 520px) {
+            .demo-title { font-size: 28px; }
+            .demo-subtitle { font-size: 15px; }
+            .phone-shell { width: 240px; height: 500px; }
+        }
     </style>
 </head>
 <body>
@@ -731,6 +908,42 @@
             
             <div class="btn-container">
                 <button id="getStartedBtn" class="btn">🚀 Get Started Free</button>
+            </div>
+        </div>
+    </section>
+
+    <section class="demo-section" id="live-demo">
+        <div class="demo-container">
+            <div class="demo-copy">
+                <h2 class="demo-title">Experience Real Conversations</h2>
+                <p class="demo-subtitle">See how our AI-powered bots interact seamlessly across platforms.</p>
+            </div>
+
+            <div class="phone-shell">
+                <div class="phone-notch"></div>
+
+                <div class="phone-chat-header">
+                    <span class="phone-back">‹</span>
+                    <div class="phone-avatar">💬</div>
+                    <div class="phone-header-info">
+                        <span class="phone-name">AutoChat</span>
+                        <span class="phone-status">● Online</span>
+                    </div>
+                </div>
+
+                <div class="phone-chat-box" id="phoneChatBox"></div>
+
+                <div class="phone-input-area">
+                    <div class="phone-input-bubble">
+                        <span id="phoneInputField" class="phone-placeholder">Write a message...</span>
+                    </div>
+                    <div class="phone-send-btn" id="phoneSendBtn">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="22" y1="2" x2="11" y2="13"></line>
+                            <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                        </svg>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -988,6 +1201,90 @@
     <footer><p>&copy; 2026 AutoChat Platform. All rights reserved.</p></footer>
 
     <script>
+        // ── Live Chat Demo Animation ──
+        (function () {
+            const phoneChatBox = document.getElementById('phoneChatBox');
+            const phoneInputField = document.getElementById('phoneInputField');
+            const phoneSendBtn = document.getElementById('phoneSendBtn');
+            if (!phoneChatBox) return;
+
+            const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
+            async function typePhoneMessage(text) {
+                phoneInputField.className = 'phone-typing-cursor';
+                phoneInputField.textContent = '';
+
+                for (let i = 0; i < text.length; i++) {
+                    phoneInputField.textContent += text.charAt(i);
+                    await sleep(150);
+                }
+
+                phoneSendBtn.classList.add('active');
+                await sleep(400);
+
+                phoneInputField.textContent = 'Write a message...';
+                phoneInputField.className = 'phone-placeholder';
+                phoneSendBtn.classList.remove('active');
+
+                addPhoneMessage(text, 'user');
+            }
+
+            function addPhoneMessage(text, sender) {
+                const msgDiv = document.createElement('div');
+                msgDiv.className = `phone-msg ${sender}`;
+                msgDiv.innerHTML = text;
+                phoneChatBox.appendChild(msgDiv);
+                phoneChatBox.scrollTop = phoneChatBox.scrollHeight;
+            }
+
+            async function runPhoneChatLoop() {
+                phoneChatBox.innerHTML = "";
+
+                await sleep(1500);
+                await typePhoneMessage("Hi");
+
+                await sleep(2500);
+                addPhoneMessage(`Hello! 👋<br>Welcome to AutoChat.<br>Choose an option below:<br><br>
+                1️⃣ Top Luxury Products<br>
+                2️⃣ Prices & Offers<br>
+                3️⃣ Order & Booking`, 'bot');
+
+                await sleep(3500);
+                await typePhoneMessage("1");
+
+                await sleep(2500);
+                addPhoneMessage(`✨ <b>World-Class Collection:</b><br>
+                • Crème de la Mer<br>
+                • Platinum Rare (La Prairie)<br>
+                • Orchidée Impériale (Guerlain)<br>
+                • L'Elixir des Glaciers (Valmont)<br><br>
+                Reply with 2️⃣ for prices.`, 'bot');
+
+                await sleep(4000);
+                await typePhoneMessage("2");
+
+                await sleep(2500);
+                addPhoneMessage(`💎 <b>Exclusive Prices:</b><br>
+                • Crème de la Mer: <b>$570</b><br>
+                • Platinum Rare: <b>$1,525</b><br>
+                • Orchidée Impériale: <b>$460</b><br>
+                • L'Elixir des Glaciers: <b>$1,100</b><br><br>
+                Reply with 3️⃣ to book.`, 'bot');
+
+                await sleep(4000);
+                await typePhoneMessage("3");
+
+                await sleep(2500);
+                addPhoneMessage(`🛍️ <b>Fast Booking:</b><br>
+                Provide your name and address.<br><i>VIP delivery will contact you in 10 mins.</i>`, 'bot');
+
+                await sleep(6000);
+                runPhoneChatLoop();
+            }
+
+            runPhoneChatLoop();
+        })();
+
         // Counter Animation - 10 SECONDS
         function animateCounter(element) {
             const target = parseInt(element.getAttribute('data-target'));
