@@ -1237,9 +1237,15 @@
                 phoneChatBox.scrollTop = phoneChatBox.scrollHeight;
             }
 
-            async function runPhoneChatLoop() {
-                phoneChatBox.innerHTML = "";
+            const MAX_MESSAGES = 24; // cap DOM size during infinite run
 
+            function trimOldMessages() {
+                while (phoneChatBox.children.length > MAX_MESSAGES) {
+                    phoneChatBox.removeChild(phoneChatBox.firstChild);
+                }
+            }
+
+            async function showMenu() {
                 await sleep(1500);
                 await typePhoneMessage("Hi");
 
@@ -1247,8 +1253,12 @@
                 addPhoneMessage(`Hello! 👋<br>Welcome to AutoChat.<br>Choose an option below:<br><br>
                 1️⃣ Top Luxury Products<br>
                 2️⃣ Prices & Offers<br>
-                3️⃣ Order & Booking`, 'bot');
+                3️⃣ Order & Booking<br>
+                4️⃣ Customer Service`, 'bot');
+                trimOldMessages();
+            }
 
+            async function showProducts() {
                 await sleep(3500);
                 await typePhoneMessage("1");
 
@@ -1259,8 +1269,11 @@
                 • Orchidée Impériale (Guerlain)<br>
                 • L'Elixir des Glaciers (Valmont)<br><br>
                 Reply with 2️⃣ for prices.`, 'bot');
+                trimOldMessages();
+            }
 
-                await sleep(4000);
+            async function showPrices() {
+                await sleep(2500);
                 await typePhoneMessage("2");
 
                 await sleep(2500);
@@ -1270,16 +1283,44 @@
                 • Orchidée Impériale: <b>$460</b><br>
                 • L'Elixir des Glaciers: <b>$1,100</b><br><br>
                 Reply with 3️⃣ to book.`, 'bot');
+                trimOldMessages();
+            }
 
-                await sleep(4000);
+            async function showBooking() {
+                await sleep(2500);
                 await typePhoneMessage("3");
 
                 await sleep(2500);
                 addPhoneMessage(`🛍️ <b>Fast Booking:</b><br>
-                Provide your name and address.<br><i>VIP delivery will contact you in 10 mins.</i>`, 'bot');
+                Check the link Provide your name and address.<br><i>VIP delivery will contact you.</i><br><br>
+                📲 <a href="https://wa.me/15551234567" target="_blank" rel="noopener" style="color:var(--orange);font-weight:700;">Send your info here</a><br><br>
+                Reply with 4️⃣ to talk to customer service.`, 'bot');
+                trimOldMessages();
+            }
 
-                await sleep(6000);
-                runPhoneChatLoop();
+            async function showCustomerService() {
+                await sleep(2500);
+                await typePhoneMessage("4");
+
+                await sleep(2500);
+                addPhoneMessage(`🎧 <b>Customer Service</b><br>
+                Please wait, customer service will contact you soon.`, 'bot');
+                trimOldMessages();
+            }
+
+            async function runPhoneChatLoop() {
+                // "Hi" + welcome menu is shown once at the very start
+                await showMenu();
+
+                // From here the conversation cycles continuously through
+                // 1 → 2 → 3 → 4 → 1 → 2 ... without ever clearing the screen
+                while (true) {
+                    await showProducts();
+                    await showPrices();
+                    await showBooking();
+                    await showCustomerService();
+                    await sleep(3000);
+                }
             }
 
             runPhoneChatLoop();
