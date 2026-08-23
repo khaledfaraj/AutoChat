@@ -680,6 +680,40 @@
             margin: 0 auto;
         }
 
+        .demo-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: flex-start;
+            gap: 70px;
+            width: 100%;
+        }
+
+        .demo-block {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .demo-block-title {
+            font-size: 15px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            color: var(--text-hi);
+            margin-bottom: 6px;
+            text-align: center;
+        }
+
+        .demo-block-subtitle {
+            font-size: 13px;
+            color: var(--text-lo);
+            text-align: center;
+            max-width: 280px;
+            margin-bottom: 22px;
+            line-height: 1.4;
+        }
+
         .phone-shell {
             width: 280px;
             height: 560px;
@@ -824,6 +858,7 @@
             .demo-title { font-size: 28px; }
             .demo-subtitle { font-size: 15px; }
             .phone-shell { width: 240px; height: 500px; }
+            .demo-grid { gap: 50px; }
         }
     </style>
 </head>
@@ -919,29 +954,68 @@
                 <p class="demo-subtitle">See how our AI-powered bots interact seamlessly across platforms.</p>
             </div>
 
-            <div class="phone-shell">
-                <div class="phone-notch"></div>
+            <div class="demo-grid">
+                <div class="demo-block">
+                    <div class="demo-block-title">Smart Sales Assistant</div>
+                    <div class="demo-block-subtitle">Guides customers from products to prices to booking automatically.</div>
 
-                <div class="phone-chat-header">
-                    <span class="phone-back">‹</span>
-                    <div class="phone-avatar">💬</div>
-                    <div class="phone-header-info">
-                        <span class="phone-name">AutoChat</span>
-                        <span class="phone-status">● Online</span>
+                    <div class="phone-shell">
+                        <div class="phone-notch"></div>
+
+                        <div class="phone-chat-header">
+                            <span class="phone-back">‹</span>
+                            <div class="phone-avatar">💬</div>
+                            <div class="phone-header-info">
+                                <span class="phone-name">AutoChat</span>
+                                <span class="phone-status">● Online</span>
+                            </div>
+                        </div>
+
+                        <div class="phone-chat-box" id="phoneChatBox"></div>
+
+                        <div class="phone-input-area">
+                            <div class="phone-input-bubble">
+                                <span id="phoneInputField" class="phone-placeholder">Write a message...</span>
+                            </div>
+                            <div class="phone-send-btn" id="phoneSendBtn">
+                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="22" y1="2" x2="11" y2="13"></line>
+                                    <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                                </svg>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <div class="phone-chat-box" id="phoneChatBox"></div>
+                <div class="demo-block">
+                    <div class="demo-block-title">Smart Welcome Message</div>
+                    <div class="demo-block-subtitle">Auto-detects languages and replies instantly with a complete sales-driven greeting.</div>
 
-                <div class="phone-input-area">
-                    <div class="phone-input-bubble">
-                        <span id="phoneInputField" class="phone-placeholder">Write a message...</span>
-                    </div>
-                    <div class="phone-send-btn" id="phoneSendBtn">
-                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <line x1="22" y1="2" x2="11" y2="13"></line>
-                            <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
-                        </svg>
+                    <div class="phone-shell">
+                        <div class="phone-notch"></div>
+
+                        <div class="phone-chat-header">
+                            <span class="phone-back">‹</span>
+                            <div class="phone-avatar">💬</div>
+                            <div class="phone-header-info">
+                                <span class="phone-name">AutoChat</span>
+                                <span class="phone-status">● Online</span>
+                            </div>
+                        </div>
+
+                        <div class="phone-chat-box" id="phoneChatBox2"></div>
+
+                        <div class="phone-input-area">
+                            <div class="phone-input-bubble">
+                                <span id="phoneInputField2" class="phone-placeholder">Write a message...</span>
+                            </div>
+                            <div class="phone-send-btn" id="phoneSendBtn2">
+                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="22" y1="2" x2="11" y2="13"></line>
+                                    <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                                </svg>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1324,6 +1398,114 @@
             }
 
             runPhoneChatLoop();
+        })();
+
+        // ── Multilingual Welcome Demo Animation ──
+        (function () {
+            const chatBox2 = document.getElementById('phoneChatBox2');
+            const inputField2 = document.getElementById('phoneInputField2');
+            const sendBtn2 = document.getElementById('phoneSendBtn2');
+            if (!chatBox2) return;
+
+            const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
+            const languagesFlow = [
+                {
+                    userText: "Hi",
+                    botHtml: `Welcome to our store! ✨<br><br>
+                    🛒 <b>For quick orders and prices:</b> Please visit our catalog here: [Store Link].<br><br>
+                    🌙 <b>For inquiries:</b> Our team is available from 9 AM to 5 PM. Leave your message or place your order on the site, and we'll confirm it upon our return! 💬`
+                },
+                {
+                    userText: "أهلاً",
+                    botHtml: `<div dir="rtl" style="text-align: right;">مرحباً بك في متجرنا! ✨<br><br>
+                    🛒 <b>للطلب السريع والأسعار:</b> تفضل بزيارة الكتالوج من هنا: [رابط المتجر].<br><br>
+                    🌙 <b>للتواصل والاستفسارات:</b> فريقنا متاح من 9 صباحاً لـ 5 مساءً. اترك رسالتك أو سجل طلبك بالموقع، وسنقوم بتأكيده فور عودتنا! 💬</div>`
+                },
+                {
+                    userText: "Ciao",
+                    botHtml: `Benvenuti nel nostro negozio! ✨<br><br>
+                    🛒 <b>Per ordini rapidi e prezzi:</b> Visita il nostro catalogo qui: [Link del negozio].<br><br>
+                    🌙 <b>Per informazioni:</b> Il nostro team è disponibile dalle 9:00 alle 17:00. Lascia il tuo messaggio o effettua l'ordine sul sito, e lo confermeremo al nostro ritorno! 💬`
+                },
+                {
+                    userText: "Hola",
+                    botHtml: `¡Bienvenido a nuestra tienda! ✨<br><br>
+                    🛒 <b>Para pedidos rápidos y precios:</b> Visita nuestro catálogo aquí: [Enlace de la tienda].<br><br>
+                    🌙 <b>Para consultas:</b> Nuestro equipo está disponible de 9 AM a 5 PM. ¡Deja tu mensaje o haz tu pedido en el sitio y lo confirmaremos a nuestro regreso! 💬`
+                },
+                {
+                    userText: "Bonjour",
+                    botHtml: `Bienvenue dans notre boutique ! ✨<br><br>
+                    🛒 <b>Pour les commandes rapides et les prix :</b> Visitez notre catalogue ici : [Lien de la boutique].<br><br>
+                    🌙 <b>Pour nous contacter :</b> Notre équipe est disponible de 9h à 17h. Laissez votre message ou passez votre commande sur le site, et nous la confirmerons dès notre retour ! 💬`
+                },
+                {
+                    userText: "Привет",
+                    botHtml: `Добро пожаловать в наш магазин! ✨<br><br>
+                    🛒 <b>Для быстрых заказов и цен:</b> Посетите наш каталог здесь: [Ссылка на магазин].<br><br>
+                    🌙 <b>Для справок:</b> Наша команда доступна с 9:00 до 17:00. Оставьте свое сообщение или оформите заказ на сайте, и мы подтвердим его по возвращении! 💬`
+                },
+                {
+                    userText: "你好",
+                    botHtml: `欢迎来到我们的商店！✨<br><br>
+                    🛒 <b>快速订购和查看价格：</b> 请点击此处访问我们的目录：[商店链接]。<br><br>
+                    🌙 <b>联系与咨询：</b> 我们的团队工作时间为上午 9 点至下午 5 点。请留下您的留言或在网站上下单，我们回来后会立即确认！💬`
+                }
+            ];
+
+            async function typeMessage2(text) {
+                inputField2.className = 'phone-typing-cursor';
+                inputField2.textContent = '';
+
+                for (let i = 0; i < text.length; i++) {
+                    inputField2.textContent += text.charAt(i);
+                    await sleep(150);
+                }
+
+                sendBtn2.classList.add('active');
+                await sleep(400);
+
+                inputField2.textContent = 'Write a message...';
+                inputField2.className = 'phone-placeholder';
+                sendBtn2.classList.remove('active');
+
+                addMessage2(text, 'user');
+            }
+
+            function addMessage2(text, sender) {
+                const msgDiv = document.createElement('div');
+                msgDiv.className = `phone-msg ${sender}`;
+                msgDiv.innerHTML = text;
+                chatBox2.appendChild(msgDiv);
+                chatBox2.scrollTop = chatBox2.scrollHeight;
+
+                // Keep the DOM light-weight during the endless loop
+                while (chatBox2.children.length > 6) {
+                    chatBox2.removeChild(chatBox2.firstChild);
+                }
+            }
+
+            async function startMultilingualFlow() {
+                await sleep(1000);
+
+                // Endless loop cycling through every language, never resetting the screen
+                while (true) {
+                    for (let i = 0; i < languagesFlow.length; i++) {
+                        const currentLang = languagesFlow[i];
+
+                        await sleep(2000);
+                        await typeMessage2(currentLang.userText);
+
+                        await sleep(2500);
+                        addMessage2(currentLang.botHtml, 'bot');
+
+                        await sleep(5000);
+                    }
+                }
+            }
+
+            startMultilingualFlow();
         })();
 
         // Counter Animation - 10 SECONDS
