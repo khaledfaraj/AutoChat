@@ -1185,7 +1185,7 @@ async function startWhatsAppConnection() {
 function openWhatsAppQrStream(userId) {
     closeWhatsAppStream();
 
-    waEventSource = new EventSource(`${API_BASE_URL}/api/whatsapp/qr-stream?userId=${encodeURIComponent(userId)}`);
+    waEventSource = new EventSource(`${API_BASE_URL}/api/whatsapp/qr-stream?token=${encodeURIComponent(localStorage.getItem('authToken'))}`);
 
     waEventSource.addEventListener('status', (e) => {
         if (e.data === 'waiting') {
