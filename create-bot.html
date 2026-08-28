@@ -709,7 +709,7 @@ Please choose one of the options below, and our team will assist you shortly.</t
 // domain once you deploy — this only handles local testing automatically.
 const API_BASE_URL = (['localhost', '127.0.0.1'].includes(window.location.hostname))
     ? 'http://127.0.0.1:5000'
-    : 'https://zm06sj92-5000.uks1.devtunnels.ms'; // ⚠️ CHANGE THIS before going live
+    : 'https://api.yourdomain.com'; // ⚠️ CHANGE THIS before going live
 
 // Bot Data
 let botData = {
@@ -1185,7 +1185,7 @@ async function startWhatsAppConnection() {
 function openWhatsAppQrStream(userId) {
     closeWhatsAppStream();
 
-    waEventSource = new EventSource(`${API_BASE_URL}/api/whatsapp/qr-stream?token=${encodeURIComponent(localStorage.getItem('authToken'))}`);
+    waEventSource = new EventSource(`${API_BASE_URL}/api/whatsapp/qr-stream?userId=${encodeURIComponent(userId)}`);
 
     waEventSource.addEventListener('status', (e) => {
         if (e.data === 'waiting') {
