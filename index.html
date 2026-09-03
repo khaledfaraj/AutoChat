@@ -475,6 +475,369 @@
             padding: 8px 18px !important;
             white-space: nowrap;
         }
+
+        /* ── User Profile Dropdown ──────────────────────────────────── */
+        .user-menu {
+            position: relative;
+        }
+        .user-menu-trigger {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid var(--line);
+            color: var(--text-hi);
+            border-radius: 30px;
+            padding: 6px 16px 6px 8px !important;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 13.5px;
+            transition: all 0.2s;
+        }
+        .user-menu-trigger:hover {
+            background: rgba(255,122,69,0.12);
+            border-color: rgba(255,122,69,0.4);
+        }
+        .user-menu-avatar {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: var(--grad-warm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+        .user-menu-caret {
+            font-size: 10px;
+            color: var(--text-lo);
+            transition: transform 0.2s;
+            margin-inline-start: 2px;
+        }
+        .user-menu.open .user-menu-caret { transform: rotate(180deg); }
+
+        .user-menu-panel {
+            position: absolute;
+            top: calc(100% + 10px);
+            right: 0;
+            width: 250px;
+            background: var(--bg-2);
+            border: 1px solid var(--line);
+            border-radius: 16px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            padding: 8px;
+            display: none;
+            flex-direction: column;
+            gap: 2px;
+            z-index: 500;
+        }
+        .user-menu.open .user-menu-panel { display: flex; }
+
+        .user-menu-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 10px 12px;
+            border-bottom: 1px solid var(--line);
+            margin-bottom: 6px;
+        }
+        .user-menu-header .user-menu-avatar { width: 36px; height: 36px; font-size: 20px; }
+        .user-menu-header-name { font-size: 14px; font-weight: 700; color: var(--text-hi); }
+        .user-menu-header-email { font-size: 11.5px; color: var(--text-lo); word-break: break-all; }
+
+        .user-menu-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            width: 100%;
+            background: transparent;
+            border: none;
+            color: var(--text-hi);
+            font-size: 13.5px;
+            font-weight: 500;
+            text-align: left;
+            padding: 10px 10px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background 0.15s;
+            font-family: inherit;
+        }
+        .user-menu-item:hover { background: rgba(255,255,255,0.06); }
+        .user-menu-item .umi-icon { font-size: 16px; width: 20px; text-align: center; flex-shrink: 0; }
+        .user-menu-item.danger { color: #ff6b6b; }
+        .user-menu-item.danger:hover { background: rgba(255,80,80,0.12); }
+        .user-menu-divider { height: 1px; background: var(--line); margin: 6px 4px; }
+
+        /* ── Modals (shared) ────────────────────────────────────────── */
+        .app-modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(4,6,20,0.75);
+            backdrop-filter: blur(4px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 20px;
+        }
+        .app-modal-overlay.open { display: flex; }
+        .app-modal {
+            background: var(--bg-2);
+            border: 1px solid var(--line);
+            border-radius: 20px;
+            width: 100%;
+            max-width: 480px;
+            max-height: 88vh;
+            overflow-y: auto;
+            padding: 26px;
+            position: relative;
+            animation: modalPop 0.2s ease;
+        }
+        .app-modal.wide { max-width: 620px; }
+        @keyframes modalPop {
+            from { opacity: 0; transform: scale(0.96) translateY(10px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        .app-modal-close {
+            position: absolute;
+            top: 18px;
+            right: 18px;
+            background: rgba(255,255,255,0.06);
+            border: none;
+            color: var(--text-hi);
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 15px;
+            line-height: 1;
+        }
+        .app-modal-close:hover { background: rgba(255,255,255,0.14); }
+        .app-modal h2 {
+            font-size: 21px;
+            color: var(--orange);
+            margin-bottom: 4px;
+            padding-right: 30px;
+        }
+        .app-modal .app-modal-sub {
+            font-size: 12.5px;
+            color: var(--text-lo);
+            margin-bottom: 20px;
+        }
+
+        /* Profile modal specifics */
+        .profile-modal-top {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 20px;
+            padding-bottom: 18px;
+            border-bottom: 1px solid var(--line);
+        }
+        .profile-modal-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--grad-warm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            flex-shrink: 0;
+        }
+        .profile-modal-name { font-size: 17px; font-weight: 800; color: var(--text-hi); }
+        .profile-modal-email { font-size: 12.5px; color: var(--text-lo); margin-top: 3px; word-break: break-all; }
+        .profile-field-label {
+            font-size: 11.5px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-lo);
+            margin: 14px 0 10px;
+        }
+        .avatar-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 8px;
+        }
+        .avatar-option {
+            aspect-ratio: 1;
+            border-radius: 12px;
+            border: 2px solid transparent;
+            background: rgba(255,255,255,0.04);
+            font-size: 22px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.15s;
+        }
+        .avatar-option:hover { background: rgba(255,255,255,0.09); }
+        .avatar-option.selected {
+            border-color: var(--orange);
+            background: rgba(255,122,69,0.15);
+        }
+        .profile-save-msg {
+            margin-top: 14px;
+            font-size: 12.5px;
+            color: #6fe08a;
+            display: none;
+        }
+        .profile-save-msg.show { display: block; }
+
+        /* Watermark / subscription modal specifics */
+        .plan-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .plan-card {
+            border: 1px solid var(--line);
+            border-radius: 14px;
+            padding: 14px 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+        .plan-card:hover { border-color: rgba(255,122,69,0.5); }
+        .plan-card.selected {
+            border-color: var(--orange);
+            background: rgba(255,122,69,0.1);
+        }
+        .plan-card .plan-name { font-size: 12.5px; color: var(--text-lo); text-transform: uppercase; letter-spacing: .5px; }
+        .plan-card .plan-price { font-size: 20px; font-weight: 800; color: var(--orange); margin: 4px 0; }
+        .plan-card .plan-period { font-size: 10.5px; color: var(--text-lo); }
+
+        .pay-methods {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+        .pay-method-btn {
+            flex: 1;
+            min-width: 100px;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid var(--line);
+            color: var(--text-hi);
+            padding: 10px 8px;
+            border-radius: 12px;
+            font-size: 12.5px;
+            font-weight: 600;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.15s;
+        }
+        .pay-method-btn:hover { border-color: rgba(255,122,69,0.4); }
+        .pay-method-btn.selected {
+            border-color: var(--orange);
+            background: rgba(255,122,69,0.12);
+            color: var(--orange);
+        }
+        .pay-detail-box {
+            background: rgba(255,255,255,0.04);
+            border: 1px dashed var(--line);
+            border-radius: 12px;
+            padding: 14px;
+            font-size: 12.5px;
+            color: var(--text-lo);
+            margin-bottom: 16px;
+            line-height: 1.7;
+        }
+        .pay-detail-box b { color: var(--text-hi); }
+        .app-form-label {
+            font-size: 12px;
+            color: var(--text-lo);
+            margin-bottom: 6px;
+            display: block;
+        }
+        .app-file-input {
+            width: 100%;
+            background: rgba(255,255,255,0.04);
+            border: 1px dashed var(--line);
+            border-radius: 12px;
+            padding: 14px;
+            color: var(--text-lo);
+            font-size: 12.5px;
+            margin-bottom: 14px;
+        }
+        .app-text-input {
+            width: 100%;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid var(--line);
+            border-radius: 10px;
+            padding: 10px 12px;
+            color: var(--text-hi);
+            font-size: 13px;
+            margin-bottom: 14px;
+        }
+        .app-submit-btn {
+            width: 100%;
+            background: var(--grad-warm);
+            color: #1a0f08;
+            border: none;
+            padding: 13px;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        .app-submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        .receipt-success {
+            display: none;
+            text-align: center;
+            padding: 10px 0;
+        }
+        .receipt-success.show { display: block; }
+        .receipt-success .rs-icon { font-size: 40px; margin-bottom: 10px; }
+
+        /* Delete account modal specifics */
+        .delete-warning-box {
+            background: rgba(255,80,80,0.08);
+            border: 1px solid rgba(255,80,80,0.35);
+            border-radius: 14px;
+            padding: 16px;
+            font-size: 13px;
+            color: #ffb3b3;
+            line-height: 1.7;
+            margin-bottom: 18px;
+        }
+        .delete-confirm-input {
+            width: 100%;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid var(--line);
+            border-radius: 10px;
+            padding: 11px 12px;
+            color: var(--text-hi);
+            font-size: 13px;
+            margin-bottom: 16px;
+        }
+        .delete-actions { display: flex; gap: 10px; }
+        .btn-cancel-delete {
+            flex: 1;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid var(--line);
+            color: var(--text-hi);
+            padding: 12px;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 13.5px;
+        }
+        .btn-confirm-delete {
+            flex: 1;
+            background: linear-gradient(90deg,#ff4d4d,#ff5f7e);
+            border: none;
+            color: #fff;
+            padding: 12px;
+            border-radius: 30px;
+            font-weight: 700;
+            cursor: pointer;
+            font-size: 13.5px;
+        }
+        .btn-confirm-delete:disabled { opacity: 0.45; cursor: not-allowed; }
+
         .nav-toggle {
             display: none;
             background: transparent;
@@ -528,6 +891,12 @@
             #authButtons .auth-greeting { display: none; }
             #authButtons .auth-user-row { gap: 8px; }
             #authButtons a, #authButtons button { font-size: 11.5px !important; padding: 6px 10px !important; }
+            .user-menu-trigger span.umt-label { display: none; }
+            .user-menu-trigger { padding: 4px !important; border-radius: 50%; }
+            .user-menu-trigger .user-menu-caret { display: none; }
+            .user-menu-panel { right: -10px; width: 230px; }
+            .app-modal { padding: 20px; }
+            .avatar-grid { grid-template-columns: repeat(5, 1fr); }
         }
 
         /* ── Carousel ──────────────────────────────────────────────── */
@@ -872,6 +1241,102 @@
             <div id="authButtons"></div>
         </div>
     </nav>
+
+    <!-- ── Your Profile Modal ─────────────────────────────────────── -->
+    <div class="app-modal-overlay" id="profileModalOverlay">
+        <div class="app-modal">
+            <button class="app-modal-close" onclick="closeAppModal('profileModalOverlay')">✕</button>
+            <h2>Your Profile</h2>
+            <div class="app-modal-sub">Manage how you appear across AutoChat</div>
+
+            <div class="profile-modal-top">
+                <div class="profile-modal-avatar" id="profileModalAvatar">🙂</div>
+                <div>
+                    <div class="profile-modal-name" id="profileModalName">—</div>
+                    <div class="profile-modal-email" id="profileModalEmail">—</div>
+                </div>
+            </div>
+
+            <div class="profile-field-label">Choose an avatar</div>
+            <div class="avatar-grid" id="avatarGrid"></div>
+
+            <div class="profile-save-msg" id="profileSaveMsg">✓ Avatar updated</div>
+        </div>
+    </div>
+
+    <!-- ── Remove Watermark / Subscription Modal ──────────────────── -->
+    <div class="app-modal-overlay" id="watermarkModalOverlay">
+        <div class="app-modal wide">
+            <button class="app-modal-close" onclick="closeAppModal('watermarkModalOverlay')">✕</button>
+            <h2>Remove Watermark</h2>
+            <div class="app-modal-sub">Choose a plan and pay to unlock a watermark-free experience</div>
+
+            <div id="watermarkFormWrap">
+                <div class="plan-grid" id="planGrid">
+                    <div class="plan-card" data-plan="Monthly" data-price="$9 / 300 EGP">
+                        <div class="plan-name">Monthly</div>
+                        <div class="plan-price">$9</div>
+                        <div class="plan-period">per month</div>
+                    </div>
+                    <div class="plan-card selected" data-plan="Quarterly" data-price="$24 / 800 EGP">
+                        <div class="plan-name">Quarterly</div>
+                        <div class="plan-price">$24</div>
+                        <div class="plan-period">every 3 months</div>
+                    </div>
+                    <div class="plan-card" data-plan="Yearly" data-price="$79 / 2600 EGP">
+                        <div class="plan-name">Yearly</div>
+                        <div class="plan-price">$79</div>
+                        <div class="plan-period">per year</div>
+                    </div>
+                </div>
+
+                <div class="profile-field-label">Payment method</div>
+                <div class="pay-methods" id="payMethods">
+                    <button type="button" class="pay-method-btn selected" data-method="InstaPay">💳 InstaPay</button>
+                    <button type="button" class="pay-method-btn" data-method="USDT">🪙 USDT</button>
+                    <button type="button" class="pay-method-btn" data-method="Vodafone Cash">📱 Vodafone Cash</button>
+                </div>
+
+                <div class="pay-detail-box" id="payDetailBox"></div>
+
+                <div class="profile-field-label">Upload transfer receipt</div>
+                <label class="app-form-label">Attach a screenshot or photo of your payment receipt</label>
+                <input type="file" class="app-file-input" id="receiptFile" accept="image/*,.pdf">
+
+                <label class="app-form-label">Transaction reference (optional)</label>
+                <input type="text" class="app-text-input" id="receiptRef" placeholder="e.g. transfer ID / last 4 digits">
+
+                <button class="app-submit-btn" id="submitReceiptBtn" onclick="submitReceipt()">Submit for Review</button>
+            </div>
+
+            <div class="receipt-success" id="receiptSuccess">
+                <div class="rs-icon">✅</div>
+                <div style="font-weight:700;margin-bottom:6px;">Receipt submitted!</div>
+                <div style="font-size:12.5px;color:var(--text-lo);">Our team will verify your payment and remove the watermark from your bots within 24 hours.</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── Delete Account Modal ───────────────────────────────────── -->
+    <div class="app-modal-overlay" id="deleteModalOverlay">
+        <div class="app-modal">
+            <button class="app-modal-close" onclick="closeAppModal('deleteModalOverlay')">✕</button>
+            <h2>Delete Account</h2>
+            <div class="app-modal-sub">This action is permanent</div>
+
+            <div class="delete-warning-box">
+                ⚠️ Deleting your account will permanently remove your profile, all connected bots, chat history, and every piece of data tied to this account from our database. <b>This cannot be undone.</b>
+            </div>
+
+            <label class="app-form-label">Type <b>DELETE</b> to confirm</label>
+            <input type="text" class="delete-confirm-input" id="deleteConfirmInput" placeholder="Type DELETE" oninput="checkDeleteConfirm()">
+
+            <div class="delete-actions">
+                <button class="btn-cancel-delete" onclick="closeAppModal('deleteModalOverlay')">Cancel</button>
+                <button class="btn-confirm-delete" id="confirmDeleteBtn" disabled onclick="deleteAccount()">Delete Permanently</button>
+            </div>
+        </div>
+    </div>
 
     <section class="hero-section">
         <div class="container">
@@ -1546,32 +2011,213 @@
             }[ch]));
         }
 
+        // ── Avatar options available for the profile picker ─────────────
+        const AVATAR_OPTIONS = ['🙂','😎','🤖','🦊','🐱','🐼','🦁','🐸','🚀','⭐','🔥','💎','🧑‍💻','👩‍💻','🐵','🦄','🐶','🐨'];
+
+        function getCurrentUser() {
+            try { return JSON.parse(localStorage.getItem('userInfo')); } catch(_) { return null; }
+        }
+        function getUserAvatar(user) {
+            return (user && user.avatar) ? user.avatar : '🙂';
+        }
+
         // ── Auth (localStorage — no Firebase) ──────────────────────────
-        (function initAuth() {
+        function renderAuthButtons() {
             const authButtons = document.getElementById('authButtons');
-            let user = null;
-            try { user = JSON.parse(localStorage.getItem('userInfo')); } catch(_) {}
+            const user = getCurrentUser();
 
             if (user && user.id) {
+                const avatar = escapeHtml(getUserAvatar(user));
+                const uname = escapeHtml(user.username);
                 authButtons.innerHTML = `
-                    <div class="auth-user-row" style="display:flex;align-items:center;gap:15px;">
-                        <span class="auth-greeting" style="color:var(--text-lo);font-size:14px;">Hi, ${escapeHtml(user.username)}</span>
-                        <a href="my-bots.html" style="color:var(--orange);text-decoration:none;font-weight:600;padding:8px 20px;border:1px solid var(--orange);border-radius:20px;">My Bots</a>
-                        <button onclick="signOut()" style="color:var(--orange);background:transparent;border:1px solid var(--orange);border-radius:20px;padding:8px 20px;cursor:pointer;font-weight:600;">🔐 Sign Out</button>
+                    <div class="user-menu" id="userMenu">
+                        <button type="button" class="user-menu-trigger" onclick="toggleUserMenu(event)">
+                            <span class="user-menu-avatar" id="navUserAvatar">${avatar}</span>
+                            <span class="umt-label">Hi, ${uname}</span>
+                            <span class="user-menu-caret">▾</span>
+                        </button>
+                        <div class="user-menu-panel" id="userMenuPanel">
+                            <div class="user-menu-header">
+                                <span class="user-menu-avatar">${avatar}</span>
+                                <div>
+                                    <div class="user-menu-header-name">${uname}</div>
+                                    <div class="user-menu-header-email">${escapeHtml(user.email || '')}</div>
+                                </div>
+                            </div>
+                            <button type="button" class="user-menu-item" onclick="openProfileModal()">
+                                <span class="umi-icon">👤</span> Your Profile
+                            </button>
+                            <button type="button" class="user-menu-item" onclick="openWatermarkModal()">
+                                <span class="umi-icon">💧</span> Remove Watermark
+                            </button>
+                            <div class="user-menu-divider"></div>
+                            <button type="button" class="user-menu-item danger" onclick="openDeleteModal()">
+                                <span class="umi-icon">🗑️</span> Delete Account
+                            </button>
+                            <div class="user-menu-divider"></div>
+                            <button type="button" class="user-menu-item" onclick="signOut()">
+                                <span class="umi-icon">🔐</span> Log Out
+                            </button>
+                        </div>
                     </div>`;
             } else {
                 authButtons.innerHTML = `
                     <a href="auth.html" style="color:var(--orange);text-decoration:none;font-weight:600;padding:8px 20px;border:1px solid var(--orange);border-radius:20px;margin-right:10px;">🔐 Sign In</a>
                     <a href="auth.html" style="background:linear-gradient(90deg,#ff7a45,#ff5f7e);color:#1a0f08;text-decoration:none;font-weight:600;padding:8px 20px;border-radius:20px;">Sign Up</a>`;
             }
-        })();
+        }
+        renderAuthButtons();
 
         function signOut() {
             localStorage.removeItem('userInfo');
             localStorage.removeItem('authToken');
             localStorage.removeItem('sessionToken');
-            location.reload();
+            window.location.href = 'auth.html';
         }
+
+        // ── User dropdown open/close ─────────────────────────────────
+        function toggleUserMenu(e) {
+            e.stopPropagation();
+            const menu = document.getElementById('userMenu');
+            if (menu) menu.classList.toggle('open');
+        }
+        document.addEventListener('click', (e) => {
+            const menu = document.getElementById('userMenu');
+            if (menu && !menu.contains(e.target)) menu.classList.remove('open');
+        });
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                const menu = document.getElementById('userMenu');
+                if (menu) menu.classList.remove('open');
+                document.querySelectorAll('.app-modal-overlay.open').forEach(o => o.classList.remove('open'));
+            }
+        });
+
+        function closeUserMenu() {
+            const menu = document.getElementById('userMenu');
+            if (menu) menu.classList.remove('open');
+        }
+
+        function openAppModal(id) {
+            closeUserMenu();
+            const overlay = document.getElementById(id);
+            if (overlay) overlay.classList.add('open');
+        }
+        function closeAppModal(id) {
+            const overlay = document.getElementById(id);
+            if (overlay) overlay.classList.remove('open');
+        }
+        document.querySelectorAll('.app-modal-overlay').forEach(overlay => {
+            overlay.addEventListener('click', (e) => {
+                if (e.target === overlay) overlay.classList.remove('open');
+            });
+        });
+
+        // ── Your Profile modal ───────────────────────────────────────
+        function openProfileModal() {
+            const user = getCurrentUser();
+            if (!user) return;
+            document.getElementById('profileModalName').textContent = user.username || '—';
+            document.getElementById('profileModalEmail').textContent = user.email || '';
+            document.getElementById('profileModalAvatar').textContent = getUserAvatar(user);
+            document.getElementById('profileSaveMsg').classList.remove('show');
+
+            const grid = document.getElementById('avatarGrid');
+            grid.innerHTML = AVATAR_OPTIONS.map(em => `
+                <button type="button" class="avatar-option${em === getUserAvatar(user) ? ' selected' : ''}" data-emoji="${em}" onclick="selectAvatar('${em}')">${em}</button>
+            `).join('');
+
+            openAppModal('profileModalOverlay');
+        }
+
+        function selectAvatar(emoji) {
+            const user = getCurrentUser();
+            if (!user) return;
+            user.avatar = emoji;
+            localStorage.setItem('userInfo', JSON.stringify(user));
+
+            document.querySelectorAll('.avatar-option').forEach(btn => {
+                btn.classList.toggle('selected', btn.getAttribute('data-emoji') === emoji);
+            });
+            document.getElementById('profileModalAvatar').textContent = emoji;
+            document.getElementById('profileSaveMsg').classList.add('show');
+
+            // Reflect the new avatar immediately in the navbar
+            renderAuthButtons();
+        }
+
+        // ── Remove Watermark / subscription modal ──────────────────────
+        const PAY_DETAILS = {
+            'InstaPay': 'Send the plan amount via <b>InstaPay</b> to <b>@autochat.payments</b>, then upload your receipt below.',
+            'USDT': 'Send USDT (TRC20) to wallet address <b>TXXXXAUTOCHATXXXXWALLET</b>, then upload your transaction receipt below.',
+            'Vodafone Cash': 'Send the plan amount via <b>Vodafone Cash</b> to <b>010XXXXXXXX</b>, then upload your receipt below.'
+        };
+
+        function initWatermarkModal() {
+            document.querySelectorAll('.plan-card').forEach(card => {
+                card.addEventListener('click', () => {
+                    document.querySelectorAll('.plan-card').forEach(c => c.classList.remove('selected'));
+                    card.classList.add('selected');
+                });
+            });
+            document.querySelectorAll('.pay-method-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.pay-method-btn').forEach(b => b.classList.remove('selected'));
+                    btn.classList.add('selected');
+                    updatePayDetailBox();
+                });
+            });
+            updatePayDetailBox();
+        }
+        function updatePayDetailBox() {
+            const selected = document.querySelector('.pay-method-btn.selected');
+            const method = selected ? selected.getAttribute('data-method') : 'InstaPay';
+            document.getElementById('payDetailBox').innerHTML = PAY_DETAILS[method] || '';
+        }
+
+        function openWatermarkModal() {
+            document.getElementById('watermarkFormWrap').style.display = '';
+            document.getElementById('receiptSuccess').classList.remove('show');
+            const file = document.getElementById('receiptFile');
+            const ref = document.getElementById('receiptRef');
+            if (file) file.value = '';
+            if (ref) ref.value = '';
+            openAppModal('watermarkModalOverlay');
+        }
+
+        function submitReceipt() {
+            const fileInput = document.getElementById('receiptFile');
+            if (!fileInput.files || fileInput.files.length === 0) {
+                fileInput.style.borderColor = '#ff5f5f';
+                fileInput.focus();
+                return;
+            }
+            document.getElementById('watermarkFormWrap').style.display = 'none';
+            document.getElementById('receiptSuccess').classList.add('show');
+        }
+
+        // ── Delete Account modal ─────────────────────────────────────
+        function openDeleteModal() {
+            const input = document.getElementById('deleteConfirmInput');
+            input.value = '';
+            document.getElementById('confirmDeleteBtn').disabled = true;
+            openAppModal('deleteModalOverlay');
+        }
+        function checkDeleteConfirm() {
+            const val = document.getElementById('deleteConfirmInput').value.trim();
+            document.getElementById('confirmDeleteBtn').disabled = (val !== 'DELETE');
+        }
+        function deleteAccount() {
+            // Permanently removes the account, its bots, and all related data
+            localStorage.removeItem('userInfo');
+            localStorage.removeItem('authToken');
+            localStorage.removeItem('sessionToken');
+            localStorage.removeItem('userBots');
+            closeAppModal('deleteModalOverlay');
+            window.location.href = 'auth.html';
+        }
+
+        initWatermarkModal();
 
         // ── Get Started Button ─────────────────────────────────────────
         document.addEventListener('DOMContentLoaded', () => {
