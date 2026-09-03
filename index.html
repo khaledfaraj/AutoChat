@@ -387,15 +387,104 @@
             font-size: 16px;
         }
         
-        footer {
+        footer.site-footer {
             background: var(--bg-0);
-            padding: 30px;
-            text-align: center;
-            color: var(--text-lo);
             border-top: 1px solid var(--line);
+            padding: 60px 20px 0;
             position: relative;
             z-index: 1;
         }
+        .footer-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1.7fr 1fr 1fr 1fr 1fr;
+            gap: 36px;
+            padding-bottom: 40px;
+        }
+        .footer-logo {
+            font-size: 19px;
+            font-weight: 800;
+            margin-bottom: 12px;
+            background: var(--grad-warm);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .footer-tagline { color: var(--text-lo); font-size: 13.5px; line-height: 1.75; max-width: 280px; }
+        .footer-col h4 {
+            font-size: 12.5px;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--text-hi);
+            margin-bottom: 18px;
+        }
+        .footer-col a {
+            display: block;
+            color: var(--text-lo);
+            text-decoration: none;
+            font-size: 14px;
+            margin-bottom: 13px;
+            cursor: pointer;
+            transition: color 0.2s;
+            width: fit-content;
+        }
+        .footer-col a:hover { color: var(--orange); }
+        .footer-bottom {
+            border-top: 1px solid var(--line);
+            padding: 22px 0;
+            text-align: center;
+            color: var(--text-lo);
+            font-size: 12.5px;
+        }
+        @media (max-width: 820px) {
+            .footer-inner { grid-template-columns: 1fr 1fr; }
+            .footer-brand { grid-column: 1 / -1; margin-bottom: 10px; }
+        }
+
+        /* ── Long-form modal content (About / Pricing / Bot Rules / Legal) ── */
+        .policy-content h3 {
+            font-size: 15px;
+            color: var(--orange);
+            margin: 22px 0 10px;
+        }
+        .policy-content h3:first-child { margin-top: 0; }
+        .policy-content p, .policy-content li {
+            font-size: 13.5px;
+            color: var(--text-lo);
+            line-height: 1.8;
+            margin-bottom: 10px;
+        }
+        .policy-content ul { padding-left: 20px; margin-bottom: 10px; }
+        .policy-content b { color: var(--text-hi); }
+        .policy-note {
+            background: rgba(123,92,255,0.08);
+            border: 1px solid rgba(123,92,255,0.3);
+            border-radius: 12px;
+            padding: 14px 16px;
+            font-size: 12.5px;
+            color: var(--text-lo);
+            margin-top: 20px;
+            line-height: 1.7;
+        }
+        .mini-plan-row {
+            display: flex;
+            gap: 12px;
+            margin: 18px 0;
+            flex-wrap: wrap;
+        }
+        .mini-plan {
+            flex: 1;
+            min-width: 140px;
+            background: var(--bg-1);
+            border: 1px solid var(--line);
+            border-radius: 14px;
+            padding: 16px;
+            text-align: center;
+        }
+        .mini-plan .mp-name { font-size: 12.5px; color: var(--text-lo); margin-bottom: 6px; }
+        .mini-plan .mp-price { font-size: 20px; font-weight: 800; color: var(--text-hi); }
+        .mini-plan .mp-period { font-size: 11.5px; color: var(--text-lo); }
         
         /* ── Top Navigation Bar ─────────────────────────────────────── */
         .site-nav {
@@ -595,6 +684,7 @@
             animation: modalPop 0.2s ease;
         }
         .app-modal.wide { max-width: 620px; }
+        .app-modal.xwide { max-width: 760px; }
         @keyframes modalPop {
             from { opacity: 0; transform: scale(0.96) translateY(10px); }
             to { opacity: 1; transform: scale(1) translateY(0); }
@@ -771,7 +861,9 @@
             color: var(--text-hi);
             font-size: 13px;
             margin-bottom: 14px;
+            font-family: inherit;
         }
+        textarea.app-text-input { resize: vertical; min-height: 90px; }
         .app-submit-btn {
             width: 100%;
             background: var(--grad-warm);
@@ -1693,51 +1785,200 @@
         </div>
     </section>
 
-    <section class="info-section" id="faq" style="padding-top:20px;border-top:1px solid var(--line);">
-        <div class="info-container">
-            <h2 class="info-title">Frequently Asked Questions</h2>
-            <p class="info-subtitle">Everything you need to know before launching your first AutoChat.</p>
-            <div class="faq-container">
-                <div class="faq-item open">
-                    <div class="faq-question" onclick="toggleFaq(this)">
-                        Do I need coding experience to create a bot?
-                        <span class="faq-icon">+</span>
+    <!-- ── About Us Modal (story, vision, FAQ) ─────────────────────── -->
+    <div class="app-modal-overlay" id="aboutModalOverlay">
+        <div class="app-modal xwide">
+            <button class="app-modal-close" onclick="closeAppModal('aboutModalOverlay')">✕</button>
+            <h2>About AutoChat</h2>
+            <div class="app-modal-sub">Our story, our vision, and everything you might want to know</div>
+            <div class="policy-content">
+                <h3>Our Story</h3>
+                <p>AutoChat was built around a simple observation: small and growing businesses lose customers every day simply because nobody was available to reply in time. Instant messaging is where customers already are — Telegram and WhatsApp — but staffing a reply desk around the clock isn't realistic for most teams.</p>
+                <p>So we built a no-code platform that lets anyone launch a working, always-on reply bot in minutes — no developer, no server to maintain, no messages left on read.</p>
+                <h3>Our Vision</h3>
+                <p>We believe automation shouldn't be a luxury reserved for large companies with engineering teams. AutoChat's goal is to give every business — from a one-person shop to a growing team — the same instant, professional, always-available customer experience, without writing a single line of code.</p>
+
+                <h3>Frequently Asked Questions</h3>
+                <div class="faq-container" style="max-width:100%;">
+                    <div class="faq-item open">
+                        <div class="faq-question" onclick="toggleFaq(this)">Do I need coding experience to create a bot?<span class="faq-icon">+</span></div>
+                        <div class="faq-answer"><p>No — none at all. AutoChat is fully no-code. You can build and launch a working bot using our guided setup without writing a single line of code.</p></div>
                     </div>
-                    <div class="faq-answer"><p>No — none at all. AutoChat is fully no-code. You can build and launch a working bot using our guided setup without writing a single line of code.</p></div>
-                </div>
-                <div class="faq-item">
-                    <div class="faq-question" onclick="toggleFaq(this)">
-                        Is my bot available 24/7?
-                        <span class="faq-icon">+</span>
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFaq(this)">Is my bot available 24/7?<span class="faq-icon">+</span></div>
+                        <div class="faq-answer"><p>Yes. Once published, your bot runs around the clock, responding to customers instantly — even while you sleep, and with zero downtime on your end.</p></div>
                     </div>
-                    <div class="faq-answer"><p>Yes. Once published, your bot runs around the clock, responding to customers instantly — even while you sleep, and with zero downtime on your end.</p></div>
-                </div>
-                <div class="faq-item">
-                    <div class="faq-question" onclick="toggleFaq(this)">
-                        Is my data secure?
-                        <span class="faq-icon">+</span>
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFaq(this)">Is my data secure?<span class="faq-icon">+</span></div>
+                        <div class="faq-answer"><p>Yes. Sessions and account data are encrypted at rest, and every account's bots and information are kept fully isolated from other accounts.</p></div>
                     </div>
-                    <div class="faq-answer"><p>Yes. All data is encrypted end-to-end, and every account's bots and information are fully isolated — no one else can ever access your data.</p></div>
-                </div>
-                <div class="faq-item">
-                    <div class="faq-question" onclick="toggleFaq(this)">
-                        Which platforms are supported?
-                        <span class="faq-icon">+</span>
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFaq(this)">Which platforms are supported?<span class="faq-icon">+</span></div>
+                        <div class="faq-answer"><p>Telegram and WhatsApp are fully supported today, with more messaging platforms on the roadmap as the platform grows.</p></div>
                     </div>
-                    <div class="faq-answer"><p>Telegram and WhatsApp are fully supported today, with more messaging platforms on the roadmap as the platform grows.</p></div>
-                </div>
-                <div class="faq-item">
-                    <div class="faq-question" onclick="toggleFaq(this)">
-                        Can I change my bot's responses later?
-                        <span class="faq-icon">+</span>
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFaq(this)">Can I change my bot's responses later?<span class="faq-icon">+</span></div>
+                        <div class="faq-answer"><p>Absolutely. You can update your welcome message, bot behavior, and settings anytime from the My Bots dashboard — changes apply instantly.</p></div>
                     </div>
-                    <div class="faq-answer"><p>Absolutely. You can update your welcome message, AI behavior, and settings anytime from the My Bots dashboard — changes apply instantly.</p></div>
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFaq(this)">Is AutoChat really free to use?<span class="faq-icon">+</span></div>
+                        <div class="faq-answer"><p>Yes. Creating an account and building and publishing bots is completely free, with no limit. The free plan includes a small AutoChat watermark on every automated reply — removing it is an optional paid upgrade. See our Pricing page for details.</p></div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFaq(this)">Do bots reply inside group chats?<span class="faq-icon">+</span></div>
+                        <div class="faq-answer"><p>No. By design, bots only reply to private one-to-one conversations on both Telegram and WhatsApp — never inside groups, channels, or broadcast lists. See Bot Rules for the full behavior.</p></div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFaq(this)">Can I turn my bot off whenever I want?<span class="faq-icon">+</span></div>
+                        <div class="faq-answer"><p>Yes. You're always in control — toggle any bot on or off at any time from the My Bots dashboard, and the change takes effect within moments.</p></div>
+                    </div>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
 
-    <footer><p>&copy; 2026 AutoChat Platform. All rights reserved.</p></footer>
+    <!-- ── Pricing Modal ─────────────────────────────────────────────── -->
+    <div class="app-modal-overlay" id="pricingModalOverlay">
+        <div class="app-modal wide">
+            <button class="app-modal-close" onclick="closeAppModal('pricingModalOverlay')">✕</button>
+            <h2>Pricing</h2>
+            <div class="app-modal-sub">Simple, honest pricing — no hidden fees</div>
+            <div class="policy-content">
+                <h3>What's free</h3>
+                <p><b>Everything, by default.</b> Creating an account, signing up, and building and publishing an unlimited number of Telegram or WhatsApp bots costs nothing. There's no trial period and no credit card required to get started.</p>
+                <h3>The only paid upgrade: removing the watermark</h3>
+                <p>On the free plan, every automated reply your bot sends includes a small AutoChat watermark. If you'd like your bot's replies to appear watermark-free, you can subscribe to one of the following plans:</p>
+                <div class="mini-plan-row">
+                    <div class="mini-plan"><div class="mp-name">Monthly</div><div class="mp-price">$9</div><div class="mp-period">/ month · 300 EGP</div></div>
+                    <div class="mini-plan"><div class="mp-name">Quarterly</div><div class="mp-price">$24</div><div class="mp-period">/ 3 months · 800 EGP</div></div>
+                    <div class="mini-plan"><div class="mp-name">Yearly</div><div class="mp-price">$79</div><div class="mp-period">/ year · 2600 EGP</div></div>
+                </div>
+                <p>Payments are accepted via <b>InstaPay</b>, <b>Vodafone Cash</b>, or <b>USDT (TRC20)</b>. You can subscribe and submit your payment receipt directly from the Remove Watermark section inside your My Bots dashboard — our team reviews and activates it within 24 hours.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── Bot Rules Modal ───────────────────────────────────────────── -->
+    <div class="app-modal-overlay" id="botRulesModalOverlay">
+        <div class="app-modal xwide">
+            <button class="app-modal-close" onclick="closeAppModal('botRulesModalOverlay')">✕</button>
+            <h2>Bot Rules</h2>
+            <div class="app-modal-sub">How every AutoChat bot behaves, on both Telegram and WhatsApp</div>
+            <div class="policy-content">
+                <h3>1. Private conversations only</h3>
+                <p>Bots reply only to direct, one-to-one conversations. They never respond inside group chats, channels, broadcast lists, WhatsApp Status updates, or newsletters — on either Telegram or WhatsApp. This is a deliberate safety rule, not a limitation you can turn off.</p>
+                <h3>2. Real-time replies, not a message queue</h3>
+                <p>Bots respond to new messages while they're actively running. If a bot was turned off or temporarily offline, messages sent during that time will not receive an automatic reply once it comes back online — this prevents customers from getting flooded with delayed responses all at once.</p>
+                <h3>3. You're always in control</h3>
+                <p>Every bot can be turned on or off at any time from the <b>My Bots</b> dashboard. When a bot is off, it stops replying entirely until you switch it back on — no scheduling required.</p>
+                <h3>4. Two response styles</h3>
+                <ul>
+                    <li><b>Welcome / auto-reply bots</b> — send an automatic greeting or message to anyone who starts a conversation.</li>
+                    <li><b>Menu bots</b> — guide the customer through a numbered menu of options they can navigate by replying with a number.</li>
+                </ul>
+                <h3>5. No unsolicited messaging</h3>
+                <p>Bots only ever reply to a message they receive — they never initiate a conversation or send bulk/unsolicited messages to anyone.</p>
+                <div class="policy-note">These rules apply to every bot created on AutoChat and cannot be disabled by individual bot owners — they exist to keep the platform safe and spam-free for everyone.</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── Contact Us Modal ──────────────────────────────────────────── -->
+    <div class="app-modal-overlay" id="contactModalOverlay">
+        <div class="app-modal wide">
+            <button class="app-modal-close" onclick="closeAppModal('contactModalOverlay')">✕</button>
+            <h2>Contact Us</h2>
+            <div class="app-modal-sub">We usually reply within 24 hours</div>
+
+            <label class="app-form-label">Your name</label>
+            <input type="text" class="app-text-input" id="contactName" placeholder="Your name">
+
+            <label class="app-form-label">Your email</label>
+            <input type="email" class="app-text-input" id="contactEmail" placeholder="you@example.com">
+
+            <label class="app-form-label">Message</label>
+            <textarea class="app-text-input" id="contactMessage" rows="4" placeholder="How can we help?"></textarea>
+
+            <button class="app-submit-btn" onclick="sendContactMessage()">Send Message</button>
+
+            <div style="margin-top:22px;padding-top:20px;border-top:1px solid var(--line);font-size:13.5px;color:var(--text-lo);line-height:2;">
+                📧 Official email: <a href="mailto:support@autochat.app" style="color:var(--orange);">support@autochat.app</a><br>
+                📲 WhatsApp: <a href="https://wa.me/15551234567" target="_blank" rel="noopener" style="color:var(--orange);">Chat with us</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── Privacy Policy Modal ──────────────────────────────────────── -->
+    <div class="app-modal-overlay" id="privacyModalOverlay">
+        <div class="app-modal xwide">
+            <button class="app-modal-close" onclick="closeAppModal('privacyModalOverlay')">✕</button>
+            <h2>Privacy Policy</h2>
+            <div class="app-modal-sub">Last updated: 2026</div>
+            <div class="policy-content">
+                <h3>What we collect</h3>
+                <p>We collect the account information you provide (username, contact details), the bots and settings you create, and the Telegram/WhatsApp session data required to keep your bot connected.</p>
+                <h3>How we protect it</h3>
+                <p>Session data is encrypted at rest, access to your account is protected by a signed session token, and every account's bots and data are isolated from other accounts — no one else can access your bots or messages.</p>
+                <h3>How we use your data</h3>
+                <p>Your data is used solely to operate your bots and your account — to authenticate you, run your bots, and process any subscription you choose to purchase. We do not sell your data to third parties.</p>
+                <h3>Third-party services</h3>
+                <p>We use Supabase to store account and bot data securely. Payment confirmations are reviewed manually and are not shared beyond what's needed to activate your subscription.</p>
+                <h3>Your rights</h3>
+                <p>You can delete your account at any time from your dashboard, which permanently removes your profile, bots, and associated data.</p>
+                <div class="policy-note">This page is a general summary provided for transparency and is not a substitute for formal legal advice. If you need a legally binding privacy policy for your jurisdiction, we recommend having it reviewed by a qualified professional.</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── Terms of Service Modal ────────────────────────────────────── -->
+    <div class="app-modal-overlay" id="termsModalOverlay">
+        <div class="app-modal xwide">
+            <button class="app-modal-close" onclick="closeAppModal('termsModalOverlay')">✕</button>
+            <h2>Terms of Service</h2>
+            <div class="app-modal-sub">Last updated: 2026</div>
+            <div class="policy-content">
+                <h3>The service</h3>
+                <p>AutoChat lets you create and manage automated Telegram and WhatsApp reply bots. Account creation and bot publishing are free; removing the default watermark from your bot's replies requires an optional paid subscription (see Pricing).</p>
+                <h3>Acceptable use</h3>
+                <p>You agree not to use AutoChat to send spam, unsolicited bulk messages, or content that is illegal, harmful, or violates Telegram's or WhatsApp's own terms of service. All bots must follow the behavior described in our Bot Rules.</p>
+                <h3>Your account</h3>
+                <p>You're responsible for keeping your login credentials secure and for the content your bots send. You may turn your bots on or off, or delete your account, at any time from your dashboard.</p>
+                <h3>Subscriptions</h3>
+                <p>Watermark-removal subscriptions are activated manually after payment verification and apply to the bot(s) you select. Subscription plans and pricing may change; existing active subscriptions will run out their current term at the price you paid.</p>
+                <h3>Changes to these terms</h3>
+                <p>We may update these terms as the platform evolves. Continued use of AutoChat after changes are posted means you accept the updated terms.</p>
+                <div class="policy-note">This page is a general summary provided for transparency and is not a substitute for formal legal advice.</div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="site-footer">
+        <div class="footer-inner">
+            <div class="footer-brand">
+                <div class="footer-logo">🤖 AutoChat</div>
+                <p class="footer-tagline">No-code Telegram &amp; WhatsApp automation that keeps your business responsive, 24 hours a day.</p>
+            </div>
+            <div class="footer-col">
+                <h4>About the Platform</h4>
+                <a onclick="openAppModal('aboutModalOverlay')">About Us</a>
+                <a onclick="openAppModal('pricingModalOverlay')">Pricing</a>
+            </div>
+            <div class="footer-col">
+                <h4>Bot Rules</h4>
+                <a onclick="openAppModal('botRulesModalOverlay')">How Our Bots Behave</a>
+            </div>
+            <div class="footer-col">
+                <h4>Support</h4>
+                <a onclick="openAppModal('contactModalOverlay')">Contact Us</a>
+            </div>
+            <div class="footer-col">
+                <h4>Legal</h4>
+                <a onclick="openAppModal('privacyModalOverlay')">Privacy Policy</a>
+                <a onclick="openAppModal('termsModalOverlay')">Terms of Service</a>
+            </div>
+        </div>
+        <div class="footer-bottom">&copy; 2026 AutoChat Platform. All rights reserved.</div>
+    </footer>
 
     <script>
         // ── Live Chat Demo Animation ──
@@ -2109,6 +2350,22 @@
         function closeAppModal(id) {
             const overlay = document.getElementById(id);
             if (overlay) overlay.classList.remove('open');
+        }
+
+        // Contact form: no backend endpoint yet, so this opens the user's
+        // email client with the message pre-filled. Swap this out for a
+        // real POST to a /api/contact endpoint once one exists.
+        function sendContactMessage() {
+            const name    = document.getElementById('contactName').value.trim();
+            const email   = document.getElementById('contactEmail').value.trim();
+            const message = document.getElementById('contactMessage').value.trim();
+            if (!message) {
+                alert('Please write a message before sending.');
+                return;
+            }
+            const subject = `AutoChat support request from ${name || 'a visitor'}`;
+            const body    = `${message}\n\n— ${name || 'Anonymous'} (${email || 'no email provided'})`;
+            window.location.href = `mailto:support@autochat.app?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
         }
         document.querySelectorAll('.app-modal-overlay').forEach(overlay => {
             overlay.addEventListener('click', (e) => {
