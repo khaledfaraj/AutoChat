@@ -62,6 +62,20 @@
             margin-bottom: 25px;
         }
 
+        /* ⚠️ Warning Banner */
+        .warning-banner {
+            background: #ffcc00;
+            color: #000;
+            padding: 15px;
+            text-align: center;
+            font-weight: bold;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            font-size: 13px;
+            line-height: 1.6;
+            display: none; /* shown only on signup tab */
+        }
+
         /* Tab Switch */
         .tabs {
             display: flex;
@@ -326,6 +340,11 @@
 
         <h1 id="pageTitle">Sign In to Your Account</h1>
 
+        <!-- ⚠️ Warning Banner (signup only) -->
+        <div class="warning-banner" id="warningBanner">
+            ⚠️ Important Notice: You are fully responsible for keeping your data safe. The platform does not retain any recoverable data. If you forget your username or password, you will be permanently unable to recover your account, and you will have to create
+        </div>
+
         <!-- Error / Success -->
         <div class="error-msg" id="errorMsg"></div>
         <div class="success-msg" id="successMsg"></div>
@@ -433,6 +452,9 @@
             document.getElementById('switchLink').innerHTML = isSignup
                 ? 'Already have an account? <a onclick="switchTab(\'login\')">Sign in</a>'
                 : 'Don\'t have an account? <a onclick="switchTab(\'signup\')">Create one</a>';
+
+            // Show / hide signup-only elements
+            document.getElementById('warningBanner').style.display = isSignup ? 'block' : 'none';
 
             if (isSignup && !signupVerified) {
                 // First time reaching signup this session: show the verification
