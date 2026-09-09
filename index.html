@@ -386,6 +386,28 @@
             font-weight: bold;
             font-size: 16px;
         }
+
+        .feature-list li.soon {
+            color: var(--text-lo);
+        }
+        .feature-list li.soon::before {
+            content: '○';
+            color: var(--text-lo);
+        }
+        .soon-badge {
+            display: inline-block;
+            margin-left: 8px;
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--violet);
+            background: rgba(123, 92, 255, 0.15);
+            border: 1px solid rgba(123, 92, 255, 0.4);
+            padding: 2px 8px;
+            border-radius: 20px;
+            vertical-align: middle;
+        }
         
         footer.site-footer {
             background: var(--bg-0);
@@ -1594,7 +1616,7 @@
     <section class="info-section" id="learn-more">
         <div class="info-container">
             <h2 class="info-title">Platform Advantages</h2>
-            <p class="info-subtitle">Discover why thousands of businesses trust AutoChat to automate their customer service and boost productivity</p>
+            <p class="info-subtitle">Discover why businesses trust AutoChat to automate their customer service and boost productivity</p>
             
             <!-- Carousel wrapper -->
             <div class="carousel-wrapper">
@@ -1654,12 +1676,12 @@
                         <div class="feature-card">
                             <span class="feature-icon">📱</span>
                             <h3 class="feature-title">Multi-Platform Integration</h3>
-                            <p class="feature-desc">Connect with your customers wherever they are — WhatsApp, Telegram, Instagram, and more.</p>
+                            <p class="feature-desc">Connect with your customers on WhatsApp and Telegram today, with more platforms on the way.</p>
                             <ul class="feature-list">
                                 <li>WhatsApp QR Code</li>
                                 <li>Telegram API</li>
-                                <li>Instagram DM automation</li>
-                                <li>Facebook Messenger</li>
+                                <li class="soon">Instagram DM automation <span class="soon-badge">Coming Soon</span></li>
+                                <li class="soon">Facebook Messenger <span class="soon-badge">Under Development</span></li>
                             </ul>
                         </div>
 
