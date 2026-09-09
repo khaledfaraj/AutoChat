@@ -709,6 +709,7 @@
             max-width: 480px;
             max-height: 88vh;
             overflow-y: auto;
+            overflow-x: hidden;
             padding: 26px;
             position: relative;
             animation: modalPop 0.2s ease;
@@ -843,6 +844,10 @@
         .pay-method-btn {
             flex: 1;
             min-width: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 7px;
             background: rgba(255,255,255,0.04);
             border: 1px solid var(--line);
             color: var(--text-hi);
@@ -860,6 +865,15 @@
             background: rgba(255,122,69,0.12);
             color: var(--orange);
         }
+        .pay-method-icon {
+            width: 20px;
+            height: 20px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .pay-method-icon svg { width: 100%; height: 100%; display: block; }
         .pay-detail-box {
             background: rgba(255,255,255,0.04);
             border: 1px dashed var(--line);
@@ -871,6 +885,86 @@
             line-height: 1.7;
         }
         .pay-detail-box b { color: var(--text-hi); }
+        .pay-detail-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--line);
+            border-radius: 10px;
+            padding: 10px 12px;
+            margin-top: 10px;
+        }
+        .pay-detail-info { flex: 1; min-width: 0; }
+        .pay-detail-label {
+            font-size: 10.5px;
+            text-transform: uppercase;
+            letter-spacing: .5px;
+            color: var(--text-lo);
+            margin-bottom: 3px;
+        }
+        .pay-detail-value {
+            font-family: 'Courier New', monospace;
+            font-size: 12.5px;
+            color: var(--text-hi);
+            word-break: break-all;
+            overflow-wrap: anywhere;
+        }
+        .copy-btn {
+            flex-shrink: 0;
+            background: rgba(255,122,69,0.12);
+            border: 1px solid rgba(255,122,69,0.4);
+            color: var(--orange);
+            border-radius: 8px;
+            padding: 7px 12px;
+            font-size: 11.5px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            transition: all 0.15s;
+            white-space: nowrap;
+            font-family: inherit;
+        }
+        .copy-btn:hover { background: rgba(255,122,69,0.22); }
+        .copy-btn.copied {
+            background: rgba(111,224,138,0.15);
+            border-color: rgba(111,224,138,0.5);
+            color: #6fe08a;
+        }
+        .pay-network-note {
+            margin-top: 10px;
+            font-size: 11.5px;
+            color: var(--coral);
+            background: rgba(255,95,126,0.08);
+            border: 1px solid rgba(255,95,126,0.3);
+            border-radius: 10px;
+            padding: 9px 10px;
+            line-height: 1.6;
+        }
+        .pay-network-note b { color: #fff; }
+        .copy-toast {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: var(--bg-2);
+            border: 1px solid rgba(111,224,138,0.5);
+            color: #eafff0;
+            padding: 11px 22px;
+            border-radius: 30px;
+            font-size: 13px;
+            font-weight: 600;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.45);
+            z-index: 3000;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.25s ease;
+            max-width: 90vw;
+            text-align: center;
+        }
+        .copy-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
         .app-form-label {
             font-size: 12px;
             color: var(--text-lo);
@@ -898,6 +992,16 @@
             margin-bottom: 14px;
             font-family: inherit;
         }
+        select.app-text-input {
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'><path d='M1 1l4 4 4-4' fill='none' stroke='%238992b8' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/></svg>");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            padding-right: 32px;
+        }
+        select.app-text-input option { background: var(--bg-2); color: var(--text-hi); }
         textarea.app-text-input { resize: vertical; min-height: 90px; }
         .app-submit-btn {
             width: 100%;
@@ -995,6 +1099,9 @@
             .hero-section { padding-top: 100px; }
             .btn { padding: 14px 30px; font-size: 16px; }
             .nav-links { display: none; }
+            .app-modal-overlay { padding: 14px; }
+            .app-modal.wide, .app-modal.xwide { max-width: 100%; }
+            .plan-grid { grid-template-columns: repeat(3, 1fr); gap: 8px; }
         }
         @media (max-width: 480px) {
             h1 { font-size: 26px; line-height: 1.3; }
@@ -1022,7 +1129,36 @@
             .user-menu-trigger { padding: 4px !important; border-radius: 50%; }
             .user-menu-trigger .user-menu-caret { display: none; }
             .user-menu-panel { right: -10px; width: 230px; }
-            .app-modal { padding: 20px; }
+
+            /* ── Modals & forms: no overflow, no cramped text ── */
+            .app-modal-overlay { padding: 8px; align-items: flex-start; }
+            .app-modal { padding: 18px 16px; max-height: 94vh; border-radius: 18px; margin-top: 10px; }
+            .app-modal h2 { font-size: 18px; padding-right: 26px; }
+            .app-modal .app-modal-sub { font-size: 11.5px; }
+            .app-modal-close { top: 14px; right: 14px; width: 28px; height: 28px; font-size: 13px; }
+
+            /* Prevent iOS auto-zoom on focus by keeping inputs at 16px */
+            .app-text-input, .app-file-input, .delete-confirm-input,
+            select.app-text-input { font-size: 16px; }
+
+            .plan-grid { grid-template-columns: repeat(3, 1fr); gap: 6px; margin-bottom: 16px; }
+            .plan-card { padding: 10px 6px; border-radius: 12px; }
+            .plan-card .plan-name { font-size: 10px; letter-spacing: 0; }
+            .plan-card .plan-price { font-size: 15px; margin: 3px 0; }
+            .plan-card .plan-period { font-size: 9px; line-height: 1.3; }
+
+            .pay-methods { gap: 6px; }
+            .pay-method-btn { min-width: 0; font-size: 11px; padding: 9px 4px; gap: 5px; }
+            .pay-method-icon { width: 17px; height: 17px; }
+
+            .pay-detail-box { padding: 12px; font-size: 12px; }
+            .pay-detail-row { flex-direction: column; align-items: stretch; gap: 8px; }
+            .pay-detail-value { font-size: 12px; }
+            .copy-btn { width: 100%; justify-content: center; padding: 9px 10px; }
+            .pay-network-note { font-size: 11px; }
+
+            .mini-plan-row { flex-direction: column; }
+            .mini-plan { min-width: 0; }
         }
 
         /* ── Carousel ──────────────────────────────────────────────── */
@@ -1418,8 +1554,30 @@
 
                 <div class="profile-field-label">Payment method</div>
                 <div class="pay-methods" id="payMethods">
-                    <button type="button" class="pay-method-btn selected" data-method="InstaPay">💳 InstaPay</button>
-                    <button type="button" class="pay-method-btn" data-method="USDT">🪙 USDT</button>
+                    <button type="button" class="pay-method-btn selected" data-method="InstaPay">
+                        <span class="pay-method-icon">
+                            <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                <defs>
+                                    <linearGradient id="instapayGrad" x1="0" y1="0" x2="1" y2="1">
+                                        <stop offset="0%" stop-color="#5b3df6"/>
+                                        <stop offset="100%" stop-color="#00c2b8"/>
+                                    </linearGradient>
+                                </defs>
+                                <circle cx="16" cy="16" r="16" fill="url(#instapayGrad)"/>
+                                <path d="M17.5 7L11 17h4.2l-1.7 8L21 15h-4.3l0.8-8z" fill="#fff"/>
+                            </svg>
+                        </span>
+                        <span>InstaPay</span>
+                    </button>
+                    <button type="button" class="pay-method-btn" data-method="USDT">
+                        <span class="pay-method-icon">
+                            <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                <circle cx="16" cy="16" r="16" fill="#26A17B"/>
+                                <path d="M17.35 17.15v-0.01c-0.12 0.01-0.72 0.045-2.06 0.045-1.07 0-1.82-0.03-2.09-0.045v0.015c-4.14-0.18-7.23-0.9-7.23-1.76s3.09-1.58 7.23-1.76v2.8c0.27 0.02 1.04 0.065 2.1 0.065 1.28 0 1.92-0.05 2.05-0.065v-2.8c4.13 0.18 7.21 0.9 7.21 1.76s-3.08 1.58-7.21 1.76z M17.35 13.28v-2.52h5.62V7.2H9.06v3.56h5.62v2.51c-4.57 0.21-8.01 1.11-8.01 2.19s3.44 1.98 8.01 2.19v7.85h2.68v-7.85c4.56-0.21 7.99-1.11 7.99-2.19s-3.43-1.98-7.99-2.19z" fill="#fff"/>
+                            </svg>
+                        </span>
+                        <span>USDT</span>
+                    </button>
                 </div>
 
                 <div class="pay-detail-box" id="payDetailBox"></div>
@@ -2468,10 +2626,83 @@
         }
 
         // ── Remove Watermark / subscription modal ──────────────────────
-        const PAY_DETAILS = {
-            'InstaPay': 'Send the plan amount via <b>InstaPay</b> to phone number <b>01012026276</b>, then upload your receipt below.',
-            'USDT': 'Send the plan amount in USDT to wallet address <b>0x0082A8C01FF25e01739225751445eB20D14d8E24</b> on the <b>BNB Smart Chain (BEP20)</b> network only, then upload your transaction receipt below.'
+        const PAY_INFO = {
+            'InstaPay': {
+                instructions: 'Send the plan amount via <b>InstaPay</b> to the mobile number below, then upload your receipt.',
+                label: 'InstaPay Mobile Number',
+                value: '01012026276',
+                network: null
+            },
+            'USDT': {
+                instructions: 'Send the plan amount in <b>USDT</b> to the wallet address below, then upload your transaction receipt.',
+                label: 'USDT Wallet Address',
+                value: '0x0082A8C01FF25e01739225751445eB20D14d8E24',
+                network: 'Only send on the <b>BNB Smart Chain (BEP20)</b> network. Sending on any other network may result in permanent loss of funds.'
+            }
         };
+
+        function renderPayDetail(method) {
+            const info = PAY_INFO[method] || PAY_INFO['InstaPay'];
+            const box = document.getElementById('payDetailBox');
+            box.innerHTML = `
+                <div>${info.instructions}</div>
+                <div class="pay-detail-row">
+                    <div class="pay-detail-info">
+                        <div class="pay-detail-label">${info.label}</div>
+                        <div class="pay-detail-value">${info.value}</div>
+                    </div>
+                    <button type="button" class="copy-btn" data-copy-value="${info.value}" onclick="copyPayValue(this)">📋 Copy</button>
+                </div>
+                ${info.network ? `<div class="pay-network-note">⚠️ ${info.network}</div>` : ''}
+            `;
+        }
+
+        function copyPayValue(btn) {
+            const value = btn.getAttribute('data-copy-value');
+            const finishCopy = () => {
+                const original = btn.innerHTML;
+                btn.classList.add('copied');
+                btn.innerHTML = '✓ Copied';
+                showCopyToast('Copied to clipboard');
+                setTimeout(() => {
+                    btn.classList.remove('copied');
+                    btn.innerHTML = original;
+                }, 1600);
+            };
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(value).then(finishCopy).catch(() => fallbackCopyText(value, finishCopy));
+            } else {
+                fallbackCopyText(value, finishCopy);
+            }
+        }
+
+        function fallbackCopyText(text, callback) {
+            const ta = document.createElement('textarea');
+            ta.value = text;
+            ta.style.position = 'fixed';
+            ta.style.opacity = '0';
+            document.body.appendChild(ta);
+            ta.focus();
+            ta.select();
+            try { document.execCommand('copy'); } catch (_) {}
+            document.body.removeChild(ta);
+            callback();
+        }
+
+        let copyToastTimer = null;
+        function showCopyToast(message) {
+            let toast = document.getElementById('copyToast');
+            if (!toast) {
+                toast = document.createElement('div');
+                toast.id = 'copyToast';
+                toast.className = 'copy-toast';
+                document.body.appendChild(toast);
+            }
+            toast.textContent = `✅ ${message}`;
+            toast.classList.add('show');
+            clearTimeout(copyToastTimer);
+            copyToastTimer = setTimeout(() => toast.classList.remove('show'), 1800);
+        }
 
         function initWatermarkModal() {
             document.querySelectorAll('.plan-card').forEach(card => {
@@ -2492,7 +2723,7 @@
         function updatePayDetailBox() {
             const selected = document.querySelector('.pay-method-btn.selected');
             const method = selected ? selected.getAttribute('data-method') : 'InstaPay';
-            document.getElementById('payDetailBox').innerHTML = PAY_DETAILS[method] || '';
+            renderPayDetail(method);
         }
 
         function openWatermarkModal() {
