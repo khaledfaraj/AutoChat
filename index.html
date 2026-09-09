@@ -597,6 +597,14 @@
             justify-content: center;
             font-size: 16px;
             flex-shrink: 0;
+            overflow: hidden;
+        }
+        .user-menu-avatar img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            display: block;
         }
         .user-menu-caret {
             font-size: 10px;
@@ -735,6 +743,14 @@
             justify-content: center;
             font-size: 32px;
             flex-shrink: 0;
+            overflow: hidden;
+        }
+        .profile-modal-avatar img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            display: block;
         }
         .profile-modal-name { font-size: 17px; font-weight: 800; color: var(--text-hi); }
         .profile-modal-email { font-size: 12.5px; color: var(--text-lo); margin-top: 3px; word-break: break-all; }
@@ -745,27 +761,24 @@
             color: var(--text-lo);
             margin: 14px 0 10px;
         }
-        .avatar-grid {
-            display: grid;
-            grid-template-columns: repeat(6, 1fr);
-            gap: 8px;
-        }
-        .avatar-option {
-            aspect-ratio: 1;
-            border-radius: 12px;
-            border: 2px solid transparent;
-            background: rgba(255,255,255,0.04);
-            font-size: 22px;
-            cursor: pointer;
+        .avatar-color-grid {
             display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.15s;
+            gap: 14px;
         }
-        .avatar-option:hover { background: rgba(255,255,255,0.09); }
-        .avatar-option.selected {
-            border-color: var(--orange);
-            background: rgba(255,122,69,0.15);
+        .avatar-color-option {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            border: 3px solid transparent;
+            cursor: pointer;
+            padding: 0;
+            transition: all 0.15s;
+            box-shadow: inset 0 0 0 1px rgba(255,255,255,0.15);
+        }
+        .avatar-color-option:hover { transform: scale(1.1); }
+        .avatar-color-option.selected {
+            border-color: var(--text-hi);
+            box-shadow: 0 0 0 2px var(--bg-2), 0 0 0 4px var(--orange);
         }
         .profile-save-msg {
             margin-top: 14px;
@@ -988,7 +1001,6 @@
             .user-menu-trigger .user-menu-caret { display: none; }
             .user-menu-panel { right: -10px; width: 230px; }
             .app-modal { padding: 20px; }
-            .avatar-grid { grid-template-columns: repeat(5, 1fr); }
         }
 
         /* ── Carousel ──────────────────────────────────────────────── */
@@ -1342,15 +1354,15 @@
             <div class="app-modal-sub">Manage how you appear across AutoChat</div>
 
             <div class="profile-modal-top">
-                <div class="profile-modal-avatar" id="profileModalAvatar">🙂</div>
+                <div class="profile-modal-avatar" id="profileModalAvatar"></div>
                 <div>
                     <div class="profile-modal-name" id="profileModalName">—</div>
                     <div class="profile-modal-email" id="profileModalEmail">—</div>
                 </div>
             </div>
 
-            <div class="profile-field-label">Choose an avatar</div>
-            <div class="avatar-grid" id="avatarGrid"></div>
+            <div class="profile-field-label">Choose an avatar color</div>
+            <div class="avatar-color-grid" id="avatarColorGrid"></div>
 
             <div class="profile-save-msg" id="profileSaveMsg">✓ Avatar updated</div>
         </div>
@@ -2252,14 +2264,19 @@
             }[ch]));
         }
 
-        // ── Avatar options available for the profile picker ─────────────
-        const AVATAR_OPTIONS = ['🙂','😎','🤖','🦊','🐱','🐼','🦁','🐸','🚀','⭐','🔥','💎','🧑‍💻','👩‍💻','🐵','🦄','🐶','🐨'];
+        // ── Avatar background colors available for the profile picker ───
+        const AVATAR_COLORS = ['2563eb', 'ff7a45', 'ff5f7e', '7b5cff'];
 
         function getCurrentUser() {
             try { return JSON.parse(localStorage.getItem('userInfo')); } catch(_) { return null; }
         }
-        function getUserAvatar(user) {
-            return (user && user.avatar) ? user.avatar : '🙂';
+        function getUserAvatarColor(user) {
+            return (user && user.avatarColor) ? user.avatarColor : AVATAR_COLORS[0];
+        }
+        function getUserAvatarUrl(user) {
+            const initials = ((user && user.username) ? user.username : 'U').trim().slice(0, 2);
+            const color = getUserAvatarColor(user);
+            return `https://ui-avatars.com/api/?name=${encodeURIComponent(initials)}&background=${color}&color=fff&bold=true`;
         }
 
         // ── Auth (localStorage — no Firebase) ──────────────────────────
@@ -2268,18 +2285,19 @@
             const user = getCurrentUser();
 
             if (user && user.id) {
-                const avatar = escapeHtml(getUserAvatar(user));
+                const avatarUrl = getUserAvatarUrl(user);
                 const uname = escapeHtml(user.username);
+                const avatarImg = `<img src="${avatarUrl}" alt="${uname}">`;
                 authButtons.innerHTML = `
                     <div class="user-menu" id="userMenu">
                         <button type="button" class="user-menu-trigger" onclick="toggleUserMenu(event)">
-                            <span class="user-menu-avatar" id="navUserAvatar">${avatar}</span>
+                            <span class="user-menu-avatar" id="navUserAvatar">${avatarImg}</span>
                             <span class="umt-label">Hi, ${uname}</span>
                             <span class="user-menu-caret">▾</span>
                         </button>
                         <div class="user-menu-panel" id="userMenuPanel">
                             <div class="user-menu-header">
-                                <span class="user-menu-avatar">${avatar}</span>
+                                <span class="user-menu-avatar">${avatarImg}</span>
                                 <div>
                                     <div class="user-menu-header-name">${uname}</div>
                                     <div class="user-menu-header-email">${escapeHtml(user.email || '')}</div>
@@ -2379,27 +2397,27 @@
             if (!user) return;
             document.getElementById('profileModalName').textContent = user.username || '—';
             document.getElementById('profileModalEmail').textContent = user.email || '';
-            document.getElementById('profileModalAvatar').textContent = getUserAvatar(user);
+            document.getElementById('profileModalAvatar').innerHTML = `<img src="${getUserAvatarUrl(user)}" alt="${escapeHtml(user.username || '')}">`;
             document.getElementById('profileSaveMsg').classList.remove('show');
 
-            const grid = document.getElementById('avatarGrid');
-            grid.innerHTML = AVATAR_OPTIONS.map(em => `
-                <button type="button" class="avatar-option${em === getUserAvatar(user) ? ' selected' : ''}" data-emoji="${em}" onclick="selectAvatar('${em}')">${em}</button>
+            const grid = document.getElementById('avatarColorGrid');
+            grid.innerHTML = AVATAR_COLORS.map(color => `
+                <button type="button" class="avatar-color-option${color === getUserAvatarColor(user) ? ' selected' : ''}" data-color="${color}" style="background:#${color};" onclick="selectAvatarColor('${color}')" aria-label="Avatar color ${color}"></button>
             `).join('');
 
             openAppModal('profileModalOverlay');
         }
 
-        function selectAvatar(emoji) {
+        function selectAvatarColor(color) {
             const user = getCurrentUser();
             if (!user) return;
-            user.avatar = emoji;
+            user.avatarColor = color;
             localStorage.setItem('userInfo', JSON.stringify(user));
 
-            document.querySelectorAll('.avatar-option').forEach(btn => {
-                btn.classList.toggle('selected', btn.getAttribute('data-emoji') === emoji);
+            document.querySelectorAll('.avatar-color-option').forEach(btn => {
+                btn.classList.toggle('selected', btn.getAttribute('data-color') === color);
             });
-            document.getElementById('profileModalAvatar').textContent = emoji;
+            document.getElementById('profileModalAvatar').innerHTML = `<img src="${getUserAvatarUrl(user)}" alt="${escapeHtml(user.username || '')}">`;
             document.getElementById('profileSaveMsg').classList.add('show');
 
             // Reflect the new avatar immediately in the navbar
