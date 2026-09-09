@@ -865,15 +865,6 @@
             background: rgba(255,122,69,0.12);
             color: var(--orange);
         }
-        .pay-method-icon {
-            width: 20px;
-            height: 20px;
-            flex-shrink: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .pay-method-icon svg { width: 100%; height: 100%; display: block; }
         .pay-detail-box {
             background: rgba(255,255,255,0.04);
             border: 1px dashed var(--line);
@@ -1149,7 +1140,6 @@
 
             .pay-methods { gap: 6px; }
             .pay-method-btn { min-width: 0; font-size: 11px; padding: 9px 4px; gap: 5px; }
-            .pay-method-icon { width: 17px; height: 17px; }
 
             .pay-detail-box { padding: 12px; font-size: 12px; }
             .pay-detail-row { flex-direction: column; align-items: stretch; gap: 8px; }
@@ -1535,49 +1525,27 @@
 
             <div id="watermarkFormWrap">
                 <div class="plan-grid" id="planGrid">
-                    <div class="plan-card" data-plan="Monthly" data-price="$9 / 300 EGP">
-                        <div class="plan-name">Monthly</div>
-                        <div class="plan-price">$9</div>
-                        <div class="plan-period">per month</div>
+                    <div class="plan-card" data-plan="Basic" data-price="$10 / 15 days">
+                        <div class="plan-name">Basic</div>
+                        <div class="plan-price">$10</div>
+                        <div class="plan-period">for 15 days</div>
                     </div>
-                    <div class="plan-card selected" data-plan="Quarterly" data-price="$24 / 800 EGP">
-                        <div class="plan-name">Quarterly</div>
-                        <div class="plan-price">$24</div>
-                        <div class="plan-period">every 3 months</div>
+                    <div class="plan-card selected" data-plan="Standard" data-price="$15 / 30 days">
+                        <div class="plan-name">Standard</div>
+                        <div class="plan-price">$15</div>
+                        <div class="plan-period">for 30 days</div>
                     </div>
-                    <div class="plan-card" data-plan="Yearly" data-price="$79 / 2600 EGP">
-                        <div class="plan-name">Yearly</div>
-                        <div class="plan-price">$79</div>
-                        <div class="plan-period">per year</div>
+                    <div class="plan-card" data-plan="Premium" data-price="$25 / 60 days">
+                        <div class="plan-name">Premium</div>
+                        <div class="plan-price">$25</div>
+                        <div class="plan-period">for 60 days</div>
                     </div>
                 </div>
 
                 <div class="profile-field-label">Payment method</div>
                 <div class="pay-methods" id="payMethods">
-                    <button type="button" class="pay-method-btn selected" data-method="InstaPay">
-                        <span class="pay-method-icon">
-                            <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                                <defs>
-                                    <linearGradient id="instapayGrad" x1="0" y1="0" x2="1" y2="1">
-                                        <stop offset="0%" stop-color="#5b3df6"/>
-                                        <stop offset="100%" stop-color="#00c2b8"/>
-                                    </linearGradient>
-                                </defs>
-                                <circle cx="16" cy="16" r="16" fill="url(#instapayGrad)"/>
-                                <path d="M17.5 7L11 17h4.2l-1.7 8L21 15h-4.3l0.8-8z" fill="#fff"/>
-                            </svg>
-                        </span>
-                        <span>InstaPay</span>
-                    </button>
-                    <button type="button" class="pay-method-btn" data-method="USDT">
-                        <span class="pay-method-icon">
-                            <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                                <circle cx="16" cy="16" r="16" fill="#26A17B"/>
-                                <path d="M17.35 17.15v-0.01c-0.12 0.01-0.72 0.045-2.06 0.045-1.07 0-1.82-0.03-2.09-0.045v0.015c-4.14-0.18-7.23-0.9-7.23-1.76s3.09-1.58 7.23-1.76v2.8c0.27 0.02 1.04 0.065 2.1 0.065 1.28 0 1.92-0.05 2.05-0.065v-2.8c4.13 0.18 7.21 0.9 7.21 1.76s-3.08 1.58-7.21 1.76z M17.35 13.28v-2.52h5.62V7.2H9.06v3.56h5.62v2.51c-4.57 0.21-8.01 1.11-8.01 2.19s3.44 1.98 8.01 2.19v7.85h2.68v-7.85c4.56-0.21 7.99-1.11 7.99-2.19s-3.43-1.98-7.99-2.19z" fill="#fff"/>
-                            </svg>
-                        </span>
-                        <span>USDT</span>
-                    </button>
+                    <button type="button" class="pay-method-btn selected" data-method="InstaPay">💳 InstaPay</button>
+                    <button type="button" class="pay-method-btn" data-method="USDT">🪙 USDT</button>
                 </div>
 
                 <div class="pay-detail-box" id="payDetailBox"></div>
@@ -1608,8 +1576,6 @@
                 <label class="app-form-label">Attach a screenshot or photo of your payment receipt</label>
                 <input type="file" class="app-file-input" id="receiptFile" accept="image/*,.pdf">
 
-                <label class="app-form-label">Transaction reference (optional)</label>
-                <input type="text" class="app-text-input" id="receiptRef" placeholder="e.g. transfer ID / last 4 digits">
 
                 <button class="app-submit-btn" id="submitReceiptBtn" onclick="submitReceipt()">Submit for Review</button>
             </div>
@@ -2062,9 +2028,9 @@
                 <h3>The only paid upgrade: removing the watermark</h3>
                 <p>On the free plan, every automated reply your bot sends includes a small AutoChat watermark. If you'd like your bot's replies to appear watermark-free, you can subscribe to one of the following plans:</p>
                 <div class="mini-plan-row">
-                    <div class="mini-plan"><div class="mp-name">Monthly</div><div class="mp-price">$9</div><div class="mp-period">/ month · 300 EGP</div></div>
-                    <div class="mini-plan"><div class="mp-name">Quarterly</div><div class="mp-price">$24</div><div class="mp-period">/ 3 months · 800 EGP</div></div>
-                    <div class="mini-plan"><div class="mp-name">Yearly</div><div class="mp-price">$79</div><div class="mp-period">/ year · 2600 EGP</div></div>
+                    <div class="mini-plan"><div class="mp-name">Basic</div><div class="mp-price">$10</div><div class="mp-period">15 days</div></div>
+                    <div class="mini-plan"><div class="mp-name">Standard</div><div class="mp-price">$15</div><div class="mp-period">30 days</div></div>
+                    <div class="mini-plan"><div class="mp-name">Premium</div><div class="mp-price">$25</div><div class="mp-period">60 days</div></div>
                 </div>
                 <p>Payments are accepted via <b>InstaPay</b> or <b>USDT (BNB Smart Chain / BEP20)</b>. You can subscribe and submit your payment receipt directly from the Remove Watermark section inside your My Bots dashboard — our team reviews and activates it within 24 hours.</p>
             </div>
@@ -2730,13 +2696,11 @@
             document.getElementById('watermarkFormWrap').style.display = '';
             document.getElementById('receiptSuccess').classList.remove('show');
             const file = document.getElementById('receiptFile');
-            const ref = document.getElementById('receiptRef');
             const botName = document.getElementById('botName');
             const botType = document.getElementById('botType');
             const botPlatform = document.getElementById('botPlatform');
             const botPhone = document.getElementById('botPhone');
             if (file) file.value = '';
-            if (ref) ref.value = '';
             if (botName) { botName.value = ''; botName.style.borderColor = ''; }
             if (botType) { botType.value = ''; botType.style.borderColor = ''; }
             if (botPlatform) { botPlatform.value = ''; botPlatform.style.borderColor = ''; }
@@ -2752,7 +2716,6 @@
             const botPlatform= document.getElementById('botPlatform');
             const botPhone   = document.getElementById('botPhone');
             const fileInput  = document.getElementById('receiptFile');
-            const refInput   = document.getElementById('receiptRef');
 
             // Reset any previous error highlighting
             [botName, botType, botPlatform, botPhone, fileInput].forEach(el => { if (el) el.style.borderColor = ''; });
@@ -2787,7 +2750,6 @@
                 botType: botType.value,
                 platform: botPlatform.value,
                 phoneNumber: botPhone.value.trim(),
-                transactionRef: refInput.value.trim(),
                 receiptFileName: fileInput.files[0].name
             };
             console.log('Watermark removal request submitted:', submission);
