@@ -1420,10 +1420,31 @@
                 <div class="pay-methods" id="payMethods">
                     <button type="button" class="pay-method-btn selected" data-method="InstaPay">💳 InstaPay</button>
                     <button type="button" class="pay-method-btn" data-method="USDT">🪙 USDT</button>
-                    <button type="button" class="pay-method-btn" data-method="Vodafone Cash">📱 Vodafone Cash</button>
                 </div>
 
                 <div class="pay-detail-box" id="payDetailBox"></div>
+
+                <div class="profile-field-label">Bot details</div>
+                <label class="app-form-label">Bot name</label>
+                <input type="text" class="app-text-input" id="botName" placeholder="e.g. My Store Assistant">
+
+                <label class="app-form-label">Bot type</label>
+                <select class="app-text-input" id="botType">
+                    <option value="">Select bot type</option>
+                    <option value="Welcome / Auto-Reply Bot">Welcome / Auto-Reply Bot</option>
+                    <option value="Menu Bot">Menu Bot</option>
+                    <option value="Other">Other</option>
+                </select>
+
+                <label class="app-form-label">Platform</label>
+                <select class="app-text-input" id="botPlatform">
+                    <option value="">Select platform</option>
+                    <option value="Telegram">Telegram</option>
+                    <option value="WhatsApp">WhatsApp</option>
+                </select>
+
+                <label class="app-form-label">Phone number</label>
+                <input type="tel" class="app-text-input" id="botPhone" placeholder="e.g. +20 1XX XXX XXXX">
 
                 <div class="profile-field-label">Upload transfer receipt</div>
                 <label class="app-form-label">Attach a screenshot or photo of your payment receipt</label>
@@ -1887,7 +1908,7 @@
                     <div class="mini-plan"><div class="mp-name">Quarterly</div><div class="mp-price">$24</div><div class="mp-period">/ 3 months · 800 EGP</div></div>
                     <div class="mini-plan"><div class="mp-name">Yearly</div><div class="mp-price">$79</div><div class="mp-period">/ year · 2600 EGP</div></div>
                 </div>
-                <p>Payments are accepted via <b>InstaPay</b>, <b>Vodafone Cash</b>, or <b>USDT (TRC20)</b>. You can subscribe and submit your payment receipt directly from the Remove Watermark section inside your My Bots dashboard — our team reviews and activates it within 24 hours.</p>
+                <p>Payments are accepted via <b>InstaPay</b> or <b>USDT (BNB Smart Chain / BEP20)</b>. You can subscribe and submit your payment receipt directly from the Remove Watermark section inside your My Bots dashboard — our team reviews and activates it within 24 hours.</p>
             </div>
         </div>
     </div>
@@ -2448,9 +2469,8 @@
 
         // ── Remove Watermark / subscription modal ──────────────────────
         const PAY_DETAILS = {
-            'InstaPay': 'Send the plan amount via <b>InstaPay</b> to <b>@autochat.payments</b>, then upload your receipt below.',
-            'USDT': 'Send USDT (TRC20) to wallet address <b>TXXXXAUTOCHATXXXXWALLET</b>, then upload your transaction receipt below.',
-            'Vodafone Cash': 'Send the plan amount via <b>Vodafone Cash</b> to <b>010XXXXXXXX</b>, then upload your receipt below.'
+            'InstaPay': 'Send the plan amount via <b>InstaPay</b> to phone number <b>01012026276</b>, then upload your receipt below.',
+            'USDT': 'Send the plan amount in USDT to wallet address <b>0x0082A8C01FF25e01739225751445eB20D14d8E24</b> on the <b>BNB Smart Chain (BEP20)</b> network only, then upload your transaction receipt below.'
         };
 
         function initWatermarkModal() {
@@ -2480,18 +2500,67 @@
             document.getElementById('receiptSuccess').classList.remove('show');
             const file = document.getElementById('receiptFile');
             const ref = document.getElementById('receiptRef');
+            const botName = document.getElementById('botName');
+            const botType = document.getElementById('botType');
+            const botPlatform = document.getElementById('botPlatform');
+            const botPhone = document.getElementById('botPhone');
             if (file) file.value = '';
             if (ref) ref.value = '';
+            if (botName) { botName.value = ''; botName.style.borderColor = ''; }
+            if (botType) { botType.value = ''; botType.style.borderColor = ''; }
+            if (botPlatform) { botPlatform.value = ''; botPlatform.style.borderColor = ''; }
+            if (botPhone) { botPhone.value = ''; botPhone.style.borderColor = ''; }
             openAppModal('watermarkModalOverlay');
         }
 
         function submitReceipt() {
-            const fileInput = document.getElementById('receiptFile');
+            const planCard   = document.querySelector('.plan-card.selected');
+            const methodBtn  = document.querySelector('.pay-method-btn.selected');
+            const botName    = document.getElementById('botName');
+            const botType    = document.getElementById('botType');
+            const botPlatform= document.getElementById('botPlatform');
+            const botPhone   = document.getElementById('botPhone');
+            const fileInput  = document.getElementById('receiptFile');
+            const refInput   = document.getElementById('receiptRef');
+
+            // Reset any previous error highlighting
+            [botName, botType, botPlatform, botPhone, fileInput].forEach(el => { if (el) el.style.borderColor = ''; });
+
+            // Required: bot details before the receipt
+            let firstInvalid = null;
+            if (!botName.value.trim()) firstInvalid = firstInvalid || botName;
+            if (!botType.value) firstInvalid = firstInvalid || botType;
+            if (!botPlatform.value) firstInvalid = firstInvalid || botPlatform;
+            if (!botPhone.value.trim()) firstInvalid = firstInvalid || botPhone;
+
+            if (firstInvalid) {
+                firstInvalid.style.borderColor = '#ff5f5f';
+                firstInvalid.focus();
+                return;
+            }
+
             if (!fileInput.files || fileInput.files.length === 0) {
                 fileInput.style.borderColor = '#ff5f5f';
                 fileInput.focus();
                 return;
             }
+
+            // Bundle the bot details together with the plan, payment method,
+            // and receipt info. Swap this out for a real POST (multipart/form-data,
+            // including the receipt file) to a /api/watermark-request endpoint
+            // once a backend exists.
+            const submission = {
+                plan: planCard ? planCard.getAttribute('data-plan') : null,
+                paymentMethod: methodBtn ? methodBtn.getAttribute('data-method') : null,
+                botName: botName.value.trim(),
+                botType: botType.value,
+                platform: botPlatform.value,
+                phoneNumber: botPhone.value.trim(),
+                transactionRef: refInput.value.trim(),
+                receiptFileName: fileInput.files[0].name
+            };
+            console.log('Watermark removal request submitted:', submission);
+
             document.getElementById('watermarkFormWrap').style.display = 'none';
             document.getElementById('receiptSuccess').classList.add('show');
         }
